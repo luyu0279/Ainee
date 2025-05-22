@@ -1,6 +1,8 @@
 # Ainee
 
-Ainee is a highly customizable AI assistant designed to transform how you capture, organize, and engage with your study materials—whether they are audio, text, files, YouTube videos, or more. It is a free alternative to products like NotebookLM, Fabric, and MyMind.
+Ainee is a versatile AI assistant created to revolutionize the way you capture, organize, and interact with your study materials, whether they involve audio, text, files, YouTube videos, or other formats. It serves as a free alternative to products like NotebookLM, helping you accelerate your learning and improve your ability to share insights.
+
+<img src="https://raw.githubusercontent.com/luyu0279/Ainee/main/misc/features.png" >
 
 ---
 
