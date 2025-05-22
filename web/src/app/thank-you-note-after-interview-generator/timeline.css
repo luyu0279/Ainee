@@ -1,0 +1,35 @@
+.timeline-container {
+  position: relative;
+}
+
+.timeline-container::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 8px;
+  height: calc(100% - 16px);
+  width: 2px;
+  background-color: #69DA00;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 3rem;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #69DA00;
+  transform: translateX(-50%);
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+} 

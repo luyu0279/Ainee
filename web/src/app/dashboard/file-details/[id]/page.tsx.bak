@@ -1,0 +1,2059 @@
+"use client";
+
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter, useParams } from "next/navigation";
+import Link from 'next/link';
+import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import {
+  ChevronLeft,
+  Share2,
+  MoreHorizontal,
+  Loader2,
+  Plus,
+  Search,
+  Filter,
+  ChevronDown,
+  ChevronUp,
+  ChevronRight,
+  FileText,
+  SortAsc,
+  SortDesc,
+  Edit,
+  Trash,
+  X,
+  ChevronDownSquare,
+  ChevronUpSquare,
+  GripVertical,
+  Copy,
+  Check as CheckIcon,
+  ListTree,
+  Network,
+  Files,
+  ArrowLeft,
+  Trash2,
+  Link2,
+  Tag,
+  BookOpen,
+  RefreshCw
+} from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ApiLibs from "@/lib/ApiLibs";
+import { ResponseCode } from "@/apis/models/ResponseCode";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import Sidebar from '../../components/sidebar';
+import { ContentMediaType } from "@/types/fileTypes";
+import dynamic from "next/dynamic";
+import { ChatStartType } from "@/types/chatTypes";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { usePathname } from "next/navigation";
+import { ChatService } from "@/services/chatService";
+import { KnowledgeBaseType } from "@/apis/models/KnowledgeBaseType";
+import { KnowledgeBaseVisibility } from "@/apis/models/KnowledgeBaseVisibility";
+import type { KnowledgeBaseResponse } from '@/apis/models/KnowledgeBaseResponse';
+import type { KnowledgeBaseInfo } from '@/apis/models/KnowledgeBaseInfo';
+import { ImportDialog } from "@/components/import/ImportDialog"; // 添加ImportDialog组件导入
+import FileContentViewer from '../../inbox/components/FileContentViewer';
+
+// Dynamically import detail components to improve performance
+const ContentDetail = dynamic(() => import("@/components/details").then(mod => mod.ContentDetail), { ssr: false });
+const VideoDetail = dynamic(() => import("@/components/details").then(mod => mod.VideoDetail), { ssr: false });
+const PdfDetail = dynamic(() => import("@/components/details").then(mod => mod.PdfDetail), { ssr: false });
+const AudioDetail = dynamic(() => import("@/components/details").then(mod => mod.AudioDetail), { ssr: false });
+const DocDetail = dynamic(() => import("@/components/details").then(mod => mod.DocDetail), { ssr: false });
+const ImageDetail = dynamic(() => import("@/components/details").then(mod => mod.ImageDetail), { ssr: false });
+const ChatComponent = dynamic(() => import("@/components/chat/ChatComponent"), { ssr: false });
+
+// Interface for the file content
+interface FileContent {
+  id: string | number;
+  title: string;
+  media_type: ContentMediaType;
+  page_url?: string;
+  content?: string;
+  ai_tags?: string[];
+  created_at: string;
+  updated_at?: string;
+  file_url?: string;
+  video_embed_html?: string;
+  media_subtitles?: Array<{
+    start: number;
+    end: number;
+    text: string;
+  }>;
+  shownotes?: string;
+  image_ocr?: string;
+  uid: string;
+  ai_summary?: string;
+  ai_structure?: string;
+  belonged_kbs?: KnowledgeBaseInfo[];
+  source?: string;
+  owned?: boolean;
+}
+
+// 定义共享文件项接口，继承FileItem并添加timestamp字段
+interface SharedFileItem extends FileItem {
+  timestamp?: number;
+  last_accessed?: string;
+}
+
+// File item interface (same as in files/page.tsx)
+interface FileItem {
+  id: string | number;
+  title: string;
+  media_type: ContentMediaType;
+  created_at: string;
+  last_accessed?: string;
+  uid?: string;
+}
+
+// Get file icon based on media type - same as in files page
+const getItemIcon = (mediaType?: ContentMediaType) => {
+  switch (mediaType) {
+    case ContentMediaType.video:
+      return '/icon/icon_file_video.png';
+    case ContentMediaType.pdf:
+      return '/icon/icon_pdf_add.png';
+    case ContentMediaType.audio:
+      return '/icon/icon_item_voice.png';
+    case ContentMediaType.word:
+      return '/icon/icon_item_word.png';
+    case ContentMediaType.audioInternal:
+      return '/icon/icon_recording_audio.png';
+    case ContentMediaType.audioMicrophone:
+      return '/icon/icon_recording_mic.png';
+    case ContentMediaType.image:
+      return '/icon/icon_item_image.png';
+    case ContentMediaType.ppt:
+      return '/icon/icon_item_ppt.png';
+    case ContentMediaType.text:
+      return '/icon/icon_item_txt.png';
+    case ContentMediaType.excel:
+      return '/icon/icon_item_xls.png';
+    default:
+      return '/icon/icon_link.png';
+  }
+};
+
+// Mock knowledge bases for now
+const MOCK_KNOWLEDGE_BASES = [
+  "Artificial Intelligence",
+  "Search Technology",
+  "Web Development",
+  "Productivity Tools",
+  "Browser Technology"
+];
+
+// Check component from files/page.tsx
+const Check = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
+
+// 添加一个转换函数，将 FileContent 转为 ContentResponse
+const adaptToContentResponse = (content: FileContent): any => {
+  let mediaType = ContentMediaType.link; // Default to link
+
+  if (content.media_type) {
+    // 直接使用传入的类型，不再转换
+    mediaType = content.media_type;
+  }
+
+  const basic = {
+    uid: content.uid,
+    title: content.title,
+    content: content.content || '',
+    media_type: mediaType,
+    page_url: content.page_url || '',
+    file_url: content.file_url === null || content.file_url === undefined ? undefined : content.file_url,
+    source: content.source || ''
+  };
+
+  return {
+    ...basic,
+    ai_tags: content.ai_tags || [],
+    belonged_kbs: content.belonged_kbs || [],
+    owned: content.owned || false // 使用正确的字段名
+  };
+};
+
+// 动态导入Mindmap组件以避免SSR问题
+const Mindmap = dynamic(() => import('@/components/Mindmap'), {
+  ssr: false,
+  loading: () => <p className="text-center py-10">Loading mindmap...</p>
+});
+
+// 知识库列表接口
+interface KnowledgeBase {
+  uid: string;
+  name: string;
+  description?: string | null;
+  visibility?: string;
+  owned?: boolean;
+  subscribed?: boolean;
+}
+
+// 编辑文件对话框组件
+interface EditFileDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  fileContent: FileContent | null;
+  onEditSuccess: () => void;
+}
+
+const EditFileDialog = ({ open, onOpenChange, fileContent, onEditSuccess }: EditFileDialogProps) => {
+  const router = useRouter();
+  const [knowledgeBases, setKnowledgeBases] = useState<KnowledgeBase[]>([]);
+  const [fileName, setFileName] = useState("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [selectedKnowledgeBases, setSelectedKnowledgeBases] = useState<string[]>([]);
+  const [newTag, setNewTag] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showKbSelector, setShowKbSelector] = useState(true);
+
+  // 处理文件内容更新
+  useEffect(() => {
+    if (fileContent) {
+      setFileName(fileContent.title || "");
+      setTags(fileContent.ai_tags || []);
+      // 如果文件关联了知识库，则设置为选中
+      if (fileContent.belonged_kbs && fileContent.belonged_kbs.length > 0) {
+        const kbIds = fileContent.belonged_kbs.map(kb => kb.uid);
+        setSelectedKnowledgeBases(kbIds);
+      } else {
+        setSelectedKnowledgeBases([]);
+      }
+    }
+  }, [fileContent]);
+
+  // 加载知识库列表
+  useEffect(() => {
+    if (open) {
+      loadKnowledgeBases();
+
+      // 重置表单状态
+      if (fileContent) {
+        setFileName(fileContent.title || '');
+        setTags(fileContent.ai_tags || []);
+
+        // 如果文件关联了知识库，则保持选择状态
+        if (fileContent.belonged_kbs && fileContent.belonged_kbs.length > 0) {
+          const kbIds = fileContent.belonged_kbs.map(kb => kb.uid);
+          setSelectedKnowledgeBases(kbIds);
+        } else {
+          setSelectedKnowledgeBases([]);
+        }
+      }
+      setNewTag('');
+      // 默认展开知识库选择器，让用户可以直接看到已选择的知识库
+      setShowKbSelector(true);
+    }
+  }, [open, fileContent]);
+
+  const loadKnowledgeBases = async () => {
+    try {
+      setIsLoading(true);
+      const response = await ApiLibs.knowledgeBase.getKnowledgeBaseListApiKbListOwnGet(
+        KnowledgeBaseType.OWNED
+      );
+
+      if (response.code === "SUCCESS" && response.data) {
+        // 类型转换，确保兼容接口
+        const kbs: KnowledgeBase[] = (response.data.knowledge_bases || []).map((kb: KnowledgeBaseResponse) => ({
+          uid: kb.uid,
+          name: kb.name,
+          description: kb.description,
+          visibility: kb.visibility,
+          owned: kb.owned,
+          subscribed: kb.subscribed
+        }));
+        setKnowledgeBases(kbs);
+
+        // 确保保留文件当前关联的知识库
+        if (fileContent?.belonged_kbs && fileContent.belonged_kbs.length > 0) {
+          const kbIds = fileContent.belonged_kbs.map(kb => kb.uid);
+          setSelectedKnowledgeBases(kbIds);
+        }
+      }
+    } catch (error) {
+      console.error("Error loading knowledge bases:", error);
+      toast.error("Failed to load knowledge bases");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 删除标签
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
+  };
+
+  // 添加标签
+  const addTag = () => {
+    if (newTag.trim() && !tags.includes(newTag.trim())) {
+      setTags([...tags, newTag.trim()]);
+      setNewTag('');
+    }
+  };
+
+  // 处理标签输入框按键事件
+  const handleTagKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addTag();
+    }
+  };
+
+  // 切换知识库选择
+  const toggleKnowledgeBase = (kbId: string) => {
+    if (selectedKnowledgeBases.includes(kbId)) {
+      setSelectedKnowledgeBases(selectedKnowledgeBases.filter(id => id !== kbId));
+    } else {
+      setSelectedKnowledgeBases([...selectedKnowledgeBases, kbId]);
+    }
+  };
+
+  // 跳转到创建知识库页面
+  const navigateToCreateKnowledgeBase = () => {
+    // 保存当前页面URL
+    const returnUrl = window.location.pathname;
+    localStorage.setItem('returnUrl', returnUrl);
+
+    // 设置标记，表示用户意图是创建知识库
+    localStorage.setItem('createKnowledgeBase', 'true');
+
+    // 直接跳转到知识库页面
+    router.push('/dashboard/knowledge-base');
+  };
+
+  // 处理编辑提交
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      if (!fileContent?.uid) {
+        toast.error("File UID is missing");
+        setIsSubmitting(false);
+        return;
+      }
+
+      const response = await ApiLibs.content.editContentApiContentEditPost({
+        uid: fileContent.uid,
+        title: fileName.trim(),
+        tags: tags,
+        add_to_kb_ids: selectedKnowledgeBases.length > 0 ? selectedKnowledgeBases : undefined
+      });
+
+      if (response.code === "SUCCESS") {
+        toast.success("File updated successfully");
+        onOpenChange(false);
+        onEditSuccess();
+      } else {
+        toast.error(response.message || "Failed to update file");
+      }
+    } catch (error) {
+      console.error("Error updating file:", error);
+      toast.error("An error occurred while updating the file");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Edit File</DialogTitle>
+          <DialogDescription>
+            Update file information and manage its knowledge bases.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-6 py-4">
+          {/* File Name */}
+          <div className="space-y-2">
+            <label htmlFor="fileName" className="text-sm font-medium">
+              File Name
+            </label>
+            <Input
+              id="fileName"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+              placeholder="Enter file name"
+              className="w-full"
+            />
+          </div>
+
+          {/* File Tags */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              File Tags (up to 3 can be added)
+            </label>
+
+            <div className="flex flex-wrap gap-2 mb-2">
+              {tags.map((tag, index) => (
+                <div
+                  key={index}
+                  className="flex items-center bg-secondary rounded-full px-3 py-1 text-xs"
+                >
+                  <span className="mr-1">#{tag}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeTag(tag)}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {tags.length < 3 && (
+              <div className="flex gap-2">
+                <Input
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onKeyDown={handleTagKeyDown}
+                  placeholder="Add new tag"
+                  className="w-full"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={addTag}
+                  disabled={!newTag.trim()}
+                >
+                  Add
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Knowledge Bases */}
+          <div className="space-y-2">
+            <label className="text-sm font-medium">
+              Add to Knowledge Bases
+            </label>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full flex justify-between"
+              onClick={() => setShowKbSelector(!showKbSelector)}
+            >
+              <span>
+                {selectedKnowledgeBases.length > 0
+                  ? `${selectedKnowledgeBases.length} Knowledge Base${selectedKnowledgeBases.length > 1 ? 's' : ''} Selected`
+                  : "Select Knowledge Bases"}
+              </span>
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+
+            {showKbSelector && (
+              <div className="border rounded-md p-3 mt-2 space-y-3 max-h-[200px] overflow-y-auto">
+                <div className="space-y-2">
+                  {isLoading ? (
+                    <div className="flex justify-center py-2">
+                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                    </div>
+                  ) : knowledgeBases.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">No knowledge bases found.</p>
+                  ) : (
+                    knowledgeBases.map((kb) => (
+                      <div
+                        key={kb.uid}
+                        className="flex items-center space-x-2"
+                      >
+                        <input
+                          type="checkbox"
+                          id={kb.uid}
+                          checked={selectedKnowledgeBases.includes(kb.uid)}
+                          onChange={() => toggleKnowledgeBase(kb.uid)}
+                          className="h-4 w-4 rounded border-gray-300"
+                        />
+                        <label htmlFor={kb.uid} className="text-sm truncate max-w-[400px]" title={kb.name}>
+                          {kb.name}
+                        </label>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className="pt-2 border-t mt-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full"
+                    onClick={navigateToCreateKnowledgeBase}
+                  >
+                    + Create New Knowledge Base
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <DialogFooter className="flex gap-2 justify-end">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="default"
+            onClick={handleSubmit}
+            disabled={isLoading || !fileName.trim()}
+          >
+            {isLoading ? (
+              <>
+                <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-t-transparent"></span>
+                Saving...
+              </>
+            ) : (
+              'Save Changes'
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default function FileDetailsPage() {
+  const router = useRouter();
+  const params = useParams();
+  const contentId = params.id as string;
+
+  // State for the file content
+  const [fileContent, setFileContent] = useState<FileContent | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // New state variables for the expanded details section
+  const [newTagInput, setNewTagInput] = useState("");
+  const [kbSelectorOpen, setKbSelectorOpen] = useState(false);
+  const [selectedKnowledgeBases, setSelectedKnowledgeBases] = useState<string[]>([]);
+  const [availableKnowledgeBases, setAvailableKnowledgeBases] = useState<KnowledgeBase[]>([]);
+  const [isLoadingKbs, setIsLoadingKbs] = useState(false);
+
+  // Sidebar state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  // File list state - same as in files/page.tsx
+  const [isFileListExpanded, setIsFileListExpanded] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [mediaTypeFilter, setMediaTypeFilter] = useState<ContentMediaType | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+  // File data state - same as in files/page.tsx
+  const [files, setFiles] = useState<FileItem[]>([]);
+  const [filteredFiles, setFilteredFiles] = useState<FileItem[]>([]);
+  const [recentFiles, setRecentFiles] = useState<FileItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasNext, setHasNext] = useState(false);
+  const [nextCursor, setNextCursor] = useState<string | null>(null);
+
+  // Split view state
+  const [leftPanelWidth, setLeftPanelWidth] = useState(65); // As percentage
+  const [isDragging, setIsDragging] = useState(false);
+
+  // AI tabs state
+  const [currentTab, setCurrentTab] = useState("summary");
+
+  // Add expand/collapse state
+  const [isDetailsExpanded, setIsDetailsExpanded] = useState(false);
+
+  // Add copy functionality
+  const [isCopied, setIsCopied] = useState(false);
+
+  // Add Outline view mode
+  const [outlineView, setOutlineView] = useState<'tree' | 'mindmap'>('tree');
+
+  // Add delete related states
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Add edit related states
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
+  // Import dialog state
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
+
+  // 新增：添加文件列表选项卡状态
+  const [activeTab, setActiveTab] = useState<'my-files' | 'shared'>('my-files');
+
+  // 新增：共享文件列表
+  const [sharedFiles, setSharedFiles] = useState<SharedFileItem[]>([]);
+  const [filteredSharedFiles, setFilteredSharedFiles] = useState<SharedFileItem[]>([]);
+
+  // 新增：初始化 IndexedDB
+  useEffect(() => {
+    const initIndexedDB = async () => {
+      // 检查浏览器是否支持 IndexedDB
+      if (!window.indexedDB) {
+        console.error("Your browser doesn't support IndexedDB");
+        return;
+      }
+
+      try {
+        // 打开数据库，如果不存在则创建
+        const request = window.indexedDB.open("AineeAppDB", 1);
+
+        request.onerror = (event) => {
+          console.error("IndexedDB error:", event);
+        };
+
+        request.onupgradeneeded = (event) => {
+          const db = (event.target as IDBOpenDBRequest).result;
+
+          // 创建存储浏览历史的对象存储
+          if (!db.objectStoreNames.contains("sharedFilesHistory")) {
+            const objectStore = db.createObjectStore("sharedFilesHistory", { keyPath: "id" });
+            objectStore.createIndex("timestamp", "timestamp", { unique: false });
+          }
+        };
+
+        request.onsuccess = () => {
+          console.log("IndexedDB initialized successfully");
+          // 初始化完成后加载共享文件历史
+          loadSharedFilesHistory();
+        };
+      } catch (error) {
+        console.error("Error initializing IndexedDB:", error);
+      }
+    };
+
+    initIndexedDB();
+  }, []);
+
+  // 修改loadSharedFilesHistory方法，简化过滤逻辑，使用原生IndexedDB
+  const loadSharedFilesHistory = () => {
+    try {
+      const request = window.indexedDB.open("AineeAppDB", 1);
+
+      request.onsuccess = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        const transaction = db.transaction(["sharedFilesHistory"], "readonly");
+        const objectStore = transaction.objectStore("sharedFilesHistory");
+        const getAllRequest = objectStore.getAll();
+
+        getAllRequest.onsuccess = () => {
+          const sharedFilesData = getAllRequest.result || [];
+          console.log(`加载了 ${sharedFilesData.length} 个共享文件记录`);
+
+          // 按时间戳排序，最新访问的排在前面
+          const sortedFiles = sharedFilesData.sort((a, b) =>
+            (b.timestamp || 0) - (a.timestamp || 0)
+          ) as SharedFileItem[];
+
+          setSharedFiles(sortedFiles);
+          setFilteredSharedFiles(sortedFiles);
+        };
+
+        getAllRequest.onerror = (error) => {
+          console.error("加载共享文件历史失败:", error);
+          setSharedFiles([]);
+        };
+      };
+
+      request.onerror = (error) => {
+        console.error("打开数据库失败:", error);
+        setSharedFiles([]);
+      };
+    } catch (error) {
+      console.error("加载共享文件历史时出错:", error);
+      setSharedFiles([]);
+    }
+  };
+
+  // Handle import button click
+  const handleImportClick = () => {
+    setIsImportDialogOpen(true);
+  };
+
+  // 添加点击源标签页的全局状态变量
+  const [sourceTab, setSourceTab] = useState<'my-files' | 'shared' | null>(null);
+
+  // 修改recordSharedFileVisit方法，使用正确的字段名
+  const recordSharedFileVisit = (file: FileContent) => {
+    // 验证文件有效性
+    if (!file || !file.uid) {
+      console.log("无效的文件，不记录访问");
+      return;
+    }
+
+    // 使用API返回的owned字段和点击来源双重检查
+    // 只有当文件不是用户所有 且 来源是shared标签页 或 通过共享链接直接访问时才记录
+    if (file.owned) {
+      console.log(`文件 "${file.title}" 属于当前用户，不记录为共享访问`);
+      return;
+    }
+
+    // 如果是从"My Files"标签页点击的，即使API返回owned=false，也不记录
+    // (这可能是API返回错误的情况)
+    if (sourceTab === 'my-files') {
+      console.log(`文件 "${file.title}" 来自"我的文件"标签页，不记录为共享访问`);
+      return;
+    }
+
+    console.log(`记录共享文件访问: "${file.title}" (ID: ${file.id})`);
+
+    try {
+      const request = window.indexedDB.open("AineeAppDB", 1);
+
+      request.onsuccess = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        const transaction = db.transaction(["sharedFilesHistory"], "readwrite");
+        const objectStore = transaction.objectStore("sharedFilesHistory");
+
+        // 检查是否已存在该文件
+        const getRequest = objectStore.get(file.id);
+
+        getRequest.onsuccess = () => {
+          const fileData = getRequest.result;
+
+          const fileToSave: SharedFileItem = {
+            id: file.id,
+            uid: file.uid,
+            title: file.title,
+            media_type: file.media_type,
+            created_at: file.created_at,
+            timestamp: Date.now(), // 更新访问时间戳
+            last_accessed: new Date().toISOString()
+          };
+
+          // 如果文件已存在，则更新时间戳；否则添加新记录
+          objectStore.put(fileToSave);
+          console.log(`共享文件 "${file.title}" 已${fileData ? '更新' : '添加'}到IndexedDB`);
+        };
+
+        transaction.oncomplete = () => {
+          // 重新加载共享文件历史
+          loadSharedFilesHistory();
+        };
+      };
+
+      request.onerror = (error) => {
+        console.error("记录共享文件访问出错:", error);
+      };
+    } catch (error) {
+      console.error("记录共享文件访问时出错:", error);
+    } finally {
+      // 重置sourceTab以便下次检查
+      setSourceTab(null);
+    }
+  };
+
+  // 添加一个useEffect确保在我的文件列表更新时，也更新共享文件列表
+  useEffect(() => {
+    // 当文件列表加载完成后，重新加载共享文件历史以过滤掉我的文件
+    if (files.length > 0) {
+      loadSharedFilesHistory();
+    }
+  }, [files]);
+
+  // Fetch user contents - same as in files/page.tsx
+  const fetchUserContents = async (cursor?: string | null) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // 添加limit参数，将默认的100改为500
+      const response = await ApiLibs.content.getUserContentsApiContentUserContentsGet(cursor, 500);
+
+      if (response.code === ResponseCode.SUCCESS && response.data) {
+        // 安全地访问API返回数据，转换为any类型以避免类型检查问题
+        const apiData: any = response.data;
+        const allContents = apiData.contents || [];
+        const hasMoreData = !!apiData.has_next;
+        const nextCursorValue = apiData.next_cursor || null;
+
+        // 过滤出processing_status为completed的内容
+        const contents = allContents.filter((content: any) => content.processing_status === "completed");
+        console.log(`总文件数: ${allContents.length}, 已完成文件数: ${contents.length}`);
+
+        // 将API返回的数据映射到我们的FileItem接口
+        const fileItems: FileItem[] = contents.map((content: any) => {
+          // 从API返回的内容获取媒体类型
+          let mediaType = ContentMediaType.link;
+          if (content.media_type) {
+            const mediaTypeStr = String(content.media_type).toLowerCase();
+            if (mediaTypeStr.includes('video')) mediaType = ContentMediaType.video;
+            else if (mediaTypeStr.includes('pdf')) mediaType = ContentMediaType.pdf;
+            else if (mediaTypeStr.includes('audio') && mediaTypeStr.includes('internal')) mediaType = ContentMediaType.audioInternal;
+            else if (mediaTypeStr.includes('audio') && mediaTypeStr.includes('microphone')) mediaType = ContentMediaType.audioMicrophone;
+            else if (mediaTypeStr.includes('audio')) mediaType = ContentMediaType.audio;
+            else if (mediaTypeStr.includes('word')) mediaType = ContentMediaType.word;
+            else if (mediaTypeStr.includes('image')) mediaType = ContentMediaType.image;
+            else if (mediaTypeStr.includes('ppt')) mediaType = ContentMediaType.ppt;
+            else if (mediaTypeStr.includes('text')) mediaType = ContentMediaType.text;
+            else if (mediaTypeStr.includes('excel')) mediaType = ContentMediaType.excel;
+          }
+
+          return {
+            id: content.uid || content.id || content.content_id || `temp-${Math.random().toString(36).substr(2, 9)}`,
+            uid: content.uid, // Store the uid separately for API calls
+            title: content.title || content.file_name || content.filename || 'Untitled',
+            media_type: mediaType,
+            created_at: content.created_at || new Date().toISOString(),
+            last_accessed: content.updated_at ? new Date(content.updated_at).toLocaleString() : 'Recently'
+          };
+        });
+
+        if (cursor) {
+          // 加载更多的情况
+          setFiles(prev => [...prev, ...fileItems]);
+        } else {
+          // 初始加载
+          setFiles(fileItems);
+
+          // 设置最近访问的文件
+          const recent = [...fileItems]
+            .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+            .slice(0, 6);
+          setRecentFiles(recent);
+        }
+
+        setHasNext(hasMoreData);
+        setNextCursor(nextCursorValue);
+      } else {
+        throw new Error(response.message || 'Failed to fetch files');
+      }
+    } catch (err) {
+      console.error('Error fetching files:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch files');
+      if (typeof toast !== 'undefined') {
+        toast.error('Failed to load files. Please try again later.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Initial load
+  useEffect(() => {
+    fetchUserContents();
+  }, []);
+
+  // Filter and sort files - same as in files/page.tsx
+  useEffect(() => {
+    let result = [...files];
+
+    // 搜索过滤
+    if (searchTerm) {
+      result = result.filter(file =>
+        file.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // 媒体类型过滤
+    if (mediaTypeFilter) {
+      result = result.filter(file => file.media_type === mediaTypeFilter);
+    }
+
+    // 排序
+    result.sort((a, b) => {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+    setFilteredFiles(result);
+  }, [files, searchTerm, mediaTypeFilter, sortOrder]);
+
+  // 同样为共享文件列表添加过滤和排序逻辑
+  useEffect(() => {
+    let result = [...sharedFiles];
+
+    // 搜索过滤
+    if (searchTerm) {
+      result = result.filter(file =>
+        file.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // 媒体类型过滤
+    if (mediaTypeFilter) {
+      result = result.filter(file => file.media_type === mediaTypeFilter);
+    }
+
+    // 排序
+    result.sort((a, b) => {
+      // 对于共享文件历史，优先按照访问时间排序
+      const dateA = a.timestamp || new Date(a.created_at).getTime();
+      const dateB = b.timestamp || new Date(b.created_at).getTime();
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+
+    setFilteredSharedFiles(result);
+  }, [sharedFiles, searchTerm, mediaTypeFilter, sortOrder]);
+
+  // Load more files
+  const handleLoadMore = () => {
+    if (hasNext && nextCursor) {
+      fetchUserContents(nextCursor);
+    }
+  };
+
+  // 刷新文件列表 - 使用useCallback
+  const refreshFiles = useCallback(() => {
+    toast.info("Refreshing file list...");
+    fetchUserContents(); // 不传递cursor参数，从头开始加载
+  }, [fetchUserContents]);
+
+  // 监听导入成功事件，自动刷新文件列表
+  useEffect(() => {
+    // 导入成功时自动刷新文件列表的处理函数
+    const handleImportSuccess = () => {
+      // 如果当前在"我的文件"标签，则刷新文件列表
+      if (activeTab === 'my-files') {
+        refreshFiles();
+      }
+    };
+
+    // 添加事件监听器
+    window.addEventListener('ainee:import:success', handleImportSuccess);
+
+    // 组件卸载时移除事件监听器
+    return () => {
+      window.removeEventListener('ainee:import:success', handleImportSuccess);
+    };
+  }, [activeTab, refreshFiles]); // 添加activeTab和refreshFiles作为依赖项
+
+  // 修改文件加载逻辑，使用正确的owned字段
+  // useEffect(() => {
+  //   const fetchFileContent = async () => {
+  //     if (!contentId) return;
+  //     document.removeEventListener('mousemove', handleGlobalMouseMove);
+  //     document.removeEventListener('mouseup', handleGlobalMouseUp);
+  //   }
+  // }, [isDragging]);
+
+  // 处理tab切换
+  const handleTabChange = (value: string) => {
+    setCurrentTab(value);
+  };
+
+  // Handle copy functionality
+  const handleCopy = () => {
+    if (fileContent?.ai_summary) {
+      navigator.clipboard.writeText(fileContent.ai_summary);
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    }
+  };
+
+  // Handle tag addition
+  const handleAddTag = async () => {
+    if (!newTagInput.trim() || !fileContent) return;
+
+    const newTag = newTagInput.trim();
+    const currentTags = fileContent.ai_tags || [];
+
+    // Check if tag already exists or we've reached the limit
+    if (currentTags.includes(newTag) || currentTags.length >= 3) {
+      return;
+    }
+
+    const updatedTags = [...currentTags, newTag];
+
+    try {
+      const response = await ApiLibs.content.editContentApiContentEditPost({
+        uid: fileContent.uid,
+        tags: updatedTags
+      });
+
+      if (response.code === "SUCCESS") {
+        // Update local state
+        setFileContent({
+          ...fileContent,
+          ai_tags: updatedTags
+        });
+        setNewTagInput("");
+        toast.success("Tag added successfully");
+      } else {
+        toast.error(response.message || "Failed to add tag");
+      }
+    } catch (error) {
+      console.error("Error adding tag:", error);
+      toast.error("Failed to add tag");
+    }
+  };
+
+  // Load knowledge bases for the selector
+  const loadAvailableKnowledgeBases = async () => {
+    if (isLoadingKbs) return;
+
+    try {
+      console.log("Loading knowledge bases...");
+      setIsLoadingKbs(true);
+      const response = await ApiLibs.knowledgeBase.getKnowledgeBaseListApiKbListOwnGet(
+        KnowledgeBaseType.OWNED
+      );
+
+      console.log("KB API response:", response);
+
+      if (response.code === "SUCCESS" && response.data) {
+        // 类型转换，确保兼容接口
+        const kbs: KnowledgeBase[] = (response.data.knowledge_bases || []).map((kb: KnowledgeBaseResponse) => ({
+          uid: kb.uid,
+          name: kb.name,
+          description: kb.description,
+          visibility: kb.visibility,
+          owned: kb.owned,
+          subscribed: kb.subscribed
+        }));
+
+        console.log("Processed knowledge bases:", kbs);
+        setAvailableKnowledgeBases(kbs);
+
+        // 确保保留文件当前关联的知识库
+        if (fileContent?.belonged_kbs && fileContent.belonged_kbs.length > 0) {
+          const kbIds = fileContent.belonged_kbs.map(kb => kb.uid);
+          console.log("Setting selected KBs in loadAvailableKnowledgeBases:", kbIds);
+          setSelectedKnowledgeBases(kbIds);
+        }
+      } else {
+        console.error("Failed to load knowledge bases:", response);
+        toast.error("Failed to load knowledge bases");
+      }
+    } catch (error) {
+      console.error("Error loading knowledge bases:", error);
+      toast.error("Failed to load knowledge bases");
+    } finally {
+      setIsLoadingKbs(false);
+    }
+  };
+
+  // 打开知识库选择器
+  const openKnowledgeBaseSelector = () => {
+    // 重置已选择的知识库为当前文件关联的知识库
+    if (fileContent?.belonged_kbs && fileContent.belonged_kbs.length > 0) {
+      const kbIds = fileContent.belonged_kbs.map(kb => kb.uid);
+      console.log("Setting selected KBs to current file's KBs:", kbIds);
+      setSelectedKnowledgeBases(kbIds);
+    } else {
+      console.log("No KBs associated with file, clearing selection");
+      setSelectedKnowledgeBases([]);
+    }
+
+    // 打开选择器并加载知识库
+    setKbSelectorOpen(true);
+    loadAvailableKnowledgeBases();
+  };
+
+  // Handle knowledge base selection update
+  const handleUpdateKnowledgeBases = async () => {
+    if (!fileContent) return;
+
+    try {
+      // 显示加载状态
+      setIsLoadingKbs(true);
+      console.log("Updating knowledge bases with selected IDs:", selectedKnowledgeBases);
+
+      const response = await ApiLibs.content.editContentApiContentEditPost({
+        uid: fileContent.uid,
+        add_to_kb_ids: selectedKnowledgeBases
+      });
+
+      console.log("Update KB response:", response);
+
+      if (response.code === "SUCCESS") {
+        // We need to fetch the updated content to get the full KB info
+        handleEditSuccess();
+        setKbSelectorOpen(false);
+        toast.success("Knowledge bases updated successfully");
+      } else {
+        toast.error(response.message || "Failed to update knowledge bases");
+      }
+    } catch (error) {
+      console.error("Error updating knowledge bases:", error);
+      toast.error("Failed to update knowledge bases");
+    } finally {
+      setIsLoadingKbs(false);
+    }
+  };
+
+  // Handle Outline copy functionality
+  const handleOutlineCopy = () => {
+    if (fileContent?.ai_structure) {
+      navigator.clipboard.writeText(fileContent.ai_structure);
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    }
+  };
+
+  // Add delete functionality
+  const handleDeleteClick = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!fileContent?.uid) {
+      toast.error("Cannot delete: File ID is missing");
+      setIsDeleteDialogOpen(false);
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+      const response = await ApiLibs.content.deleteContentApiContentDeleteUidPost(fileContent.uid);
+
+      // 检查API响应，确认删除是否成功
+      if (response && response.code === "SUCCESS") {
+        toast.success("File deleted successfully");
+        // 重定向到文件列表页面
+        router.push('/dashboard/inbox');
+      } else {
+        toast.error(response.message || "Failed to delete file");
+      }
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      toast.error("An error occurred while deleting the file");
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteDialogOpen(false);
+    }
+  };
+
+  // 添加复制链接功能
+  const handleShare = () => {
+    if (fileContent?.page_url) {
+      const url = fileContent.page_url.startsWith('http')
+        ? fileContent.page_url
+        : `https://${fileContent.page_url}`;
+
+      navigator.clipboard.writeText(url)
+        .then(() => {
+          toast.success("Link copied to clipboard!");
+        })
+        .catch((error) => {
+          console.error("Failed to copy: ", error);
+          toast.error("Failed to copy link");
+        });
+    } else {
+      toast.info("No shareable link available for this content");
+    }
+  };
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-background">
+      {/* <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} /> */}
+
+      {/* Import Dialog - 放在最外层确保任何按钮都能打开 */}
+      <ImportDialog
+        open={isImportDialogOpen}
+        onOpenChange={setIsImportDialogOpen}
+      />
+
+      {/* 文件列表区域 - Same as in files/page.tsx */}
+      <div className={`border-r bg-card flex flex-col ${isFileListExpanded ? 'w-64' : 'w-16'} transition-all duration-300 ease-in-out`}>
+        {/* 文件列表头部 */}
+        <div className="p-3 border-b flex flex-col gap-2">
+          {isFileListExpanded && (
+            <>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="text"
+                  placeholder="Search files..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="h-8 text-xs"
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => setIsFileListExpanded(false)}
+                >
+                  <img src="/icon/sidebar-expand.svg" alt="Collapse" className="h-5 w-5" />
+                </Button>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full h-8 text-xs justify-center"
+                onClick={handleImportClick}
+              >
+                <Plus className="mr-2 h-3.5 w-3.5" /> Import New
+              </Button>
+
+              {/* 添加文件列表选项卡 */}
+              <div className="flex border-b mt-2">
+                <button
+                  className={`pb-2 px-3 text-xs font-medium ${activeTab === 'my-files' ? 'border-b-2 border-primary text-primary' : 'text-muted-foreground'}`}
+                  onClick={() => setActiveTab('my-files')}
+                >
+                  My Files
+                </button>
+                <button
+                  className={`pb-2 px-3 text-xs font-medium ${activeTab === 'shared' ? 'border-b-2 border-primary text-primary' : 'text-muted-foreground'}`}
+                  onClick={() => setActiveTab('shared')}
+                >
+                  Shared
+                </button>
+              </div>
+            </>
+          )}
+
+          {!isFileListExpanded && (
+            <div className="flex flex-col items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setIsFileListExpanded(true)}
+              >
+                <img src="/icon/sidebar-collapse.svg" alt="Expand" className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8"
+                onClick={handleImportClick}
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          )}
+        </div>
+
+        {/* 文件列表内容 */}
+        <div className="flex-1 overflow-auto">
+          {isFileListExpanded && (
+            <div className="pt-0 px-3 pb-3">
+              <div className="sticky top-0 z-10 bg-card pt-1 pb-2 flex items-center justify-between mb-2">
+                <div className="flex items-center">
+                  <h3 className="text-[12px] font-medium">{activeTab === 'my-files' ? 'My Files' : 'Shared Files'}</h3>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  {/* 添加刷新按钮 */}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={refreshFiles}
+                    title="Refresh file list"
+                    disabled={isLoading}
+                  >
+                    <RefreshCw className={`h-3 w-3 ${isLoading ? 'animate-spin' : ''}`} />
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                    title={sortOrder === 'asc' ? "Sort Descending" : "Sort Ascending"}
+                  >
+                    {sortOrder === 'asc' ?
+                      <SortAsc className="h-3 w-3" /> :
+                      <SortDesc className="h-3 w-3" />
+                    }
+                  </Button>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button
+                        variant={mediaTypeFilter !== null ? "secondary" : "ghost"}
+                        size="icon"
+                        className={`h-6 w-6 ${mediaTypeFilter !== null ? "bg-primary/20" : ""}`}
+                        title={mediaTypeFilter !== null ? `Filtered by: ${mediaTypeFilter}` : "Filter by Type"}
+                      >
+                        <Filter className={`h-3 w-3 ${mediaTypeFilter !== null ? "text-primary" : ""}`} />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48">
+                      <DropdownMenuLabel className="text-xs font-normal">Filter by Type</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem
+                        className="text-xs flex items-center justify-between"
+                        onClick={() => setMediaTypeFilter(null)}
+                      >
+                        <span>All Files</span>
+                        {mediaTypeFilter === null && <CheckIcon className="h-3 w-3 ml-2" />}
+                      </DropdownMenuItem>
+
+                      {(Object.values(ContentMediaType) as ContentMediaType[]).map((type) => (
+                        <DropdownMenuItem
+                          key={type}
+                          className="text-xs flex items-center justify-between"
+                          onClick={() => setMediaTypeFilter(type)}
+                        >
+                          <div className="flex items-center">
+                            <Image
+                              src={getItemIcon(type)}
+                              alt={type}
+                              width={14}
+                              height={14}
+                              className="mr-2"
+                            />
+                            <span>{type}</span>
+                          </div>
+                          {mediaTypeFilter === type && <CheckIcon className="h-3 w-3 ml-2" />}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                {isLoading && (activeTab === 'my-files' ? files.length === 0 : sharedFiles.length === 0) ? (
+                  <div className="flex justify-center items-center py-4">
+                    <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                  </div>
+                ) : error ? (
+                  <div className="text-xs text-center py-4 text-destructive">
+                    {error}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="ml-2 h-6"
+                      onClick={() => fetchUserContents()}
+                    >
+                      Retry
+                    </Button>
+                  </div>
+                ) : (activeTab === 'my-files' ? filteredFiles.length === 0 : filteredSharedFiles.length === 0) ? (
+                  <div className="text-xs text-center py-4 text-muted-foreground">
+                    No files found.
+                  </div>
+                ) : (
+                  // 显示文件列表，根据选项卡切换显示的文件
+                  (activeTab === 'my-files' ? filteredFiles : filteredSharedFiles).map((file) => (
+                    <Link
+                      key={file.id}
+                      href={`/dashboard/file-details/${file.id}`}
+                      className={cn(
+                        "flex items-center p-1.5 rounded-md hover:bg-accent transition-colors cursor-pointer",
+                        file.id.toString() === contentId ? "bg-accent" : ""
+                      )}
+                      onClick={() => {
+                        // 记录当前点击发生在哪个标签页
+                        setSourceTab(activeTab);
+
+                        // 输出日志
+                        if (activeTab === 'shared') {
+                          console.log(`点击共享文件: ${file.title} (ID: ${file.id})`);
+                        } else {
+                          console.log(`点击我的文件: ${file.title} (ID: ${file.id})`);
+                        }
+                      }}
+                    >
+                      <Image
+                        src={getItemIcon(file.media_type)}
+                        alt={String(file.media_type)}
+                        width={16}
+                        height={16}
+                        className="mr-2 flex-shrink-0"
+                      />
+                      <span className="text-xs truncate flex-1">{file.title}</span>
+                    </Link>
+                  ))
+                )}
+
+                {activeTab === 'my-files' && hasNext && (
+                  <div className="flex justify-center pt-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs h-7"
+                      onClick={handleLoadMore}
+                      disabled={isLoading}
+                    >
+                      {isLoading ? <Loader2 className="h-3 w-3 animate-spin mr-1" /> : null}
+                      Load More
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* 收起状态下的文件列表 */}
+          {!isFileListExpanded && (
+            <>
+              <div className="flex flex-col items-center py-3 space-y-3 overflow-y-auto max-h-full">
+                {isLoading && files.length === 0 ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                ) : filteredFiles.map((file) => (
+                  <Button
+                    key={file.id}
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 flex-shrink-0 tooltip-trigger"
+                    title={file.title}
+                    onClick={() => router.push(`/dashboard/file-details/${file.id}`)}
+                  >
+                    <Image
+                      src={getItemIcon(file.media_type)}
+                      alt={String(file.media_type)}
+                      width={16}
+                      height={16}
+                    />
+                  </Button>
+                ))}
+              </div>
+
+              {/* 尝试优化原生title的延迟 */}
+              <style jsx global>{`
+                .tooltip-trigger {
+                  position: relative;
+                }
+                .tooltip-trigger:hover::before {
+                  content: "";
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                }
+              `}</style>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Content Area with Split View */}
+        <div className="flex-1 flex overflow-hidden"
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+        >
+          {/* Left Panel - Content Display */}
+          <div
+            className="flex flex-col overflow-hidden"
+            style={{ width: `${leftPanelWidth}%` }}
+          >
+            {/* File Info Section */}
+            <div className="p-4 border-b">
+              {loading ? (
+                <div className="flex items-center space-x-2">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                  <span className="text-muted-foreground">Loading file information...</span>
+                </div>
+              ) : error ? (
+                <div className="text-sm text-destructive">
+                  {error}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="ml-2"
+                    onClick={() => router.refresh()}
+                  >
+                    Retry
+                  </Button>
+                </div>
+              ) : fileContent ? (
+                <div className="space-y-4">
+                  {/* File Title and Actions Row */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2 min-w-0 flex-1">
+                      <Image
+                        src={getItemIcon(fileContent.media_type)}
+                        alt={String(fileContent.media_type)}
+                        width={20}
+                        height={20}
+                        className="flex-shrink-0"
+                      />
+                      <h1 className="text-xl font-semibold truncate" title={fileContent.title}>
+                        {fileContent.title}
+                      </h1>
+                    </div>
+
+                    <div className="flex items-center gap-2 ml-4 flex-shrink-0">
+                      <Button variant="ghost" size="icon" onClick={handleShare}>
+                        <Share2 className="h-4 w-4" />
+                      </Button>
+
+                      {fileContent.owned && (
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="border-0 ring-0 bg-popover shadow-elevation-menu">
+                            <DropdownMenuItem onClick={() => handleEditClick()}>
+                              <Edit className="h-4 w-4 mr-2" />
+                              <span>Edit</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => handleDeleteClick()}>
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              <span>Delete</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      )}
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setIsDetailsExpanded(!isDetailsExpanded)}
+                        className="p-0 h-7 w-7 rounded-md flex items-center justify-center"
+                      >
+                        {isDetailsExpanded ?
+                          <ChevronUpSquare className="h-4 w-4 text-muted-foreground" /> :
+                          <ChevronDownSquare className="h-4 w-4 text-muted-foreground" />
+                        }
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Collapsible Details Section */}
+                  {isDetailsExpanded && (
+                    <div className="mt-3 space-y-3">
+                      {/* Source URL if available */}
+                      {fileContent.source && fileContent.source.trim() !== '' && (
+                        <div className="flex items-center">
+                          <Link2 className="h-4 w-4 text-muted-foreground mr-2 flex-shrink-0" />
+                          <h3 className="text-sm font-medium mr-2">Source:</h3>
+                          <a
+                            href={fileContent.source}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-blue-500 hover:underline truncate"
+                          >
+                            {fileContent.source}
+                          </a>
+                        </div>
+                      )}
+
+                      {/* Tags */}
+                      <div className="flex items-center">
+                        <Tag className="h-4 w-4 text-muted-foreground mr-2 flex-shrink-0" />
+                        <h3 className="text-sm font-medium mr-2">Tags:</h3>
+
+                        <div className="flex-1">
+                          <div className="flex flex-wrap gap-2 items-center">
+                            {(fileContent.ai_tags || []).map((tag, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center bg-secondary rounded-full px-3 py-1 text-xs"
+                              >
+                                <span className="mr-1">#{tag}</span>
+                                {/* 只有在拥有者模式下才显示删除按钮 */}
+                                {fileContent.owned && (
+                                  <button
+                                    type="button"
+                                    onClick={async () => {
+                                      // Remove tag and update via API
+                                      const updatedTags = (fileContent.ai_tags || []).filter(t => t !== tag);
+                                      try {
+                                        const response = await ApiLibs.content.editContentApiContentEditPost({
+                                          uid: fileContent.uid,
+                                          tags: updatedTags
+                                        });
+
+                                        if (response.code === "SUCCESS") {
+                                          // Update local state to reflect the change
+                                          setFileContent({
+                                            ...fileContent,
+                                            ai_tags: updatedTags
+                                          });
+                                          toast.success("Tag removed successfully");
+                                        } else {
+                                          toast.error(response.message || "Failed to remove tag");
+                                        }
+                                      } catch (error) {
+                                        console.error("Error removing tag:", error);
+                                        toast.error("Failed to remove tag");
+                                      }
+                                    }}
+                                    className="text-muted-foreground hover:text-foreground"
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+
+                            {/* 只有在拥有者模式下才显示添加标签功能 */}
+                            {fileContent.owned && (fileContent.ai_tags || []).length < 3 && (
+                              <div className="flex items-center">
+                                <Input
+                                  value={newTagInput}
+                                  onChange={(e) => setNewTagInput(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && newTagInput.trim()) {
+                                      e.preventDefault();
+                                      handleAddTag();
+                                    }
+                                  }}
+                                  placeholder="Add tag"
+                                  className="h-7 text-xs w-24 mr-1"
+                                />
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  className="h-7 text-xs px-2"
+                                  onClick={handleAddTag}
+                                  disabled={!newTagInput.trim()}
+                                >
+                                  Add
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Knowledge Bases */}
+                      <div className="flex items-center">
+                        <BookOpen className="h-4 w-4 text-muted-foreground mr-2 flex-shrink-0" />
+                        <h3 className="text-sm font-medium mr-2">Knowledge Bases:</h3>
+
+                        <div className="flex-1">
+                          <div className="flex flex-wrap gap-2 items-center">
+                            {(fileContent.belonged_kbs || []).length > 0 ? (
+                              <>
+                                {(fileContent.belonged_kbs || []).map((kb) => (
+                                  <div
+                                    key={kb.uid}
+                                    className="flex items-center bg-secondary rounded-full px-3 py-1 text-xs cursor-pointer hover:bg-secondary/80"
+                                    onClick={() => router.push(`/dashboard/knowledge-base?id=${kb.uid}`)}
+                                    title="Click to view knowledge base"
+                                  >
+                                    <span>{kb.name}</span>
+                                  </div>
+                                ))}
+                              </>
+                            ) : (
+                              <span className="text-xs text-muted-foreground mr-2">No knowledge bases associated</span>
+                            )}
+
+                            {/* 只有在拥有者模式下才显示添加知识库按钮 */}
+                            {fileContent.owned && (
+                              <Button
+                                variant="outline"
+                                className="h-7 text-xs px-2"
+                                onClick={openKnowledgeBaseSelector}
+                              >
+                                + Add to Knowledge Bases
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : null}
+            </div>
+
+            {/* Content Display */}
+            <div className="flex-1 p-4 overflow-auto">
+              {loading ? (
+                <div className="flex justify-center items-center h-full">
+                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                </div>
+              ) : error ? (
+                <div className="text-destructive text-center p-4">
+                  Failed to load content. Please try again.
+                </div>
+              ) : fileContent ? (
+                <FileContentViewer
+                  fileContent={fileContent}
+                  loading={loading}
+                  error={error}
+                />
+              ) : (
+                <div className="text-muted-foreground text-center p-4">
+                  No content available.
+                </div>
+              )}
+            </div>
+          </div>
+          ·
+          {/* Resizable Handle */}
+          <div
+            className={cn(
+              "relative group border-r border-l border-border bg-background hover:bg-accent flex items-center justify-center w-2 cursor-col-resize",
+              isDragging && "bg-accent"
+            )}
+            onMouseDown={handleMouseDown}
+          >
+            <GripVertical className="h-2.5 w-2.5 text-muted-foreground opacity-0 group-hover:opacity-100" />
+          </div>
+
+          {/* Right Panel - AI Tools */}
+          <div
+            className="flex flex-col overflow-hidden"
+            style={{ width: `${100 - leftPanelWidth}%` }}
+          >
+            {/* Top Actions Bar */}
+            <div className="p-4 border-b flex justify-between items-center min-h-[64px]">
+              <div className="flex">
+                {/* Action buttons will be added here */}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" title="Share" onClick={handleShare}>
+                  <Share2 className="h-4 w-4" />
+                </Button>
+
+                {/* 只有在拥有者模式下才显示更多选项 */}
+                {fileContent?.owned && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Button variant="ghost" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="border-0 ring-0 bg-popover shadow-elevation-menu">
+                      <DropdownMenuItem onClick={() => handleEditClick()}>
+                        <Edit className="h-4 w-4 mr-2" />
+                        <span>Edit</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={() => handleDeleteClick()}>
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        <span>Delete</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+              </div>
+            </div>
+
+            {/* AI Tools Tabs */}
+            <div className="border-b">
+              <div className="px-4 py-2">
+                <div className="flex space-x-4 border-b">
+                  <button
+                    onClick={() => setCurrentTab("summary")}
+                    className={`pb-2 px-2 font-medium text-sm flex items-center gap-2 ${currentTab === "summary" ? "border-b-2 border-primary text-foreground" : "text-muted-foreground"}`}
+                  >
+                    <Image src="/icon/summary_icon.svg" width={16} height={16} alt="Summary" />
+                    <span>Summary</span>
+                  </button>
+                  <button
+                    onClick={() => setCurrentTab("outline")}
+                    className={`pb-2 px-2 font-medium text-sm flex items-center gap-2 ${currentTab === "outline" ? "border-b-2 border-primary text-foreground" : "text-muted-foreground"}`}
+                  >
+                    <Image src="/icon/outline_icon.svg" width={16} height={16} alt="Outline" />
+                    <span>Outline</span>
+                  </button>
+                  <button
+                    onClick={() => setCurrentTab("chat")}
+                    className={`pb-2 px-2 font-medium text-sm flex items-center gap-2 ${currentTab === "chat" ? "border-b-2 border-primary text-foreground" : "text-muted-foreground"}`}
+                  >
+                    <Image src="/icon/chat_icon.svg" width={16} height={16} alt="Chat" />
+                    <span>Chat</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* AI Content Area */}
+            <div className="flex-1 p-4 overflow-auto">
+              {currentTab === "summary" && (
+                <div className="h-full">
+                  <Card className="border-dashed h-full flex flex-col p-6 relative">
+                    {/* 复制按钮 */}
+                    {fileContent?.ai_summary && (
+                      <div className="absolute top-2 right-2">
+                        <button
+                          onClick={handleCopy}
+                          className="p-2 rounded-md hover:bg-gray-100 transition-colors flex items-center gap-1 text-sm text-gray-600"
+                        >
+                          {isCopied ? (
+                            <>
+                              <CheckIcon className="h-4 w-4" />
+                              <span>Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-4 w-4" />
+                              <span>Copy</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+
+                    {loading ? (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-2" />
+                        <p className="text-muted-foreground">Loading summary...</p>
+                      </div>
+                    ) : fileContent?.ai_summary ? (
+                      <div className="prose prose-sm max-w-none overflow-auto">
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            h1: ({...props}) => <h1 className="text-xl font-bold my-3 font-sans text-[#213756]" {...props} />,
+                            h2: ({...props}) => <h2 className="text-lg font-bold my-2 font-sans text-[#213756]" {...props} />,
+                            h3: ({...props}) => <h3 className="text-md font-bold my-2 font-sans text-[#213756]" {...props} />,
+                            p: ({...props}) => <p className="mb-3 font-sans text-[#737373] text-sm leading-relaxed" {...props} />,
+                            ul: ({...props}) => <ul className="list-disc pl-5 mb-3 font-sans text-[#737373] text-sm" {...props} />,
+                            ol: ({...props}) => <ol className="list-decimal pl-5 mb-3 font-sans text-[#737373] text-sm" {...props} />,
+                            li: ({...props}) => <li className="mb-1 font-sans text-[#737373]" {...props} />,
+                            code: ({...props}) => <code className="bg-gray-100 px-1 rounded text-sm font-mono text-[#4D4DFF]" {...props} />,
+                            pre: ({...props}) => <pre className="bg-gray-100 p-2 rounded-md my-2 text-sm font-mono overflow-x-auto" {...props} />,
+                            blockquote: ({...props}) => <blockquote className="border-l-4 border-gray-300 pl-4 italic my-2 font-sans text-[#737373]" {...props} />,
+                            table: ({...props}) => <table className="border-collapse w-full my-3 font-sans text-sm" {...props} />,
+                            th: ({...props}) => <th className="border border-gray-300 p-2 bg-gray-50 font-sans text-[#213756]" {...props} />,
+                            td: ({...props}) => <td className="border border-gray-300 p-2 font-sans text-[#737373] text-sm" {...props} />,
+                          }}
+                        >
+                          {fileContent.ai_summary}
+                        </ReactMarkdown>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <div className="text-center">
+                          <p className="text-muted-foreground mb-4">Summary is being generated, please wait a moment..</p>
+                        </div>
+                      </div>
+                    )}
+                  </Card>
+                </div>
+              )}
+
+              {currentTab === "outline" && (
+                <div className="h-full">
+                  <Card className="border-dashed h-full flex flex-col p-0 relative">
+                    {/* 复制按钮 - 移动到Card组件的直接子元素位置 */}
+                    {fileContent?.ai_structure && (
+                      <div className="absolute top-2 right-2 z-50">
+                        <button
+                          onClick={handleOutlineCopy}
+                          className="p-2 rounded-md hover:bg-gray-100 transition-colors flex items-center gap-1 text-sm text-gray-600"
+                        >
+                          {isCopied ? (
+                            <>
+                              <CheckIcon className="h-4 w-4" />
+                              <span>Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-4 w-4" />
+                              <span>Copy</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+
+                    {loading ? (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-2" />
+                        <p className="text-muted-foreground">Loading outline...</p>
+                      </div>
+                    ) : fileContent?.ai_structure ? (
+                      <div className="overflow-auto flex-1">
+                        <div className="h-full w-full bg-gray-50 p-0 rounded relative">
+                          <Mindmap chart={fileContent.ai_structure} />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <div className="text-center">
+                          <p className="text-muted-foreground mb-4">Outline is being generated, please wait a moment.</p>
+                        </div>
+                      </div>
+                    )}
+                  </Card>
+                </div>
+              )}
+
+              {currentTab === "chat" && (
+                <div className="h-full">
+                  <Card className="border-dashed h-full flex flex-col p-0 overflow-hidden">
+                    {loading ? (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground mb-2" />
+                        <p className="text-muted-foreground">Loading chat...</p>
+                      </div>
+                    ) : fileContent ? (
+                      <ChatComponent
+                        contentId={fileContent.uid || fileContent.id.toString()}
+                        contentTitle={fileContent.title}
+                        chatStartType={ChatStartType.ARTICLE}
+                      />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full">
+                        <div className="text-center">
+                          <p className="text-muted-foreground mb-4">No content available to chat with.</p>
+                        </div>
+                      </div>
+                    )}
+                  </Card>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 添加删除确认对话框 */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Are you sure you want to delete this file?</DialogTitle>
+            <DialogDescription>
+              This action cannot be undone. This will permanently delete the file and remove it from our servers.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
+            >
+              {isDeleting ? (
+                <>
+                  <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent"></span>
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 添加编辑对话框 */}
+      <EditFileDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        fileContent={fileContent}
+        onEditSuccess={handleEditSuccess}
+      />
+
+      {/* Knowledge Base Selector Dialog */}
+      <Dialog open={kbSelectorOpen} onOpenChange={(open: boolean) => {
+        if (!open) {
+          setKbSelectorOpen(false);
+        }
+      }}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add to Knowledge Bases</DialogTitle>
+            <DialogDescription>
+              Select the knowledge bases you want to add this content to.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-4">
+            <div className="max-h-[300px] overflow-y-auto border rounded-md p-3 space-y-2">
+              {isLoadingKbs ? (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                </div>
+              ) : availableKnowledgeBases.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-2">No knowledge bases found.</p>
+              ) : (
+                availableKnowledgeBases.map((kb) => (
+                  <div key={kb.uid} className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id={`kb-select-${kb.uid}`}
+                      checked={selectedKnowledgeBases.includes(kb.uid)}
+                      onChange={() => {
+                        if (selectedKnowledgeBases.includes(kb.uid)) {
+                          setSelectedKnowledgeBases(
+                            selectedKnowledgeBases.filter(id => id !== kb.uid)
+                          );
+                        } else {
+                          setSelectedKnowledgeBases([...selectedKnowledgeBases, kb.uid]);
+                        }
+                      }}
+                      className="h-4 w-4 rounded border-gray-300"
+                    />
+                    <label htmlFor={`kb-select-${kb.uid}`} className="text-sm truncate max-w-[400px] cursor-pointer" title={kb.name}>
+                      {kb.name}
+                    </label>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          <DialogFooter className="flex gap-2 justify-end">
+            <Button
+              variant="outline"
+              onClick={() => setKbSelectorOpen(false)}
+              disabled={isLoadingKbs}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleUpdateKnowledgeBases}
+              disabled={isLoadingKbs}
+            >
+              {isLoadingKbs ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  Saving...
+                </>
+              ) : (
+                'Save Changes'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

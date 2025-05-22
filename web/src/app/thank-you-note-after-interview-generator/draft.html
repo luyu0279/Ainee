@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Thank You Note Generator | Professional Templates & Tips</title>
+    <meta name="description" content="Create perfect thank you notes after your job interview. Free generator, templates and expert advice to help you stand out and improve your chances of landing the job.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+        .hero-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%);
+        }
+        .template-card {
+            transition: all 0.3s ease;
+        }
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        .generator-bg {
+            background-color: #F9FAFB;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #6366F1;
+            border: 4px solid white;
+            box-shadow: 0 0 0 2px #6366F1;
+        }
+        .timeline-connector {
+            position: absolute;
+            left: -29px;
+            top: 20px;
+            bottom: -20px;
+            width: 2px;
+            background-color: #6366F1;
+        }
+        .scrollable-content {
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        .tab-button.active {
+            color: #4F46E5;
+            border-bottom: 2px solid #4F46E5;
+        }
+        #output {
+            white-space: pre-wrap;
+        }
+        /* Remove scrollbars and optimize for PDF export */
+        @media print {
+            .scrollable-content {
+                max-height: none;
+                overflow: visible;
+            }
+            body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- Header -->
+    <header class="hero-bg text-white py-16 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">Thank You Note after interview Generator</h1>
+                    <h2 class="text-xl md:text-2xl mb-6 font-light">Create the perfect post-interview thank you note in seconds</h2>
+                    <p class="text-lg mb-8">Stand out from other candidates with a professional, personalized thank you note after your job interview.</p>
+                    <a href="#generator" class="btn-primary text-white font-semibold px-8 py-3 rounded-lg inline-block">Create Your Note Now</a>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+                        <div class="text-gray-800 mb-4">
+                            <div class="flex mb-3">
+                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mr-3">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="font-medium">Increases your chances of getting hired</div>
+                            </div>
+                            <div class="flex mb-3">
+                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mr-3">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="font-medium">Shows professionalism and courtesy</div>
+                            </div>
+                            <div class="flex mb-3">
+                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mr-3">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="font-medium">Reminds hiring managers of your qualifications</div>
+                            </div>
+                            <div class="flex">
+                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mr-3">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="font-medium">Helps you stand out from other candidates</div>
+                            </div>
+                        </div>
+                        <div class="text-center text-gray-500 text-sm">
+                            <span class="font-bold text-gray-700">87%</span> of hiring managers say thank you notes influence their decisions
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Why Send a Thank You Note -->
+    <section class="py-16 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Why You Should Send a Thank You Note</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mb-4">
+                        <i class="fas fa-user-tie text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Shows Professionalism</h3>
+                    <p class="text-gray-600">A thank you note demonstrates your professionalism and attention to detail, traits employers value in candidates.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mb-4">
+                        <i class="fas fa-brain text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Keeps You Top of Mind</h3>
+                    <p class="text-gray-600">Sending a note after your interview helps the hiring manager remember you when making their final decision.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mb-4">
+                        <i class="fas fa-comment-dots text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Adds Value</h3>
+                    <p class="text-gray-600">It gives you an opportunity to address any concerns, elaborate on answers, or add information you forgot to mention.</p>
+                </div>
+            </div>
+            <div class="mt-12 bg-indigo-50 p-6 rounded-lg">
+                <div class="flex items-start">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mr-4 flex-shrink-0">
+                        <i class="fas fa-lightbulb text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-2">Did You Know?</h3>
+                        <p class="text-gray-700">According to surveys, only 20-25% of candidates send thank you notes after interviews, yet nearly 80% of hiring managers say they influence their decision-making process. This simple step can significantly differentiate you from other candidates.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="py-16 bg-gray-50 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12">When & How to Send Your Thank You Note</h2>
+            <div class="relative pl-12 md:pl-16 max-w-3xl mx-auto">
+                <div class="mb-12 relative timeline-item">
+                    <div class="timeline-connector"></div>
+                    <h3 class="text-xl font-semibold mb-3">Within 24 Hours</h3>
+                    <p class="text-gray-600 mb-4">Send your thank you note within 24 hours of your interview while you're still fresh in the interviewer's mind.</p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <p class="text-gray-500 italic">"I always look for thank you notes within a day of the interview. It shows me the candidate is serious and eager about the position."</p>
+                        <p class="text-gray-700 font-medium mt-2">- HR Director, Fortune 500 Company</p>
+                    </div>
+                </div>
+                <div class="mb-12 relative timeline-item">
+                    <div class="timeline-connector"></div>
+                    <h3 class="text-xl font-semibold mb-3">Email vs. Handwritten</h3>
+                    <p class="text-gray-600 mb-4">Email is the most common and efficient method. Handwritten notes can add a personal touch but take longer to arrive.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                            <h4 class="font-medium mb-2 text-indigo-600">Email</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>✅ Immediate delivery</li>
+                                <li>✅ Professional format</li>
+                                <li>✅ Easy to read and respond to</li>
+                                <li>✅ Industry standard</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                            <h4 class="font-medium mb-2 text-indigo-600">Handwritten</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>✅ More personal touch</li>
+                                <li>✅ Stands out as unique</li>
+                                <li>❌ Takes days to arrive</li>
+                                <li>❌ May arrive too late</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-12 relative timeline-item">
+                    <div class="timeline-connector"></div>
+                    <h3 class="text-xl font-semibold mb-3">Keep It Concise</h3>
+                    <p class="text-gray-600 mb-4">Your thank you note should be brief but impactful. Aim for 3-4 short paragraphs maximum.</p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <div class="flex space-x-3">
+                            <div class="text-indigo-500"><i class="fas fa-quote-left text-2xl"></i></div>
+                            <p class="text-gray-600">The perfect thank you email should take no more than 2 minutes to read. Busy hiring managers appreciate candidates who can communicate clearly and efficiently.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative timeline-item">
+                    <h3 class="text-xl font-semibold mb-3">Follow Up if Needed</h3>
+                    <p class="text-gray-600 mb-4">If you don't hear back within the timeframe mentioned during your interview, it's appropriate to send a polite follow-up.</p>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <h4 class="font-medium mb-2 text-indigo-600">Sample Follow-up:</h4>
+                        <p class="text-sm text-gray-600 italic">"I hope this email finds you well. I'm following up on my interview for the [Position] from [Interview Date]. I'm still very interested in the role and wondering if you have an update on the hiring process. I appreciate your time and consideration."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thank You Note Generator -->
+    <section id="generator" class="py-16 generator-bg px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-2">Thank You Note after interview Generator</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Fill in the details below to create a professional, personalized thank you note that will help you stand out after your interview.</p>
+            
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                <div class="flex flex-col md:flex-row">
+                    <!-- Generator Form -->
+                    <div class="md:w-1/2 p-6 md:p-8 border-b md:border-b-0 md:border-r border-gray-200">
+                        <h3 class="text-xl font-semibold mb-6">Enter Your Information</h3>
+                        <form id="generator-form">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="interviewer-name">
+                                    Interviewer's Name
+                                </label>
+                                <input class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none" id="interviewer-name" type="text" placeholder="e.g., John Smith">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="company-name">
+                                    Company Name
+                                </label>
+                                <input class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none" id="company-name" type="text" placeholder="e.g., Acme Corporation">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="position">
+                                    Position Applied For
+                                </label>
+                                <input class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none" id="position" type="text" placeholder="e.g., Marketing Manager">
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="interview-type">
+                                    Interview Type
+                                </label>
+                                <select class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none" id="interview-type">
+                                    <option value="in-person">In-person Interview</option>
+                                    <option value="phone">Phone Interview</option>
+                                    <option value="video">Video Interview</option>
+                                    <option value="panel">Panel Interview</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="tone">
+                                    Tone
+                                </label>
+                                <select class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none" id="tone">
+                                    <option value="formal">Formal</option>
+                                    <option value="semi-formal" selected>Semi-formal</option>
+                                    <option value="casual">Casual</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="specific-points">
+                                    Specific Points to Mention (Optional)
+                                </label>
+                                <textarea class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none" id="specific-points" rows="3" placeholder="e.g., The team culture you mentioned, the project we discussed, something you forgot to mention"></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-medium mb-2" for="your-name">
+                                    Your Name
+                                </label>
+                                <input class="input-field w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none" id="your-name" type="text" placeholder="e.g., Jane Doe">
+                            </div>
+                            <div class="flex justify-between items-center mt-6">
+                                <button type="button" id="reset-form" class="text-gray-600 hover:text-gray-800">
+                                    <i class="fas fa-redo mr-1"></i> Reset
+                                </button>
+                                <button type="submit" class="btn-primary text-white font-semibold px-6 py-2 rounded-lg">
+                                    Generate Note
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Generated Output -->
+                    <div class="md:w-1/2 p-6 md:p-8 bg-gray-50">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold">Your Thank You Note</h3>
+                            <button id="copy-button" class="text-indigo-600 hover:text-indigo-800 hidden">
+                                <i class="fas fa-copy mr-1"></i> Copy
+                            </button>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg p-6 min-h-[400px]">
+                            <div id="initial-message" class="text-center text-gray-500 h-full flex flex-col items-center justify-center">
+                                <i class="fas fa-envelope-open-text text-4xl mb-4 text-gray-300"></i>
+                                <p>Fill in the form and click "Generate Note" to create your personalized thank you email.</p>
+                            </div>
+                            <div id="output" class="hidden text-gray-700"></div>
+                        </div>
+                        <div class="mt-6 text-center text-sm text-gray-500">
+                            <p>After generating, review and personalize your note before sending it.</p>
+                            <p class="mt-2"><i class="fas fa-lightbulb text-yellow-500 mr-1"></i> Tip: Send your thank you note within 24 hours of your interview.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sample Templates -->
+    <section class="py-16 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-4">Sample Thank You Notes After Interview</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Browse our collection of effective thank you note templates for different interview scenarios.</p>
+            
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                    <button type="button" class="tab-button active px-5 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-l-lg focus:outline-none" data-target="in-person">
+                        In-person
+                    </button>
+                    <button type="button" class="tab-button px-5 py-2.5 text-sm font-medium bg-white border-t border-b border-gray-200 focus:outline-none" data-target="phone">
+                        Phone
+                    </button>
+                    <button type="button" class="tab-button px-5 py-2.5 text-sm font-medium bg-white border-t border-b border-gray-200 focus:outline-none" data-target="video">
+                        Video
+                    </button>
+                    <button type="button" class="tab-button px-5 py-2.5 text-sm font-medium bg-white border border-gray-200 rounded-r-lg focus:outline-none" data-target="panel">
+                        Panel
+                    </button>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="in-person">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Formal In-person</h3>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">Formal</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thank You - [Position] Interview</p>
+                            <p class="mt-4">Dear Mr./Ms. [Last Name],</p>
+                            <p class="mt-4">Thank you for taking the time to meet with me yesterday to discuss the [Position] role at [Company]. I appreciated the opportunity to learn more about the position and the company's goals for the coming year.</p>
+                            <p class="mt-4">Our conversation about [specific topic discussed] was particularly insightful, and I'm excited about the possibility of contributing to [specific project or team goal]. My background in [relevant skill/experience] aligns well with what you're looking for, and I'm confident I could make valuable contributions to your team.</p>
+                            <p class="mt-4">Thank you again for considering my application. I look forward to hearing from you about the next steps in the process. Please don't hesitate to contact me if you need any additional information.</p>
+                            <p class="mt-4">Sincerely,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                            <p>[Your Email]</p>
+                        </div>
+                    </div>
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Casual In-person</h3>
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Casual</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thanks for the great conversation today!</p>
+                            <p class="mt-4">Hi [First Name],</p>
+                            <p class="mt-4">Thanks so much for taking the time to meet with me today! I really enjoyed our conversation about the [Position] role and learning more about the amazing culture at [Company].</p>
+                            <p class="mt-4">I was particularly excited about [something specific you discussed], and I can definitely see myself thriving in that environment. The work your team is doing with [specific project] sounds fascinating, and my experience with [relevant skill/experience] could be a great fit for what you're looking for.</p>
+                            <p class="mt-4">Thanks again for the opportunity to interview. I'm very interested in joining the team and would love to continue the conversation. Feel free to reach out if you need anything else from me!</p>
+                            <p class="mt-4">Best,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                            <p>[Your Email]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content hidden" id="phone">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Phone Interview - Formal</h3>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">Formal</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thank You for the Phone Interview - [Position]</p>
+                            <p class="mt-4">Dear Mr./Ms. [Last Name],</p>
+                            <p class="mt-4">Thank you for taking the time to speak with me over the phone today regarding the [Position] position at [Company]. I appreciate the opportunity to learn more about the role and how my skills could contribute to your team.</p>
+                            <p class="mt-4">Our discussion about [specific topic] was particularly informative, and I'm enthusiastic about the possibility of bringing my experience in [relevant skill/experience] to support the team's objectives.</p>
+                            <p class="mt-4">Thank you again for considering my application. I look forward to potentially continuing our conversation in person and learning more about the opportunity. Please don't hesitate to contact me if you need any additional information.</p>
+                            <p class="mt-4">Sincerely,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                            <p>[Your Email]</p>
+                        </div>
+                    </div>
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Phone Interview - Brief</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Semi-formal</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thank you for our conversation</p>
+                            <p class="mt-4">Hello [First Name],</p>
+                            <p class="mt-4">Thank you for taking the time to speak with me today about the [Position] role at [Company]. I enjoyed learning more about the position and the team's current priorities.</p>
+                            <p class="mt-4">After our conversation, I'm even more excited about the opportunity to join your team. My background in [relevant skill/experience] aligns well with what you described, and I'm confident I could make valuable contributions quickly.</p>
+                            <p class="mt-4">I look forward to the possibility of meeting in person to discuss the role further. Please let me know if you need any additional information from me.</p>
+                            <p class="mt-4">Thank you again for your consideration.</p>
+                            <p class="mt-4">Best regards,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content hidden" id="video">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Video Interview - Standard</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Semi-formal</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thank You - [Position] Video Interview</p>
+                            <p class="mt-4">Hello [First Name],</p>
+                            <p class="mt-4">Thank you for meeting with me via video conference today to discuss the [Position] role at [Company]. I appreciate your time and the insights you shared about the position and the team.</p>
+                            <p class="mt-4">I was particularly interested in learning about [specific project or aspect of the role discussed]. My experience with [relevant skill/experience] would allow me to contribute effectively to these initiatives from day one.</p>
+                            <p class="mt-4">Thank you again for considering my application. I'm very excited about the possibility of joining [Company] and would welcome the opportunity to continue our conversation. Please don't hesitate to reach out if you need any additional information.</p>
+                            <p class="mt-4">Best regards,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                            <p>[Your Email]</p>
+                        </div>
+                    </div>
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Video Interview - Technical Role</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Semi-formal</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thank You for the Technical Interview</p>
+                            <p class="mt-4">Hello [First Name],</p>
+                            <p class="mt-4">Thank you for taking the time to meet with me virtually today for the [Position] role. I appreciated the opportunity to discuss my technical background and how it aligns with the needs of your team.</p>
+                            <p class="mt-4">The technical challenges you described regarding [specific technical challenge] are exactly the kind of problems I enjoy solving. My experience with [relevant technologies/skills] has prepared me well for addressing these types of issues, and I'm excited about the possibility of contributing to your team's success.</p>
+                            <p class="mt-4">After our conversation, I did some additional research on [topic discussed] and thought you might find this [article/resource] interesting: [link or brief description].</p>
+                            <p class="mt-4">Thank you again for your consideration. I'm very interested in the position and look forward to hearing about the next steps.</p>
+                            <p class="mt-4">Best regards,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                            <p>[Your Email]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content hidden" id="panel">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Panel Interview - Group Email</h3>
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">Formal</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thank You - [Position] Panel Interview</p>
+                            <p class="mt-4">Dear [Primary Interviewer's Name] and Team,</p>
+                            <p class="mt-4">Thank you for taking the time to meet with me today for the panel interview for the [Position] role. I appreciate the opportunity to speak with each of you and learn more about your team and the position.</p>
+                            <p class="mt-4">The discussion about [specific topic] was particularly insightful, and I enjoyed hearing about the different perspectives and priorities across the team. My experience with [relevant skill/experience] has prepared me well for the challenges you described, and I'm excited about the possibility of contributing to your projects.</p>
+                            <p class="mt-4">Thank you again for your time and consideration. I'm very interested in joining [Company] and look forward to hearing about the next steps in the process. Please don't hesitate to reach out if you need any additional information.</p>
+                            <p class="mt-4">Sincerely,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                            <p>[Your Email]</p>
+                        </div>
+                    </div>
+                    <div class="template-card bg-white border border-gray-200 rounded-lg shadow-sm p-6">
+                        <div class="flex justify-between mb-4">
+                            <h3 class="font-semibold text-lg">Panel Interview - Individual Emails</h3>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Semi-formal</span>
+                        </div>
+                        <div class="scrollable-content text-gray-700">
+                            <p>Subject: Thank You for the [Position] Interview</p>
+                            <p class="mt-4">Hello [Individual Interviewer's Name],</p>
+                            <p class="mt-4">Thank you for including me in today's panel interview for the [Position] role at [Company]. I appreciated your questions about [specific topic they asked about] and enjoyed our discussion.</p>
+                            <p class="mt-4">Your insights on [something specific they mentioned] were particularly valuable, and they've given me an even better understanding of the role and its challenges. My experience with [relevant skill/experience that connects to their area] would allow me to contribute effectively to your team's goals.</p>
+                            <p class="mt-4">Thank you again for your time and consideration. I'm very excited about the possibility of joining [Company] and working with you and the team. I look forward to potentially continuing our conversation.</p>
+                            <p class="mt-4">Best regards,</p>
+                            <p class="mt-2">[Your Name]</p>
+                            <p>[Your Phone Number]</p>
+                            <p>[Your Email]</p>
+                            <p class="mt-4 text-sm italic">Note: Customize each email to reference specific topics discussed with each interviewer. Send individual emails to each panel member when possible.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Do's and Don'ts -->
+    <section class="py-16 bg-gray-50 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-4">Do's and Don'ts</h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">Follow these guidelines to create effective thank you notes that make a positive impression.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-green-500">
+                    <h3 class="text-xl font-semibold mb-4 text-green-600">Do's <i class="fas fa-check ml-2"></i></h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-check text-xs text-green-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Send promptly</strong> - Within 24 hours of your interview</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-check text-xs text-green-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Personalize</strong> - Reference specific topics from your conversation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-check text-xs text-green-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Proofread</strong> - Check for spelling, grammar, and name spelling errors</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-check text-xs text-green-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Reaffirm interest</strong> - Express your continued enthusiasm for the role</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-check text-xs text-green-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Add value</strong> - Include a relevant resource or address something you forgot to mention</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-check text-xs text-green-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Keep it brief</strong> - Respect the reader's time with concise communication</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-check text-xs text-green-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Include contact info</strong> - Make it easy for them to reach you</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm p-6 border-l-4 border-red-500">
+                    <h3 class="text-xl font-semibold mb-4 text-red-600">Don'ts <i class="fas fa-times ml-2"></i></h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-times text-xs text-red-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Wait too long</strong> - Delaying can make you seem uninterested</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-times text-xs text-red-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Use generic templates</strong> - Avoid copy-pasting without customization</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-times text-xs text-red-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Include salary</strong> - Save compensation discussions for later stages</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-times text-xs text-red-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Be too casual</strong> - Maintain professional tone even if the interview was relaxed</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-times text-xs text-red-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Send errors</strong> - Don't rush and send an email with mistakes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-times text-xs text-red-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Be demanding</strong> - Avoid pressuring them about when you'll hear back</span>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center mt-1 mr-2">
+                                <i class="fas fa-times text-xs text-red-600"></i>
+                            </div>
+                            <span class="text-gray-700"><strong>Write too much</strong> - Keep it concise and to the point</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">Is a thank you note really necessary after every interview?</h3>
+                    <p class="text-gray-700">Yes, sending a thank you note is considered a professional courtesy and is expected by many hiring managers. According to surveys, 80% of hiring managers say thank you notes impact their decision-making process, yet only about 25% of candidates send them. Taking this simple step can help you stand out from other candidates.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">How soon should I send a thank you note after an interview?</h3>
+                    <p class="text-gray-700">You should send your thank you note within 24 hours of your interview. This ensures your conversation is still fresh in the interviewer's mind, and it demonstrates your promptness and continued interest in the position.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">Should I send an email or a handwritten note?</h3>
+                    <p class="text-gray-700">Email is the preferred method for most professional settings as it delivers your message immediately. However, you can stand out by sending both: an immediate email followed by a handwritten note. If you choose only one, email is generally safer, especially if a hiring decision will be made quickly.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">What should I include in my thank you note?</h3>
+                    <p class="text-gray-700">Your thank you note should include: a genuine expression of gratitude for the interviewer's time, reference to specific topics discussed during the interview, a brief reiteration of your interest and qualifications, and your contact information. Keep it concise, professional, and error-free.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">What should I title my thank you email after an interview?</h3>
+                    <p class="text-gray-700">Use a clear, professional subject line such as "Thank You - [Position] Interview" or "Thank You for the Opportunity" or "Following Up: [Position] Interview." Avoid vague subjects like "Hi" or "Following up" that might get lost in a busy inbox.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">How do I send thank you notes after a panel interview?</h3>
+                    <p class="text-gray-700">Ideally, send personalized thank you notes to each person who interviewed you, referencing specific topics you discussed with them. If you don't have everyone's email, it's acceptable to send one note to your primary contact and ask them to extend your thanks to the rest of the panel.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">What if I interviewed with multiple people?</h3>
+                    <p class="text-gray-700">Send individual, personalized thank you notes to each person who interviewed you. Make sure to customize each note with specific references to your conversation with that person. This demonstrates your attention to detail and genuine interest in the role.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+                    <h3 class="text-lg font-semibold mb-3">Is it appropriate to follow up again if I don't hear back?</h3>
+                    <p class="text-gray-700">Yes, it's appropriate to send one polite follow-up email if you haven't heard back by the timeframe they mentioned during your interview. Wait at least a week after your thank you note before sending a follow-up inquiry about the status of your application.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-16 bg-indigo-50 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Why Thank You Notes Matter</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg p-6 text-center shadow-md">
+                    <div class="text-indigo-600 text-5xl font-bold mb-3">80%</div>
+                    <p class="text-gray-700">of hiring managers say thank you notes impact their decision-making process</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 text-center shadow-md">
+                    <div class="text-indigo-600 text-5xl font-bold mb-3">24hrs</div>
+                    <p class="text-gray-700">is the optimal timeframe to send your thank you note after an interview</p>
+                </div>
+                
+                <div class="bg-white rounded-lg p-6 text-center shadow-md">
+                    <div class="text-indigo-600 text-5xl font-bold mb-3">20%</div>
+                    <p class="text-gray-700">of candidates send thank you notes, giving you an easy way to stand out</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-start">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-500 mr-4 flex-shrink-0">
+                        <i class="fas fa-quote-left text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-700 italic mb-4">"When candidates are equally qualified, the thank you note often becomes the deciding factor. It demonstrates professionalism, attention to detail, and genuine interest in the position—all qualities employers value."</p>
+                        <p class="text-gray-800 font-medium">- HR Director with 15+ years of experience</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-4 md:px-0">
+        <div class="container mx-auto max-w-6xl">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-xl font-semibold mb-4">Thank You Note Generator</h3>
+                    <p class="text-gray-400 mb-4">Create professional thank you notes after job interviews to increase your chances of landing your dream job.</p>
+                    <p class="text-gray-400">Our tools and templates help you craft personalized, effective thank you notes for any interview scenario.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#generator" class="hover:text-white">Note Generator</a></li>
+                        <li><a href="#" class="hover:text-white">Sample Templates</a></li>
+                        <li><a href="#" class="hover:text-white">Best Practices</a></li>
+                        <li><a href="#" class="hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">Career Blog</a></li>
+                        <li><a href="#" class="hover:text-white">Resume Templates</a></li>
+                        <li><a href="#" class="hover:text-white">Interview Tips</a></li>
+                        <li><a href="#" class="hover:text-white">Job Search Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>© 2023 Thank You Note Generator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and hide all content
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Add active class to clicked button and show corresponding content
+                button.classList.add('active');
+                const targetId = button.getAttribute('data-target');
+                document.getElementById(targetId).classList.remove('hidden');
+            });
+        });
+        
+        // Form submission and note generation
+        const generatorForm = document.getElementById('generator-form');
+        const initialMessage = document.getElementById('initial-message');
+        const output = document.getElementById('output');
+        const copyButton = document.getElementById('copy-button');
+        const resetButton = document.getElementById('reset-form');
+        
+        generatorForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const interviewerName = document.getElementById('interviewer-name').value || '[Interviewer Name]';
+            const companyName = document.getElementById('company-name').value || '[Company Name]';
+            const position = document.getElementById('position').value || '[Position]';
+            const interviewType = document.getElementById('interview-type').value;
+            const tone = document.getElementById('tone').value;
+            const specificPoints = document.getElementById('specific-points').value;
+            const yourName = document.getElementById('your-name').value || '[Your Name]';
+            
+            // Generate thank you note based on inputs
+            let subject = '';
+            let greeting = '';
+            let thankYouParagraph = '';
+            let specificParagraph = '';
+            let closingParagraph = '';
+            let signature = '';
+            
+            // Subject line based on tone
+            if (tone === 'formal') {
+                subject = `Thank You - ${position} Interview`;
+                greeting = `Dear ${interviewerName},`;
+            } else if (tone === 'semi-formal') {
+                subject = `Thank You for the ${position} Interview`;
+                greeting = `Hello ${interviewerName},`;
+            } else {
+                subject = `Thanks for the great conversation today!`;
+                greeting = `Hi ${interviewerName},`;
+            }
+            
+            // First paragraph based on interview type
+            if (interviewType === 'in-person') {
+                if (tone === 'formal') {
+                    thankYouParagraph = `Thank you for taking the time to meet with me today to discuss the ${position} position at ${companyName}. I appreciated the opportunity to learn more about the role and your organization's goals.`;
+                } else if (tone === 'semi-formal') {
+                    thankYouParagraph = `Thank you for taking the time to meet with me today about the ${position} role at ${companyName}. I enjoyed our conversation and learning more about the team and position.`;
+                } else {
+                    thankYouParagraph = `Thanks so much for chatting with me today about the ${position} role! I really enjoyed learning about ${companyName} and the amazing work your team is doing.`;
+                }
+            } else if (interviewType === 'phone') {
+                if (tone === 'formal') {
+                    thankYouParagraph = `Thank you for taking the time to speak with me over the phone today regarding the ${position} position at ${companyName}. I appreciate the opportunity to learn more about the role and how my skills could contribute to your team.`;
+                } else if (tone === 'semi-formal') {
+                    thankYouParagraph = `Thank you for taking the time to speak with me today about the ${position} role at ${companyName}. It was great to learn more about the position over the phone.`;
+                } else {
+                    thankYouParagraph = `Thanks for the phone call today! I really enjoyed our conversation about the ${position} role at ${companyName} and appreciated the chance to discuss my background with you.`;
+                }
+            } else if (interviewType === 'video') {
+                if (tone === 'formal') {
+                    thankYouParagraph = `Thank you for taking the time to meet with me via video conference today regarding the ${position} position at ${companyName}. I appreciate the opportunity to discuss the role and learn more about your organization.`;
+                } else if (tone === 'semi-formal') {
+                    thankYouParagraph = `Thank you for meeting with me virtually today to discuss the ${position} role at ${companyName}. I enjoyed our conversation and learning more about the team.`;
+                } else {
+                    thankYouParagraph = `Thanks for the great video chat today! It was awesome talking about the ${position} role at ${companyName} and getting to know more about the team.`;
+                }
+            } else if (interviewType === 'panel') {
+                if (tone === 'formal') {
+                    thankYouParagraph = `Thank you for the opportunity to participate in the panel interview today for the ${position} position at ${companyName}. I appreciate the time that you and your colleagues spent discussing the role and your organization's needs.`;
+                } else if (tone === 'semi-formal') {
+                    thankYouParagraph = `Thank you for including me in today's panel interview for the ${position} role at ${companyName}. I enjoyed meeting you and your team and learning more about the position.`;
+                } else {
+                    thankYouParagraph = `Thanks so much for the panel interview today! It was great meeting everyone on the team and discussing the ${position} role at ${companyName}.`;
+                }
+            }
+            
+            // Second paragraph with specific points
+            if (specificPoints) {
+                specificParagraph = `I was particularly interested in discussing ${specificPoints}. This aligns well with my background and I'm confident I could make valuable contributions in this area.`;
+            } else {
+                if (tone === 'formal') {
+                    specificParagraph = `After our discussion, I am even more enthusiastic about the possibility of joining ${companyName}. My experience and skills align well with the requirements you outlined, and I am confident I would be a valuable addition to your team.`;
+                } else if (tone === 'semi-formal') {
+                    specificParagraph = `After our conversation, I'm even more excited about the opportunity to join your team. My background in this field has prepared me well for the challenges of this role, and I'm confident I could make meaningful contributions quickly.`;
+                } else {
+                    specificParagraph = `I'm really excited about this opportunity! My experience is a great match for what you're looking for, and I can already see myself fitting in with the team culture you described.`;
+                }
+            }
+            
+            // Closing paragraph based on tone
+            if (tone === 'formal') {
+                closingParagraph = `Thank you again for considering my application. I look forward to hearing from you about the next steps in the process. Please don't hesitate to contact me if you need any additional information.`;
+                signature = `Sincerely,\n\n${yourName}`;
+            } else if (tone === 'semi-formal') {
+                closingParagraph = `Thank you again for your time and consideration. I'm very interested in the position and look forward to hearing about next steps. Please let me know if you need any additional information.`;
+                signature = `Best regards,\n\n${yourName}`;
+            } else {
+                closingParagraph = `Thanks again for the opportunity! I'm really excited about the possibility of joining the team and would love to continue the conversation. Feel free to reach out if you need anything else from me!`;
+                signature = `Best,\n\n${yourName}`;
+            }
+            
+            // Combine all sections
+            const thankYouNote = `Subject: ${subject}\n\n${greeting}\n\n${thankYouParagraph}\n\n${specificParagraph}\n\n${closingParagraph}\n\n${signature}`;
+            
+            // Display the generated note
+            initialMessage.classList.add('hidden');
+            output.classList.remove('hidden');
+            output.textContent = thankYouNote;
+            copyButton.classList.remove('hidden');
+        });
+        
+        // Copy to clipboard functionality
+        copyButton.addEventListener('click', () => {
+            const textToCopy = output.textContent;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                // Change button text temporarily
+                const originalText = copyButton.innerHTML;
+                copyButton.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                }, 2000);
+            });
+        });
+        
+        // Reset form
+        resetButton.addEventListener('click', () => {
+            generatorForm.reset();
+            output.classList.add('hidden');
+            initialMessage.classList.remove('hidden');
+            copyButton.classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

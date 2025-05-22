@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashAI - Best Free AI Flashcard Maker | Alternative to Quizlet</title>
+    <meta name="description" content="Create high-quality flashcards instantly with FlashAI. Our free AI flashcard generator transforms PDFs, notes, images, videos, and texts into effective study materials. Better than Quizlet with advanced AI technology.">
+    <meta name="keywords" content="ai flashcard maker, ai flashcard generator, ai flashcards, flashcard maker ai, free ai flashcard maker, flashcards ai, quizlet alternative, quizlet ai flashcards suck, best ai flashcard maker">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4F46E5, #7C3AED);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .card-shadow:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+            transition: all 0.3s ease-in-out;
+        }
+        .flashcard {
+            perspective: 1000px;
+            transition: transform 0.6s;
+        }
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .flashcard:hover .flashcard-inner, .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flashcard-back {
+            transform: rotateY(180deg);
+        }
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+        .progress-bar-anim {
+            width: 0%;
+            animation: progressBarAnim 3s ease-in-out forwards;
+        }
+        @keyframes progressBarAnim {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        .typing-animation::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .upload-area {
+            border: 2px dashed #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #6366f1;
+            background-color: #eff6ff;
+        }
+        .flashcard-demo {
+            height: 180px;
+        }
+        /* For PDF export optimization */
+        @media print {
+            .page-break {
+                display: none;
+            }
+            .print-section {
+                break-inside: avoid;
+            }
+        }
+    </style>
+    <!-- Structured data for SEO -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "FlashAI",
+            "applicationCategory": "EducationalApplication",
+            "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+            },
+            "description": "AI-powered flashcard generator that creates high-quality study materials from PDFs, notes, images, and more.",
+            "operatingSystem": "Web",
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "1248"
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold gradient-text">FlashAI</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-gray-700 hover:text-indigo-600 transition">Features</a>
+                    <a href="#demo" class="text-gray-700 hover:text-indigo-600 transition">Try Demo</a>
+                    <a href="#benefits" class="text-gray-700 hover:text-indigo-600 transition">Benefits</a>
+                    <a href="#how-it-works" class="text-gray-700 hover:text-indigo-600 transition">How It Works</a>
+                    <a href="#testimonials" class="text-gray-700 hover:text-indigo-600 transition">Testimonials</a>
+                    <a href="#faq" class="text-gray-700 hover:text-indigo-600 transition">FAQ</a>
+                </div>
+                <div class="flex items-center">
+                    <a href="#get-started" class="bg-indigo-600 text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-700 transition">Get Started Free</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-16 pb-16 px-4 sm:px-6 lg:px-8 gradient-bg text-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-10">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4">Create Better Flashcards in Seconds with AI</h1>
+                    <p class="text-xl mb-8 text-indigo-100">Transform any study material into effective flashcards instantly. Upload PDFs, images, notes, videos, or text and let our advanced AI do the work.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#get-started" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-100 transition">
+                            Create Free Flashcards
+                        </a>
+                        <a href="#demo" class="bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-white/10 transition">
+                            Try Interactive Demo
+                        </a>
+                    </div>
+                    <div class="mt-8 flex items-center">
+                        <div class="flex -space-x-2">
+                            <div class="w-8 h-8 rounded-full bg-indigo-300 flex items-center justify-center text-xs font-bold">JD</div>
+                            <div class="w-8 h-8 rounded-full bg-indigo-400 flex items-center justify-center text-xs font-bold">KL</div>
+                            <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-xs font-bold">RS</div>
+                            <div class="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold">+</div>
+                        </div>
+                        <p class="ml-3 text-sm text-indigo-100">Join over <span class="font-bold">200,000+</span> students already using FlashAI</p>
+                    </div>
+                </div>
+                <div class="md:w-1/2 float-animation">
+                    <div class="relative bg-white p-6 rounded-xl shadow-2xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <div class="text-xs text-gray-500">FlashAI Generator</div>
+                        </div>
+                        <div class="flex flex-col space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0 p-2 bg-indigo-100 rounded-lg">
+                                    <i class="fas fa-file-pdf text-indigo-600 text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="typing-animation text-sm text-gray-700">Cell_Biology_Chapter5.pdf</div>
+                                </div>
+                            </div>
+                            <div class="border-t border-b border-gray-200 py-4">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-sm font-medium text-gray-700">Processing content...</span>
+                                    <span class="text-xs text-indigo-600 progress-percentage">0%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-indigo-600 h-2 rounded-full progress-bar-anim"></div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 gap-4 flashcards-container">
+                                <div class="bg-gray-100 p-4 rounded-lg fade-in" style="animation-delay: 0.5s">
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-sm font-medium text-gray-700">What is the primary function of mitochondria?</div>
+                                        <div class="text-xs text-indigo-600 font-medium">Card 1/28</div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-100 p-4 rounded-lg fade-in" style="animation-delay: 1s">
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-sm font-medium text-gray-700">Explain the process of cellular respiration</div>
+                                        <div class="text-xs text-indigo-600 font-medium">Card 2/28</div>
+                                    </div>
+                                </div>
+                                <div class="bg-indigo-100 p-4 rounded-lg border-2 border-indigo-300 fade-in" style="animation-delay: 1.5s">
+                                    <div class="flex justify-between items-center">
+                                        <div class="text-sm font-medium text-indigo-800">List the 3 phases of the cell cycle</div>
+                                        <div class="text-xs text-indigo-600 font-medium">Card 3/28</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center fade-in" style="animation-delay: 2s">
+                                <button class="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-gray-700 transition">Edit Cards</button>
+                                <button class="text-sm bg-indigo-600 hover:bg-indigo-700 px-3 py-1 rounded text-white transition">Start Studying</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="py-8 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-gray-500 font-medium mb-6">TRUSTED BY STUDENTS FROM</p>
+            <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+                <div class="grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition">
+                    <svg class="h-6 md:h-8" viewBox="0 0 100 30" fill="currentColor">
+                        <path d="M0 0h28.6v28.6H0z M42.9 0h28.6v28.6H42.9z M85.7 0h14.3v14.3H85.7z M85.7 14.3h14.3v14.3H85.7z"/>
+                    </svg>
+                </div>
+                <div class="grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition">
+                    <svg class="h-6 md:h-8" viewBox="0 0 136 30" fill="currentColor">
+                        <path d="M9.1 16.7L0 1.5h6.3l5.5 9.6 5.6-9.6h6.3L14.6 16.7V28H9.1V16.7zM38.9 23.3c-1.5 0-2.9-.3-4.2-.8-1.3-.5-2.4-1.3-3.3-2.2-.9-.9-1.6-2-2.1-3.3-.5-1.3-.8-2.6-.8-4.1 0-1.5.3-2.8.8-4.1.5-1.3 1.2-2.4 2.2-3.3.9-.9 2-1.7 3.3-2.2 1.3-.5 2.7-.8 4.2-.8 1.5 0 2.9.3 4.2.8 1.3.5 2.4 1.3 3.4 2.2.9.9 1.6 2 2.1 3.3.5 1.3.8 2.6.8 4.1 0 1.5-.3 2.8-.8 4.1-.5 1.3-1.2 2.4-2.1 3.3-.9.9-2 1.6-3.3 2.2-1.3.5-2.7.8-4.4.8zm0-4.1c.8 0 1.5-.2 2.1-.5.6-.3 1.1-.7 1.6-1.3.4-.5.7-1.2.9-1.9.2-.7.3-1.5.3-2.3 0-.8-.1-1.6-.3-2.3-.2-.7-.5-1.3-.9-1.9-.4-.5-.9-1-1.6-1.3-.6-.3-1.3-.5-2.1-.5s-1.5.2-2.1.5c-.6.3-1.1.7-1.6 1.3-.4.5-.7 1.2-.9 1.9-.2.7-.3 1.5-.3 2.3 0 .8.1 1.6.3 2.3.2.7.5 1.3.9 1.9.4.5.9 1 1.6 1.3.6.3 1.3.5 2.1.5zM63.1 28V15.1c0-1.6-.3-2.7-.9-3.5-.6-.8-1.6-1.2-2.9-1.2-.7 0-1.3.1-1.9.4-.6.3-1.1.6-1.6 1.1-.5.5-.8 1.1-1.1 1.8-.3.7-.4 1.5-.4 2.4V28h-5.5V7.7h5.3v3.2c.7-1.1 1.7-2 3-2.6 1.3-.6 2.7-.9 4.3-.9 1.2 0 2.2.2 3.1.6.9.4 1.7 1 2.3 1.7.6.7 1.1 1.6 1.4 2.6.3 1 .5 2.1.5 3.4V28h-5.6zM84.9 28c-1 0-2-.2-2.8-.5-.9-.3-1.6-.8-2.2-1.4-.6-.6-1.1-1.4-1.4-2.3-.3-.9-.5-1.9-.5-3.1V11.4h-3.2V7.7h3.2V1.4h5.5v6.3h5v3.7h-5v8.5c0 .8.2 1.5.6 1.9.4.4 1 .7 1.9.7.5 0 1-.1 1.4-.2.4-.1.8-.3 1.1-.5l1.3 3.4c-.7.4-1.5.7-2.3.9-.9.3-1.7.5-2.6.5zM105.3 23.3c-1.5 0-2.9-.3-4.2-.8-1.3-.5-2.4-1.3-3.3-2.2-.9-.9-1.6-2-2.1-3.3-.5-1.3-.8-2.6-.8-4.1 0-1.5.3-2.8.8-4.1.5-1.3 1.2-2.4 2.2-3.3.9-.9 2-1.7 3.3-2.2 1.3-.5 2.7-.8 4.2-.8 1.5 0 2.9.3 4.2.8 1.3.5 2.4 1.3 3.4 2.2.9.9 1.6 2 2.1 3.3.5 1.3.8 2.6.8 4.1 0 1.5-.3 2.8-.8 4.1-.5 1.3-1.2 2.4-2.1 3.3-.9.9-2 1.6-3.3 2.2-1.3.5-2.7.8-4.4.8zm0-4.1c.8 0 1.5-.2 2.1-.5.6-.3 1.1-.7 1.6-1.3.4-.5.7-1.2.9-1.9.2-.7.3-1.5.3-2.3 0-.8-.1-1.6-.3-2.3-.2-.7-.5-1.3-.9-1.9-.4-.5-.9-1-1.6-1.3-.6-.3-1.3-.5-2.1-.5s-1.5.2-2.1.5c-.6.3-1.1.7-1.6 1.3-.4.5-.7 1.2-.9 1.9-.2.7-.3 1.5-.3 2.3 0 .8.1 1.6.3 2.3.2.7.5 1.3.9 1.9.4.5.9 1 1.6 1.3.6.3 1.3.5 2.1.5zM129.5 28.3c-1.5 0-2.9-.3-4.2-.8-1.3-.5-2.4-1.3-3.3-2.2-.9-.9-1.6-2-2.1-3.3-.5-1.3-.8-2.6-.8-4.1 0-1.5.3-2.8.8-4.1.5-1.3 1.2-2.4 2.2-3.3.9-.9 2-1.7 3.3-2.2 1.3-.5 2.7-.8 4.2-.8 1.2 0 2.3.2 3.3.5 1 .3 1.9.8 2.7 1.5.8.7 1.4 1.5 1.9 2.6.5 1 .8 2.2.8 3.7v2.3h-14.4c.1 1.3.6 2.3 1.5 3.1.9.8 2 1.1 3.4 1.1.9 0 1.7-.1 2.5-.4.8-.3 1.4-.7 1.9-1.1l2.5 3.1c-.8.7-1.8 1.3-3 1.8-1.3.4-2.5.6-3.8.6zm-.1-17.1c-1.1 0-2 .4-2.7 1.1-.7.7-1.2 1.7-1.3 2.9h7.9c0-1.2-.4-2.2-1.1-2.9-.7-.7-1.6-1.1-2.8-1.1z"/>
+                    </svg>
+                </div>
+                <div class="grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition">
+                    <svg class="h-6 md:h-8" viewBox="0 0 180 30" fill="currentColor">
+                        <path d="M30.1 0C13.5 0 0 13.5 0 30.1h9.4c0-11.5 9.2-20.7 20.7-20.7V0z M139.4 5.9v6.4h14.5v5.8h-14.5v8.5c0 5.3 1.9 6.7 6.2 6.7 2.6 0 5.5-.6 8-1.4v6c-2.7 1-5.7 1.6-9.3 1.6-8.3 0-12.6-3.3-12.6-12.5V18h-6.9v-5.8h2c3.9 0 5-2.2 5-5.1V2.6h7.6v3.3z M74.8 6.3c10.3 0 18.2 7.2 18.2 17.9 0 10.7-7.9 17.9-18.2 17.9s-18.2-7.2-18.2-17.9c0-10.8 7.9-17.9 18.2-17.9m0 28.5c5.8 0 9.9-4.2 9.9-10.7 0-6.5-4.1-10.7-9.9-10.7-5.8 0-9.9 4.2-9.9 10.7 0 6.5 4.1 10.7 9.9 10.7 M128.9 6.3c10.3 0 17.7 7.4 17.7 17.9 0 10.4-7.4 17.9-17.7 17.9-10.5 0-17.7-7.5-17.7-17.9 0-10.5 7.2-17.9 17.7-17.9m0 28.5c6.1 0 10.1-4.2 10.1-10.7 0-6.5-3.9-10.7-10.1-10.7-6.3 0-10.1 4.2-10.1 10.7 0 6.5 3.8 10.7 10.1 10.7 M98.3 12.6c-2.5-1-4.9-1.6-7.5-1.6-3.1 0-5.5.7-5.5 3.4 0 4.6 14.6 2.2 14.6 14 0 7.8-6.7 11.9-14.5 11.9-3.9 0-7.9-.8-11.1-2.1l1.3-6.6c2.6 1.4 6 2.3 9.2 2.3 3 0 6.3-1.2 6.3-3.8 0-5.5-14.6-2-14.6-14.3 0-8 6.5-11.3 13.6-11.3 4.1 0 7.5.7 10.5 1.8l-2.3 6.3z M175.3 4.1c-3.7 0-6.7-3-6.7-6.7h5c0 1 .7 1.7 1.7 1.7s1.7-.7 1.7-1.7h5c0 3.7-3 6.7-6.7 6.7 M180 14.2v28h-8.1v-28h8.1z M46.9 0v28.3c0 9.6-5.9 13.9-14.2 13.9-3.7 0-7.5-.7-10.2-1.9l1.4-6.6c2.1 1 4.9 1.7 7.6 1.7 3.7 0 7.3-1.7 7.3-7.1V0h8.1z"/>
+                    </svg>
+                </div>
+                <div class="grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition">
+                    <svg class="h-6 md:h-8" viewBox="0 0 120 30" fill="currentColor">
+                        <path d="M10.2 0L0 30h5.9l2-6.4h11l2.1 6.4h5.9L16.8 0h-6.6zm1.5 6.3l4.1 12.3H7.7L11.7 6.3zM36.2 6.6c-1.9 0-3.5.5-4.9 1.4-1.4.9-2.4 2.1-3.1 3.6-.7 1.5-1 3.2-1 5 0 1.9.3 3.6 1 5.1.7 1.5 1.7 2.7 3.1 3.6 1.4.9 3 1.3 4.9 1.3 1.8 0 3.5-.4 4.9-1.3 1.4-.9 2.4-2.1 3.1-3.6.7-1.5 1-3.2 1-5.1 0-1.8-.3-3.5-1-5-.7-1.5-1.7-2.7-3.1-3.6-1.4-.9-3-1.4-4.9-1.4zm2.2 15.4c-.5.3-1.3.5-2.2.5-1 0-1.7-.2-2.2-.5-.5-.3-.9-.8-1.1-1.3-.2-.6-.3-1.2-.3-1.9V14c0-.8.1-1.5.3-2.1.2-.6.6-1.1 1.1-1.4.5-.3 1.2-.5 2.2-.5.9 0 1.6.2 2.2.5.5.3.9.8 1.1 1.4.2.6.3 1.3.3 2.1v5.4c0 .7-.1 1.3-.3 1.9-.2.5-.6 1-1.1 1.3zM60.7 6.8h-5.1v8.5c0 1.6-.1 2.8-.4 3.5-.3.8-.6 1.3-1.2 1.6-.5.3-1.1.5-1.8.5-.9 0-1.7-.3-2.4-.9-.7-.6-1-1.4-1-2.3 0-.5.1-.9.3-1.2l.2-.2h-4.8c-.1.3-.2.7-.2 1.2 0 1.1.3 2.2.8 3.2.5 1 1.3 1.8 2.3 2.4 1 .6 2.2.9 3.5.9 1.7 0 3.2-.4 4.4-1.1 1.2-.7 2.1-1.8 2.7-3.2.6-1.4.9-3.1.9-5.2V6.8h2l-.2 4.3h4.7l.1-4.3h-4.8zM68.5 6.8h-4.7v19.4h4.7V6.8zM84.7 6.8h-4.8l-3.4 11.8-3.2-11.8h-5.2l6.7 19.3h2.3l3.6-11.8 3.3 11.8h2.5l6.5-19.3h-4.9l-3.4 11.8-3-11.8zM96.3 6.8h-4.7v19.4h12.9v-4.1h-8.1V6.8zM108.1 12.5l-1.7-1.9-2.6 2.4 4.9 5.3c.1-.5.3-1 .4-1.6.1-.8.2-1.8.2-3.1-.1-.4-.2-.7-.4-1-.2-.1-.5-.2-.8-.1zM120 6.8l-6-5-2.6 2.4c.7.8 1.1 1.6 1.4 2.6h-4.5v19.3h4.7V10.9h7V6.8z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold gradient-text inline-block mb-3">Try Our AI Flashcard Maker</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Experience how our AI transforms your study materials into effective flashcards. Try this interactive demo!</p>
+            </div>
+            
+            <div class="bg-white rounded-xl p-8 card-shadow">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Step 1: Upload Area -->
+                    <div class="md:col-span-1 border-r border-gray-200 pr-6">
+                        <h3 class="text-xl font-semibold mb-4">1. Choose Your Material</h3>
+                        <div class="upload-area rounded-lg py-8 px-4 text-center cursor-pointer" id="upload-demo">
+                            <i class="fas fa-cloud-upload-alt text-indigo-400 text-4xl mb-3"></i>
+                            <p class="text-sm text-gray-500">Click to select sample material</p>
+                            <div class="mt-4">
+                                <div class="flex justify-center space-x-2">
+                                    <button class="sample-btn px-3 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition" data-sample="biology">Biology</button>
+                                    <button class="sample-btn px-3 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition" data-sample="history">History</button>
+                                    <button class="sample-btn px-3 py-1 text-xs bg-indigo-100 text-indigo-700 rounded hover:bg-indigo-200 transition" data-sample="physics">Physics</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4 hidden" id="sample-selected">
+                            <div class="flex items-center p-3 bg-indigo-50 rounded-lg">
+                                <i class="fas fa-file-alt text-indigo-600 mr-3"></i>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800" id="sample-name">Sample_Biology.pdf</p>
+                                    <p class="text-xs text-gray-500">2 pages • 450KB</p>
+                                </div>
+                                <button class="ml-auto text-xs bg-indigo-200 hover:bg-indigo-300 px-2 py-1 rounded text-indigo-700 transition" id="change-sample">Change</button>
+                            </div>
+                            <button class="w-full mt-4 bg-indigo-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition" id="generate-btn">
+                                Generate Flashcards
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Generation Process -->
+                    <div class="md:col-span-1 border-r border-gray-200 px-6">
+                        <h3 class="text-xl font-semibold mb-4">2. AI Processing</h3>
+                        <div class="space-y-4" id="processing-area">
+                            <p class="text-gray-500 text-sm mb-2">Select a sample to start</p>
+                            <div class="h-32 flex items-center justify-center text-gray-300">
+                                <i class="fas fa-cogs text-6xl"></i>
+                            </div>
+                        </div>
+                        <div class="space-y-4 hidden" id="processing-active">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">Analyzing content...</span>
+                                <div class="text-xs text-indigo-600 processing-step">Step 1/4</div>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                                <div class="bg-indigo-600 h-2 rounded-full" id="process-bar" style="width: 10%"></div>
+                            </div>
+                            <div class="space-y-2 text-xs text-gray-500" id="process-log">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span>Uploading document...</span>
+                                </div>
+                                <div class="processing-step-1">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-spinner fa-spin text-indigo-500 mr-2"></i>
+                                        <span>Extracting text content...</span>
+                                    </div>
+                                </div>
+                                <div class="processing-step-2 hidden">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-spinner fa-spin text-indigo-500 mr-2"></i>
+                                        <span>Identifying key concepts...</span>
+                                    </div>
+                                </div>
+                                <div class="processing-step-3 hidden">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-spinner fa-spin text-indigo-500 mr-2"></i>
+                                        <span>Creating flashcard pairs...</span>
+                                    </div>
+                                </div>
+                                <div class="processing-step-4 hidden">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-spinner fa-spin text-indigo-500 mr-2"></i>
+                                        <span>Finalizing and organizing deck...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Result Flashcards -->
+                    <div class="md:col-span-1 pl-0 md:pl-6">
+                        <h3 class="text-xl font-semibold mb-4">3. Study Your Flashcards</h3>
+                        <div id="flashcards-empty" class="space-y-4">
+                            <p class="text-gray-500 text-sm mb-2">Your flashcards will appear here</p>
+                            <div class="border-2 border-dashed border-gray-200 rounded-lg h-32 flex items-center justify-center text-gray-300">
+                                <div class="text-center">
+                                    <i class="fas fa-clone text-4xl mb-2"></i>
+                                    <p class="text-sm text-gray-400">No flashcards yet</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="flashcards-result" class="space-y-4 hidden">
+                            <div class="flex justify-between items-center">
+                                <div class="text-sm font-medium text-gray-700">
+                                    <span id="current-card">1</span>/<span id="total-cards">5</span> Cards
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="navigation-btn text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded text-gray-700 transition" id="prev-card" disabled>
+                                        <i class="fas fa-chevron-left"></i>
+                                    </button>
+                                    <button class="navigation-btn text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded text-gray-700 transition" id="next-card">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <button class="text-xs bg-indigo-100 hover:bg-indigo-200 px-2 py-1 rounded text-indigo-700 transition" id="flip-card">
+                                        Flip
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Flashcard display -->
+                            <div class="flashcard flashcard-demo" id="active-flashcard">
+                                <div class="flashcard-inner h-full">
+                                    <div class="flashcard-front bg-white rounded-lg shadow-sm h-full p-4 flex flex-col">
+                                        <div class="text-xs font-medium text-indigo-600 mb-2">QUESTION</div>
+                                        <div class="flex-grow flex items-center justify-center">
+                                            <p class="text-center text-gray-800 font-medium" id="flashcard-question">What is the cell theory?</p>
+                                        </div>
+                                    </div>
+                                    <div class="flashcard-back bg-indigo-50 rounded-lg shadow-sm h-full p-4 flex flex-col">
+                                        <div class="text-xs font-medium text-indigo-800 mb-2">ANSWER</div>
+                                        <div class="flex-grow overflow-y-auto">
+                                            <p class="text-indigo-800" id="flashcard-answer">The cell theory states that all living organisms are composed of cells, cells are the basic unit of life, and all cells arise from pre-existing cells.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Rating buttons -->
+                            <div class="flex justify-between mt-4">
+                                <button class="text-xs bg-red-100 hover:bg-red-200 px-3 py-1 rounded text-red-700 transition">Again</button>
+                                <button class="text-xs bg-yellow-100 hover:bg-yellow-200 px-3 py-1 rounded text-yellow-700 transition">Hard</button>
+                                <button class="text-xs bg-blue-100 hover:bg-blue-200 px-3 py-1 rounded text-blue-700 transition">Good</button>
+                                <button class="text-xs bg-green-100 hover:bg-green-200 px-3 py-1 rounded text-green-700 transition">Easy</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold gradient-text inline-block mb-3">Powerful AI Flashcard Features</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Our AI-powered flashcard maker transforms how you create, organize, and study with flashcards.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white p-6 rounded-xl card-shadow feature-card">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-5">
+                        <i class="fas fa-magic text-indigo-600 text-xl feature-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">AI-Powered Generation</h3>
+                    <p class="text-gray-600">Upload any PDF, image, video, or text and our AI automatically creates optimized flashcards in seconds, saving you hours of manual work.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white p-6 rounded-xl card-shadow feature-card">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-5">
+                        <i class="fas fa-brain text-indigo-600 text-xl feature-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Smart Learning Algorithm</h3>
+                    <p class="text-gray-600">Our adaptive spaced repetition system customizes review schedules based on your performance, helping you remember more in less time.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white p-6 rounded-xl card-shadow feature-card">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-5">
+                        <i class="fas fa-file-alt text-indigo-600 text-xl feature-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Multiple File Formats</h3>
+                    <p class="text-gray-600">Support for PDFs, PowerPoint, Word docs, images, videos, handwritten notes, and more. Perfect for any learning material you already have.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-white p-6 rounded-xl card-shadow feature-card">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-5">
+                        <i class="fas fa-edit text-indigo-600 text-xl feature-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Easy Customization</h3>
+                    <p class="text-gray-600">Edit, refine, and personalize AI-generated flashcards to match your learning style and preferences with our intuitive editor.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="bg-white p-6 rounded-xl card-shadow feature-card">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-5">
+                        <i class="fas fa-mobile-alt text-indigo-600 text-xl feature-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Study Anywhere</h3>
+                    <p class="text-gray-600">Access your flashcards on any device with our responsive web app and mobile versions. Perfect for studying on the go.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="bg-white p-6 rounded-xl card-shadow feature-card">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-5">
+                        <i class="fas fa-chart-line text-indigo-600 text-xl feature-icon"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Progress Tracking</h3>
+                    <p class="text-gray-600">Track your learning progress with detailed analytics and insights to optimize your study habits and improve retention.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold gradient-text inline-block mb-3">AI vs. Traditional Flashcards</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">See how our AI flashcard maker revolutionizes studying compared to traditional methods and other platforms like Quizlet.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-8 card-shadow">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-robot text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-indigo-600">Ainee AI Flashcard Maker Flashcards</h3>
+                    </div>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Save hours of time</strong> - Generate complete flashcard sets in seconds instead of hours of manual creation</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Superior AI accuracy</strong> - More accurate and comprehensive cards than Quizlet, requiring fewer edits</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Personalized learning</strong> - Adaptive system focuses on your weak areas to maximize study efficiency</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Multi-format support</strong> - Create flashcards from virtually any study material format including videos</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Easy sharing and collaboration</strong> - Share decks with classmates and study together</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Data-driven insights</strong> - Track study patterns and optimize your learning strategy</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white rounded-xl p-8 card-shadow">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-pencil-alt text-white text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-600">Traditional & Quizlet Flashcards</h3>
+                    </div>
+                    
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Time-consuming creation</strong> - Hours spent manually writing cards and organizing content</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Inconsistent AI quality</strong> - Many users find Quizlet's AI cards require significant editing</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Static learning approach</strong> - Same review pattern regardless of your mastery level</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Limited format options</strong> - Difficult to incorporate digital materials or create from PDFs</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">Sharing difficulties</strong> - Physical cards are hard to share, digital cards often lack good collaboration</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-500 mt-1 mr-3"></i>
+                            <span><strong class="text-gray-800">No performance tracking</strong> - Limited ability to analyze progress and identify weak areas</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <p class="text-gray-700 font-medium mb-6">Still using Quizlet or other platforms? Try a better way to create and study flashcards.</p>
+                <a href="#get-started" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold inline-block hover:bg-indigo-700 transition">
+                    Try FlashAI Free
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold gradient-text inline-block mb-3">How FlashAI Works</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Create and study with AI-powered flashcards in just a few simple steps.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="bg-white p-8 rounded-xl card-shadow relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div>
+                    <h3 class="text-xl font-semibold mb-4 mt-2">Upload Your Material</h3>
+                    <p class="text-gray-600 mb-6">Simply upload your study material - PDF, image, notes, video, presentation, or even paste text directly.</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <div class="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg py-8 px-4">
+                            <div class="text-center">
+                                <i class="fas fa-cloud-upload-alt text-indigo-400 text-4xl mb-3"></i>
+                                <p class="text-sm text-gray-500">Drag & drop files here or click to browse</p>
+                                <p class="text-xs text-gray-400 mt-1">Supports PDF, DOCX, PPT, JPG, PNG, MP4 and more</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="bg-white p-8 rounded-xl card-shadow relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">2</div>
+                    <h3 class="text-xl font-semibold mb-4 mt-2">AI Creates Flashcards</h3>
+                    <p class="text-gray-600 mb-6">Our advanced AI analyzes your content and automatically generates high-quality question and answer pairs.</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <div class="flex flex-col space-y-4">
+                            <div class="bg-white p-3 rounded shadow-sm">
+                                <div class="h-2 bg-indigo-200 rounded-full w-3/4 mb-2"></div>
+                                <div class="h-2 bg-indigo-100 rounded-full w-1/2"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow-sm">
+                                <div class="h-2 bg-indigo-200 rounded-full w-2/3 mb-2"></div>
+                                <div class="h-2 bg-indigo-100 rounded-full w-3/5"></div>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow-sm">
+                                <div class="h-2 bg-indigo-200 rounded-full w-4/5 mb-2"></div>
+                                <div class="h-2 bg-indigo-100 rounded-full w-2/5"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="bg-white p-8 rounded-xl card-shadow relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">3</div>
+                    <h3 class="text-xl font-semibold mb-4 mt-2">Study & Master Content</h3>
+                    <p class="text-gray-600 mb-6">Review your flashcards with our spaced repetition system that adapts to your learning progress.</p>
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <div class="flashcard h-32">
+                            <div class="flashcard-inner h-full">
+                                <div class="flashcard-front bg-white rounded-lg shadow-sm h-full p-4 flex items-center justify-center">
+                                    <p class="text-center text-gray-800 font-medium">What is the primary benefit of AI flashcards?</p>
+                                </div>
+                                <div class="flashcard-back bg-indigo-50 rounded-lg shadow-sm h-full p-4 flex items-center justify-center">
+                                    <p class="text-center text-indigo-800">Time-saving automation that creates high-quality content while adapting to your learning pace.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between mt-4">
+                            <button class="text-xs bg-gray-200 px-3 py-1 rounded text-gray-700">Again</button>
+                            <button class="text-xs bg-yellow-100 px-3 py-1 rounded text-yellow-700">Hard</button>
+                            <button class="text-xs bg-blue-100 px-3 py-1 rounded text-blue-700">Good</button>
+                            <button class="text-xs bg-green-100 px-3 py-1 rounded text-green-700">Easy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold gradient-text inline-block mb-3">What Our Users Say</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Students and educators around the world love using FlashAI to improve their learning experience.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-gray-50 p-6 rounded-xl card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600 text-sm">5.0</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-6">
+                        "I used to spend hours making flashcards for medical school. With FlashAI, I upload my lecture notes and get perfect flashcards in seconds. It's saved me countless hours and improved my exam scores!"
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-indigo-200 rounded-full flex items-center justify-center text-indigo-600 font-semibold mr-3">JD</div>
+                        <div>
+                            <p class="font-medium text-gray-900">Jessica D.</p>
+                            <p class="text-sm text-gray-500">Medical Student</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-gray-50 p-6 rounded-xl card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600 text-sm">5.0</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-6">
+                        "After trying Quizlet's AI and being disappointed, I found FlashAI. The difference is night and day! The flashcards are so much more accurate and comprehensive. I can study effectively without fixing all the AI-generated content."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-indigo-200 rounded-full flex items-center justify-center text-indigo-600 font-semibold mr-3">MS</div>
+                        <div>
+                            <p class="font-medium text-gray-900">Michael S.</p>
+                            <p class="text-sm text-gray-500">College Student</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-gray-50 p-6 rounded-xl card-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 flex">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600 text-sm">4.5</span>
+                    </div>
+                    <blockquote class="text-gray-700 mb-6">
+                        "As a teacher, I needed a way to quickly create study materials for my students. FlashAI has been a game-changer. I've created dozens of decks from my lesson plans, and my students are performing better on tests as a result."
+                    </blockquote>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-indigo-200 rounded-full flex items-center justify-center text-indigo-600 font-semibold mr-3">LP</div>
+                        <div>
+                            <p class="font-medium text-gray-900">Laura P.</p>
+                            <p class="text-sm text-gray-500">High School Teacher</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-gray-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold gradient-text inline-block mb-3">Frequently Asked Questions</h2>
+                <p class="text-lg text-gray-600 max-w-3xl mx-auto">Got questions? We've got answers.</p>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Is FlashAI really free to use?</h3>
+                    <p class="text-gray-700">Yes, FlashAI offers a free plan that allows you to create and study with AI-generated flashcards. This plan includes basic features like PDF uploads, AI card generation, and study tools. For more advanced features like unlimited uploads and premium templates, we offer affordable subscription plans.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">How accurate are the AI-generated flashcards?</h3>
+                    <p class="text-gray-700">Our AI has been trained on millions of high-quality learning materials to ensure accuracy. In most cases, the flashcards are 90-95% accurate right out of the box. You can always review and edit any cards before studying. Our technology continually improves as more users create flashcards.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">How is FlashAI different from Quizlet's AI flashcards?</h3>
+                    <p class="text-gray-700">Many users find our AI technology produces more accurate and comprehensive flashcards than Quizlet. We specialize exclusively in flashcard generation with more advanced AI models trained specifically for educational content. Additionally, our spaced repetition system is designed to optimize learning rather than just testing recognition.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">What file types can I upload to create flashcards?</h3>
+                    <p class="text-gray-700">FlashAI supports a wide range of file formats including PDFs, Microsoft Word documents (.docx), PowerPoint presentations (.pptx), images (.jpg, .png), videos (.mp4), and plain text. You can also paste text directly or take photos of handwritten notes using our mobile app.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Can I export my flashcards to other platforms or print them?</h3>
+                    <p class="text-gray-700">Yes, FlashAI allows you to export your flashcards in various formats including PDF, CSV, and Anki-compatible files. This makes it easy to print physical cards or use them with other study platforms. You can also share your decks directly with others through our sharing feature.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Is there a limit to how many flashcards I can create?</h3>
+                    <p class="text-gray-700">With our free plan, you can create up to 200 AI-generated flashcards per month. Our premium plans offer unlimited flashcard creation to support more intensive study needs. There's no limit to how many cards you can create manually in any plan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="get-started" class="py-16 gradient-bg">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Ready to Transform How You Study?</h2>
+            <p class="text-xl text-indigo-100 mb-8 max-w-3xl mx-auto">Join thousands of students who are saving time and improving their grades with FlashAI.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Free Plan -->
+                <div class="bg-white rounded-xl p-8 card-shadow">
+                    <h3 class="text-xl font-bold mb-2">Free</h3>
+                    <p class="text-gray-600 mb-6">Perfect for trying out the platform</p>
+                    <div class="text-4xl font-bold mb-6">$0<span class="text-lg font-normal text-gray-500">/mo</span></div>
+                    
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>200 AI flashcards per month</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>PDF & image uploads</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Basic study tools</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Web access</span>
+                        </li>
+                    </ul>
+                    
+                    <button class="w-full bg-indigo-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-indigo-700 transition">
+                        Get Started Free
+                    </button>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="bg-white rounded-xl p-8 card-shadow relative border-2 border-indigo-500 transform scale-105">
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-indigo-500 text-white px-4 py-1 rounded-full text-sm font-bold">MOST POPULAR</div>
+                    <h3 class="text-xl font-bold mb-2">Pro</h3>
+                    <p class="text-gray-600 mb-6">For serious students</p>
+                    <div class="text-4xl font-bold mb-6">$9.99<span class="text-lg font-normal text-gray-500">/mo</span></div>
+                    
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span><strong>Unlimited</strong> AI flashcards</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>All file format support</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Advanced study analytics</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Web + mobile access</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Export to Anki & PDF</span>
+                        </li>
+                    </ul>
+                    
+                    <button class="w-full bg-indigo-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-indigo-700 transition">
+                        Choose Pro
+                    </button>
+                </div>
+                
+                <!-- Team Plan -->
+                <div class="bg-white rounded-xl p-8 card-shadow">
+                    <h3 class="text-xl font-bold mb-2">Team</h3>
+                    <p class="text-gray-600 mb-6">For educators & study groups</p>
+                    <div class="text-4xl font-bold mb-6">$24.99<span class="text-lg font-normal text-gray-500">/mo</span></div>
+                    
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span><strong>Everything in Pro</strong></span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Up to 5 team members</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Collaborative decks</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Student progress tracking</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-3"></i>
+                            <span>Priority support</span>
+                        </li>
+                    </ul>
+                    
+                    <button class="w-full bg-indigo-600 text-white px-4 py-3 rounded-lg font-medium hover:bg-indigo-700 transition">
+                        Choose Team
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-1">
+                    <div class="text-2xl font-bold text-white mb-4">FlashAI</div>
+                    <p class="mb-4">Advanced AI-powered flashcard maker that transforms how you study and learn.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-200 uppercase tracking-wider mb-4">Product</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#features" class="hover:text-white">Features</a></li>
+                        <li><a href="#" class="hover:text-white">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white">Examples</a></li>
+                        <li><a href="#" class="hover:text-white">For Educators</a></li>
+                        <li><a href="#" class="hover:text-white">For Students</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-200 uppercase tracking-wider mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">Blog</a></li>
+                        <li><a href="#" class="hover:text-white">Help Center</a></li>
+                        <li><a href="#" class="hover:text-white">Guides</a></li>
+                        <li><a href="#" class="hover:text-white">API Documentation</a></li>
+                        <li><a href="#faq" class="hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-200 uppercase tracking-wider mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white">About Us</a></li>
+                        <li><a href="#" class="hover:text-white">Careers</a></li>
+                        <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-sm">© 2023 FlashAI. All rights reserved.</div>
+                <div class="mt-4 md:mt-0">
+                    <a href="#" class="text-sm hover:text-white mr-4">Privacy Policy</a>
+                    <a href="#" class="text-sm hover:text-white mr-4">Terms of Service</a>
+                    <a href="#" class="text-sm hover:text-white">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SEO Keywords -->
+    <div class="hidden">
+        ai flashcard maker, ai flashcard maker free, flashcard maker ai, ai flashcards, quizlet ai flashcards suck, ai flashcard generator, flashcards ai, flashcard ai, quizlet ai flashcards, free ai flashcard generator, ai powered flashcards, best ai flashcard maker, alternative to quizlet, ai vs traditional flashcards, better than quizlet
+    </div>
+
+    <!-- Interactive Demo Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Demo sample selection
+            const uploadDemo = document.getElementById('upload-demo');
+            const sampleSelected = document.getElementById('sample-selected');
+            const sampleName = document.getElementById('sample-name');
+            const changeButton = document.getElementById('change-sample');
+            const generateBtn = document.getElementById('generate-btn');
+            const sampleButtons = document.querySelectorAll('.sample-btn');
+            
+            // Processing elements
+            const processingArea = document.getElementById('processing-area');
+            const processingActive = document.getElementById('processing-active');
+            const processBar = document.getElementById('process-bar');
+            const processingStep = document.querySelector('.processing-step');
+            
+            // Flashcard display elements
+            const flashcardsEmpty = document.getElementById('flashcards-empty');
+            const flashcardsResult = document.getElementById('flashcards-result');
+            const activeFlashcard = document.getElementById('active-flashcard');
+            const flipButton = document.getElementById('flip-card');
+            const prevButton = document.getElementById('prev-card');
+            const nextButton = document.getElementById('next-card');
+            const currentCardEl = document.getElementById('current-card');
+            
+            // Sample data
+            const sampleData = {
+                biology: {
+                    name: "Cell_Biology_Chapter5.pdf",
+                    cards: [
+                        {
+                            question: "What is the cell theory?",
+                            answer: "The cell theory states that all living organisms are composed of cells, cells are the basic unit of life, and all cells arise from pre-existing cells."
+                        },
+                        {
+                            question: "What are the functions of the mitochondria?",
+                            answer: "Mitochondria are the powerhouse of the cell, responsible for cellular respiration and ATP production. They convert glucose into energy through the process of oxidative phosphorylation."
+                        },
+                        {
+                            question: "Describe the process of mitosis.",
+                            answer: "Mitosis is cell division that results in two identical daughter cells. It occurs in 4 phases: prophase, metaphase, anaphase, and telophase, followed by cytokinesis."
+                        },
+                        {
+                            question: "What is the difference between prokaryotic and eukaryotic cells?",
+                            answer: "Prokaryotic cells lack a nucleus and membrane-bound organelles, while eukaryotic cells have a true nucleus and specialized organelles. Prokaryotes include bacteria and archaea, while eukaryotes include plants, animals, fungi, and protists."
+                        },
+                        {
+                            question: "Explain the structure and function of the cell membrane.",
+                            answer: "The cell membrane is a phospholipid bilayer with embedded proteins that controls what enters and exits the cell. It maintains cell homeostasis, provides structural support, and facilitates cell communication."
+                        }
+                    ]
+                },
+                history: {
+                    name: "World_History_Medieval_Period.pdf",
+                    cards: [
+                        {
+                            question: "When was the Medieval period and what are its key characteristics?",
+                            answer: "The Medieval period (Middle Ages) lasted from approximately 500-1500 CE. Key characteristics include feudalism, the dominance of the Catholic Church, agricultural economy, and the rise of universities and Gothic architecture."
+                        },
+                        {
+                            question: "What was the significance of the Magna Carta?",
+                            answer: "Signed in 1215, the Magna Carta limited the power of the English monarchy, established that no one (including the king) was above the law, and protected certain rights of the people. It's considered a foundational document for constitutional governments."
+                        }
+                    ]
+                },
+                physics: {
+                    name: "Introduction_to_Quantum_Mechanics.pdf",
+                    cards: [
+                        {
+                            question: "What is Heisenberg's Uncertainty Principle?",
+                            answer: "Heisenberg's Uncertainty Principle states that it is impossible to simultaneously know both the position and momentum of a particle with perfect precision. The more precisely one property is measured, the less precisely the other can be known."
+                        },
+                        {
+                            question: "Explain the concept of wave-particle duality.",
+                            answer: "Wave-particle duality refers to the concept that all particles exhibit both wave-like and particle-like properties. Electrons, photons, and other quantum entities can behave as waves (showing interference patterns) or as particles (having definite positions) depending on how they are measured."
+                        }
+                    ]
+                }
+            };
+            
+            let currentSample = null;
+            let currentCardIndex = 0;
+            let totalCards = 0;
+            
+            // Sample selection
+            sampleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sample = this.getAttribute('data-sample');
+                    currentSample = sample;
+                    sampleName.textContent = sampleData[sample].name;
+                    uploadDemo.classList.add('hidden');
+                    sampleSelected.classList.remove('hidden');
+                });
+            });
+            
+            changeButton.addEventListener('click', function() {
+                uploadDemo.classList.remove('hidden');
+                sampleSelected.classList.add('hidden');
+                processingArea.classList.remove('hidden');
+                processingActive.classList.add('hidden');
+                flashcardsEmpty.classList.remove('hidden');
+                flashcardsResult.classList.add('hidden');
+                currentSample = null;
+            });
+            
+            // Generate button triggers the processing animation
+            generateBtn.addEventListener('click', function() {
+                if (!currentSample) return;
+                
+                // Show processing
+                processingArea.classList.add('hidden');
+                processingActive.classList.remove('hidden');
+                
+                // Animation for processing steps
+                let step = 1;
+                processBar.style.width = '10%';
+                
+                const interval = setInterval(function() {
+                    if (step === 1) {
+                        document.querySelector('.processing-step-1 i').classList.remove('fa-spinner', 'fa-spin');
+                        document.querySelector('.processing-step-1 i').classList.add('fa-check-circle');
+                        document.querySelector('.processing-step-1 i').classList.remove('text-indigo-500');
+                        document.querySelector('.processing-step-1 i').classList.add('text-green-500');
+                        document.querySelector('.processing-step-2').classList.remove('hidden');
+                        processingStep.textContent = "Step 2/4";
+                        processBar.style.width = '40%';
+                    } else if (step === 2) {
+                        document.querySelector('.processing-step-2 i').classList.remove('fa-spinner', 'fa-spin');
+                        document.querySelector('.processing-step-2 i').classList.add('fa-check-circle');
+                        document.querySelector('.processing-step-2 i').classList.remove('text-indigo-500');
+                        document.querySelector('.processing-step-2 i').classList.add('text-green-500');
+                        document.querySelector('.processing-step-3').classList.remove('hidden');
+                        processingStep.textContent = "Step 3/4";
+                        processBar.style.width = '70%';
+                    } else if (step === 3) {
+                        document.querySelector('.processing-step-3 i').classList.remove('fa-spinner', 'fa-spin');
+                        document.querySelector('.processing-step-3 i').classList.add('fa-check-circle');
+                        document.querySelector('.processing-step-3 i').classList.remove('text-indigo-500');
+                        document.querySelector('.processing-step-3 i').classList.add('text-green-500');
+                        document.querySelector('.processing-step-4').classList.remove('hidden');
+                        processingStep.textContent = "Step 4/4";
+                        processBar.style.width = '90%';
+                    } else if (step === 4) {
+                        document.querySelector('.processing-step-4 i').classList.remove('fa-spinner', 'fa-spin');
+                        document.querySelector('.processing-step-4 i').classList.add('fa-check-circle');
+                        document.querySelector('.processing-step-4 i').classList.remove('text-indigo-500');
+                        document.querySelector('.processing-step-4 i').classList.add('text-green-500');
+                        processingStep.textContent = "Complete!";
+                        processBar.style.width = '100%';
+                        
+                        // Show flashcards
+                        setTimeout(function() {
+                            flashcardsEmpty.classList.add('hidden');
+                            flashcardsResult.classList.remove('hidden');
+                            
+                            // Set up flashcards
+                            totalCards = sampleData[currentSample].cards.length;
+                            currentCardIndex = 0;
+                            document.getElementById('total-cards').textContent = totalCards;
+                            updateCardDisplay();
+                            
+                            // Reset navigation buttons
+                            prevButton.disabled = true;
+                            nextButton.disabled = currentCardIndex >= totalCards - 1;
+                        }, 500);
+                        
+                        clearInterval(interval);
+                    }
+                    
+                    step++;
+                }, 1500);
+            });
+            
+            // Flip card functionality
+            flipButton.addEventListener('click', function() {
+                activeFlashcard.classList.toggle('flipped');
+            });
+            
+            // Navigation functionality
+            prevButton.addEventListener('click', function() {
+                if (currentCardIndex > 0) {
+                    currentCardIndex--;
+                    updateCardDisplay();
+                    nextButton.disabled = false;
+                    prevButton.disabled = currentCardIndex === 0;
+                    
+                    // Reset flip
+                    activeFlashcard.classList.remove('flipped');
+                }
+            });
+            
+            nextButton.addEventListener('click', function() {
+                if (currentCardIndex < totalCards - 1) {
+                    currentCardIndex++;
+                    updateCardDisplay();
+                    prevButton.disabled = false;
+                    nextButton.disabled = currentCardIndex >= totalCards - 1;
+                    
+                    // Reset flip
+                    activeFlashcard.classList.remove('flipped');
+                }
+            });
+            
+            function updateCardDisplay() {
+                const card = sampleData[currentSample].cards[currentCardIndex];
+                document.getElementById('flashcard-question').textContent = card.question;
+                document.getElementById('flashcard-answer').textContent = card.answer;
+                currentCardEl.textContent = currentCardIndex + 1;
+            }
+            
+            // For the progress animation in hero section
+            const progressPercentage = document.querySelector('.progress-percentage');
+            setInterval(function() {
+                const progressValue = parseInt(progressPercentage.textContent);
+                if (progressValue < 100) {
+                    progressPercentage.textContent = (progressValue + 1) + '%';
+                }
+            }, 80);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+[
+  {
+    "name": "Massachusetts",
+    "id": "MA"
+  },
+  {
+    "name": "Rhode Island",
+    "id": "RI"
+  },
+  {
+    "name": "New Hampshire",
+    "id": "NH"
+  },
+  {
+    "name": "Maine",
+    "id": "ME"
+  },
+  {
+    "name": "Vermont",
+    "id": "VT"
+  },
+  {
+    "name": "Connecticut",
+    "id": "CT"
+  },
+  {
+    "name": "New York",
+    "id": "NY"
+  },
+  {
+    "name": "New Jersey",
+    "id": "NJ"
+  },
+  {
+    "name": "Pennsylvania",
+    "id": "PA"
+  },
+  {
+    "name": "Delaware",
+    "id": "DE"
+  },
+  {
+    "name": "District of Columbia",
+    "id": "DC"
+  },
+  {
+    "name": "Virginia",
+    "id": "VA"
+  },
+  {
+    "name": "Maryland",
+    "id": "MD"
+  },
+  {
+    "name": "West Virginia",
+    "id": "WV"
+  },
+  {
+    "name": "North Carolina",
+    "id": "NC"
+  },
+  {
+    "name": "South Carolina",
+    "id": "SC"
+  },
+  {
+    "name": "Georgia",
+    "id": "GA"
+  },
+  {
+    "name": "Florida",
+    "id": "FL"
+  },
+  {
+    "name": "Alabama",
+    "id": "AL"
+  },
+  {
+    "name": "Tennessee",
+    "id": "TN"
+  },
+  {
+    "name": "Mississippi",
+    "id": "MS"
+  },
+  {
+    "name": "Kentucky",
+    "id": "KY"
+  },
+  {
+    "name": "Ohio",
+    "id": "OH"
+  },
+  {
+    "name": "Indiana",
+    "id": "IN"
+  },
+  {
+    "name": "Michigan",
+    "id": "MI"
+  },
+  {
+    "name": "Iowa",
+    "id": "IA"
+  },
+  {
+    "name": "Wisconsin",
+    "id": "WI"
+  },
+  {
+    "name": "Minnesota",
+    "id": "MN"
+  },
+  {
+    "name": "South Dakota",
+    "id": "SD"
+  },
+  {
+    "name": "North Dakota",
+    "id": "ND"
+  },
+  {
+    "name": "Montana",
+    "id": "MT"
+  },
+  {
+    "name": "Illinois",
+    "id": "IL"
+  },
+  {
+    "name": "Missouri",
+    "id": "MO"
+  },
+  {
+    "name": "Kansas",
+    "id": "KS"
+  },
+  {
+    "name": "Nebraska",
+    "id": "NE"
+  },
+  {
+    "name": "Louisiana",
+    "id": "LA"
+  },
+  {
+    "name": "Arkansas",
+    "id": "AR"
+  },
+  {
+    "name": "Oklahoma",
+    "id": "OK"
+  },
+  {
+    "name": "Texas",
+    "id": "TX"
+  },
+  {
+    "name": "Colorado",
+    "id": "CO"
+  },
+  {
+    "name": "Wyoming",
+    "id": "WY"
+  },
+  {
+    "name": "Idaho",
+    "id": "ID"
+  },
+  {
+    "name": "Utah",
+    "id": "UT"
+  },
+  {
+    "name": "Arizona",
+    "id": "AZ"
+  },
+  {
+    "name": "New Mexico",
+    "id": "NM"
+  },
+  {
+    "name": "Nevada",
+    "id": "NV"
+  },
+  {
+    "name": "California",
+    "id": "CA"
+  },
+  {
+    "name": "Hawaii",
+    "id": "HI"
+  },
+  {
+    "name": "Oregon",
+    "id": "OR"
+  },
+  {
+    "name": "Washington",
+    "id": "WA"
+  },
+  {
+    "name": "Alaska",
+    "id": "AK"
+  }
+]

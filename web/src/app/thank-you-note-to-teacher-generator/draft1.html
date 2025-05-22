@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Thank You Note Generator | Heartfelt Messages for Educators</title>
+    <meta name="description" content="Create personalized thank you notes for teachers with our AI-powered generator. Perfect for parents, students, and expressing gratitude to daycare teachers.">
+    <meta name="keywords" content="thank you note to teacher, thank you note to teacher from parent, short thank you note to teacher, thank you note to teacher from student, thank you note to daycare teacher">
+    
+    <!-- Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .hero-pattern {
+            background-color: #f9fafb;
+            background-image: url("data:image/svg+xml,%3Csvg width='84' height='48' viewBox='0 0 84 48' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h12v6H0V0zm28 8h12v6H28V8zm14-8h12v6H42V0zm14 0h12v6H56V0zm0 8h12v6H56V8zM42 8h12v6H42V8zm0 16h12v6H42v-6zm14-8h12v6H56v-6zm14 0h12v6H70v-6zm0-16h12v6H70V0zM28 32h12v6H28v-6zM14 16h12v6H14v-6zM0 24h12v6H0v-6zm0 8h12v6H0v-6zm14 0h12v6H14v-6zm14 8h12v6H28v-6zm-14 0h12v6H14v-6zm28 0h12v6H42v-6zm14-8h12v6H56v-6zm0-8h12v6H56v-6zm14 8h12v6H70v-6zm0 8h12v6H70v-6zM14 24h12v6H14v-6zm14-8h12v6H28v-6zM14 8h12v6H14V8zM0 8h12v6H0V8z' fill='%239C92AC' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+        .playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #4F46E5 0%, #7C3AED 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #4338CA 0%, #6D28D9 100%);
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+        }
+        .btn-secondary {
+            background: white;
+            color: #4F46E5;
+            border: 1px solid #4F46E5;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: #F9FAFB;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .template-item {
+            transition: all 0.3s ease;
+        }
+        .template-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .ai-input:focus {
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+            outline: none;
+        }
+        .editor-border {
+            border: 2px dashed #E5E7EB;
+        }
+        .editor-border:focus-within {
+            border: 2px dashed #4F46E5;
+        }
+        .tag {
+            background-color: #EEF2FF;
+            color: #4F46E5;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+        .carousel-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .carousel-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .testimonial-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin: 1rem;
+            width: 300px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow-sm py-4 px-6 sm:px-10 fixed w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                </svg>
+                <h1 class="ml-2 text-xl font-bold text-gray-800">TeacherThankYou.com</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#generator" class="text-gray-600 hover:text-indigo-600 transition-colors">AI Generator</a>
+                <a href="#templates" class="text-gray-600 hover:text-indigo-600 transition-colors">Templates</a>
+                <a href="#creative" class="text-gray-600 hover:text-indigo-600 transition-colors">Creative Ideas</a>
+                <a href="#studio" class="text-gray-600 hover:text-indigo-600 transition-colors">Design Studio</a>
+                <a href="#resources" class="text-gray-600 hover:text-indigo-600 transition-colors">Resources</a>
+                <a href="#community" class="text-gray-600 hover:text-indigo-600 transition-colors">Community</a>
+            </nav>
+            <div class="hidden md:block">
+                <button class="btn-primary px-5 py-2 rounded-full text-white font-medium">Get Started</button>
+            </div>
+            <button class="md:hidden text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-pattern pt-32 pb-20 px-6 sm:px-10">
+        <div class="container mx-auto flex flex-col lg:flex-row items-center">
+            <div class="lg:w-1/2 lg:pr-10">
+                <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 leading-tight">
+                    Craft the Perfect <span class="gradient-text">Thank You Note</span> for Your Amazing Teacher
+                </h1>
+                <p class="mt-6 text-lg text-gray-600">
+                    Our AI thank you note to teacher generator helps parents and students create heartfelt, personalized thank you messages for teachers. Express your gratitude in just minutes.
+                </p>
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <a href="#generator" class="btn-primary px-8 py-3 rounded-full text-white font-medium inline-block">
+                        Create Your Note Now
+                    </a>
+                    <a href="#templates" class="btn-secondary px-8 py-3 rounded-full font-medium inline-block">
+                        Browse Templates
+                    </a>
+                </div>
+                <div class="mt-10 grid grid-cols-2 gap-4 max-w-md">
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="ml-2 text-gray-700">Parents to Teachers</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="ml-2 text-gray-700">Students to Teachers</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="ml-2 text-gray-700">Quick & Easy Notes</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="ml-2 text-gray-700">Daycare Teachers</span>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:w-1/2 mt-12 lg:mt-0">
+                <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/thank-you-teacher-hero.png" alt="Teacher thank you note" class="w-full rounded-lg shadow-xl">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section class="py-20 px-6 sm:px-10 bg-white">
+        <div class="container mx-auto text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Express Your Gratitude in Meaningful Ways</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Our comprehensive platform provides everything you need to create the perfect thank you message for your teachers.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 container mx-auto">
+            <div class="feature-card p-6 rounded-xl card-shadow bg-white">
+                <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">AI-Powered Generator</h3>
+                <p class="text-gray-600">Create personalized thank you notes in seconds with our advanced AI. Just provide a few details, and we'll craft the perfect message.</p>
+            </div>
+            
+            <div class="feature-card p-6 rounded-xl card-shadow bg-white">
+                <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Extensive Template Library</h3>
+                <p class="text-gray-600">Browse hundreds of professionally written templates for every occasion, categorized by sender type and teaching level.</p>
+            </div>
+            
+            <div class="feature-card p-6 rounded-xl card-shadow bg-white">
+                <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Creative Expression Ideas</h3>
+                <p class="text-gray-600">Discover unique ways to show your appreciation beyond written notes, from DIY gifts to memorable gestures.</p>
+            </div>
+            
+            <div class="feature-card p-6 rounded-xl card-shadow bg-white">
+                <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Design Studio</h3>
+                <p class="text-gray-600">Create beautiful custom cards with our easy-to-use design tools. Add photos, graphics, and personalized touches.</p>
+            </div>
+            
+            <div class="feature-card p-6 rounded-xl card-shadow bg-white">
+                <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Resource Center</h3>
+                <p class="text-gray-600">Access guides, tips, and best practices for writing heartfelt thank you messages that truly make an impact.</p>
+            </div>
+            
+            <div class="feature-card p-6 rounded-xl card-shadow bg-white">
+                <div class="w-14 h-14 rounded-full bg-indigo-100 flex items-center justify-center mb-5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">Community Sharing</h3>
+                <p class="text-gray-600">Share your creations and get inspired by others in our community. See real thank you notes that made a difference.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Generator Section -->
+    <section id="generator" class="py-20 px-6 sm:px-10 bg-gray-50">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-medium text-indigo-600 uppercase tracking-wider">AI-Powered</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Create Your Perfect Thank You Note</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Our advanced AI will help you craft a personalized, heartfelt message based on your relationship and specific details.</p>
+            </div>
+            
+            <div class="bg-white rounded-xl card-shadow p-6 md:p-10 max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Tell Us About Your Teacher</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">I am a:</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500">
+                                    <option>Parent</option>
+                                    <option>Student</option>
+                                    <option>Class Representative</option>
+                                    <option>School Administrator</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Teacher Type:</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500">
+                                    <option>Elementary School Teacher</option>
+                                    <option>Middle School Teacher</option>
+                                    <option>High School Teacher</option>
+                                    <option>Daycare/Preschool Teacher</option>
+                                    <option>College Professor</option>
+                                    <option>Special Education Teacher</option>
+                                    <option>Coach/Music/Art Teacher</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Teacher's Name:</label>
+                                <input type="text" placeholder="e.g., Mrs. Smith" class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">What would you like to thank them for?</label>
+                                <textarea rows="4" placeholder="e.g., Their patience, helping with math, inspiring creativity..." class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500"></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Note Length:</label>
+                                <div class="flex space-x-4">
+                                    <label class="flex items-center">
+                                        <input type="radio" name="length" class="h-4 w-4 text-indigo-600">
+                                        <span class="ml-2 text-sm text-gray-700">Short</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="length" class="h-4 w-4 text-indigo-600" checked>
+                                        <span class="ml-2 text-sm text-gray-700">Medium</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="radio" name="length" class="h-4 w-4 text-indigo-600">
+                                        <span class="ml-2 text-sm text-gray-700">Detailed</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tone:</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="tag cursor-pointer">Heartfelt</span>
+                                    <span class="tag cursor-pointer">Professional</span>
+                                    <span class="tag cursor-pointer">Casual</span>
+                                    <span class="tag cursor-pointer">Humorous</span>
+                                    <span class="tag cursor-pointer">Formal</span>
+                                    <span class="tag cursor-pointer">Inspirational</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn-primary w-full py-3 rounded-lg text-white font-medium mt-4">
+                                Generate Thank You Note
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Your Personalized Note</h3>
+                        <div class="editor-border rounded-lg p-5 h-96 relative overflow-hidden bg-gray-50">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-center px-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                    <p class="text-gray-500">Fill in the form and click "Generate" to create your personalized thank you note.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="hidden">
+                                <div class="text-gray-800 leading-relaxed">
+                                    <p class="mb-4">Dear Mrs. Smith,</p>
+                                    
+                                    <p class="mb-4">I wanted to take a moment to express my heartfelt gratitude for everything you've done for my child this year. Your dedication to creating an engaging learning environment has made such a positive impact.</p>
+                                    
+                                    <p class="mb-4">Your patience and encouragement have helped build my child's confidence, especially when facing challenges with math. The way you take the time to ensure every student truly understands the material rather than just memorizing it has been remarkable.</p>
+                                    
+                                    <p class="mb-4">Teachers like you make such a difference in children's lives, and we are truly fortunate to have you. Your influence extends far beyond the classroom.</p>
+                                    
+                                    <p class="mb-4">With sincere appreciation,</p>
+                                    <p>[Your Name]</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex mt-4 space-x-3">
+                            <button class="btn-secondary flex-1 py-2 rounded-lg font-medium flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                Copy Text
+                            </button>
+                            <button class="btn-secondary flex-1 py-2 rounded-lg font-medium flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                </svg>
+                                Download
+                            </button>
+                            <button class="btn-secondary py-2 px-3 rounded-lg font-medium flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Template Library Section -->
+    <section id="templates" class="py-20 px-6 sm:px-10 bg-white">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-medium text-indigo-600 uppercase tracking-wider">Rich Templates</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Browse Our Template Library</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Choose from hundreds of professionally written templates for every situation and relationship.</p>
+            </div>
+            
+            <!-- Template Categories Tabs -->
+            <div class="flex flex-wrap justify-center mb-8">
+                <button class="px-5 py-2 rounded-full m-1 text-white font-medium bg-indigo-600">All Templates</button>
+                <button class="px-5 py-2 rounded-full m-1 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200">From Parents</button>
+                <button class="px-5 py-2 rounded-full m-1 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200">From Students</button>
+                <button class="px-5 py-2 rounded-full m-1 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200">For Daycare Teachers</button>
+                <button class="px-5 py-2 rounded-full m-1 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200">Short & Sweet</button>
+                <button class="px-5 py-2 rounded-full m-1 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200">End of Year</button>
+                <button class="px-5 py-2 rounded-full m-1 text-gray-700 font-medium bg-gray-100 hover:bg-gray-200">Teacher Appreciation</button>
+            </div>
+            
+            <!-- Templates Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Template 1: From Parent -->
+                <div class="template-item rounded-xl overflow-hidden card-shadow">
+                    <div class="h-10 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center px-4">
+                        <span class="text-xs font-medium text-white">From Parent</span>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-lg font-semibold mb-2">Heartfelt Gratitude from a Parent</h3>
+                        <div class="text-gray-700 text-sm mb-4 h-32 overflow-hidden">
+                            <p>Dear [Teacher's Name],</p>
+                            <p class="mt-2">Thank you for creating a warm and nurturing environment where my child feels safe and encouraged to learn every day. Your patience and dedication have made such a positive impact on [Child's Name]'s educational journey and personal growth.</p>
+                            <p class="mt-2">We are so grateful to have you as our child's teacher.</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-gray-500">Word count: 68</span>
+                            </div>
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center">
+                                Use This Template
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 2: From Student -->
+                <div class="template-item rounded-xl overflow-hidden card-shadow">
+                    <div class="h-10 bg-gradient-to-r from-pink-500 to-rose-500 flex items-center px-4">
+                        <span class="text-xs font-medium text-white">From Student</span>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-lg font-semibold mb-2">Appreciation from a Grateful Student</h3>
+                        <div class="text-gray-700 text-sm mb-4 h-32 overflow-hidden">
+                            <p>Dear [Teacher's Name],</p>
+                            <p class="mt-2">I wanted to express my sincere thanks for making your class so engaging and interesting. I used to think [Subject] was boring, but you've helped me discover how fascinating it can be. Your teaching style and encouragement have inspired me to work harder.</p>
+                            <p class="mt-2">Thank you for believing in me and pushing me to do my best.</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-gray-500">Word count: 63</span>
+                            </div>
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center">
+                                Use This Template
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 3: For Daycare Teacher -->
+                <div class="template-item rounded-xl overflow-hidden card-shadow">
+                    <div class="h-10 bg-gradient-to-r from-amber-500 to-orange-500 flex items-center px-4">
+                        <span class="text-xs font-medium text-white">For Daycare Teacher</span>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-lg font-semibold mb-2">Gratitude for Daycare Excellence</h3>
+                        <div class="text-gray-700 text-sm mb-4 h-32 overflow-hidden">
+                            <p>Dear [Teacher's Name],</p>
+                            <p class="mt-2">Thank you so much for being friendly, kind, caring, and patient with my child. The way you make learning fun through play and creative activities has been wonderful to see. I appreciate how you keep me updated on my child's development and always greet us with a warm smile.</p>
+                            <p class="mt-2">You are truly making a difference in these formative years.</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-gray-500">Word count: 70</span>
+                            </div>
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center">
+                                Use This Template
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 4: Short & Sweet -->
+                <div class="template-item rounded-xl overflow-hidden card-shadow">
+                    <div class="h-10 bg-gradient-to-r from-green-500 to-emerald-500 flex items-center px-4">
+                        <span class="text-xs font-medium text-white">Short & Sweet</span>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-lg font-semibold mb-2">Quick Note of Appreciation</h3>
+                        <div class="text-gray-700 text-sm mb-4 h-32 overflow-hidden">
+                            <p>Dear [Teacher's Name],</p>
+                            <p class="mt-2">Your patience, dedication, and ability to make learning fun have made such a difference this year. Thank you for being an exceptional teacher!</p>
+                            <p class="mt-2">With appreciation,</p>
+                            <p>[Your Name]</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-gray-500">Word count: 30</span>
+                            </div>
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center">
+                                Use This Template
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 5: End of Year -->
+                <div class="template-item rounded-xl overflow-hidden card-shadow">
+                    <div class="h-10 bg-gradient-to-r from-purple-500 to-violet-500 flex items-center px-4">
+                        <span class="text-xs font-medium text-white">End of Year</span>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-lg font-semibold mb-2">End of School Year Thanks</h3>
+                        <div class="text-gray-700 text-sm mb-4 h-32 overflow-hidden">
+                            <p>Dear [Teacher's Name],</p>
+                            <p class="mt-2">As this school year comes to a close, I wanted to express my deep gratitude for everything you've done. Your guidance, encouragement, and expertise have made this a remarkable year of growth and learning. The impact you've had will continue long after the final bell rings.</p>
+                            <p class="mt-2">Thank you for an unforgettable year!</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-gray-500">Word count: 58</span>
+                            </div>
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center">
+                                Use This Template
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Template 6: Teacher Appreciation -->
+                <div class="template-item rounded-xl overflow-hidden card-shadow">
+                    <div class="h-10 bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center px-4">
+                        <span class="text-xs font-medium text-white">Teacher Appreciation</span>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <h3 class="text-lg font-semibold mb-2">Teacher Appreciation Week Message</h3>
+                        <div class="text-gray-700 text-sm mb-4 h-32 overflow-hidden">
+                            <p>Dear [Teacher's Name],</p>
+                            <p class="mt-2">During this Teacher Appreciation Week, I wanted to take a moment to thank you for the incredible work you do every day. Your dedication to education, your passion for your subject, and your genuine care for your students make you truly exceptional.</p>
+                            <p class="mt-2">Teachers change the world one student at a time, and you're changing mine. Thank you!</p>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xs text-gray-500">Word count: 65</span>
+                            </div>
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center">
+                                Use This Template
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10">
+                <button class="btn-secondary px-8 py-3 rounded-full font-medium inline-flex items-center">
+                    View All Templates
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creative Expression Section -->
+    <section id="creative" class="py-20 px-6 sm:px-10 bg-indigo-50">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-medium text-indigo-600 uppercase tracking-wider">Beyond Words</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Creative Ways to Express Gratitude</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Discover unique and memorable ways to thank your teachers beyond traditional thank you notes.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/handmade-gift-teacher.jpg" alt="Handmade gift for teacher" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">DIY Gift Baskets</h3>
+                        <p class="text-gray-600 mb-4">Create a personalized gift basket filled with your teacher's favorite things. Include small items like tea, chocolates, stationery, or self-care products.</p>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Get Basket Ideas
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/classroom-supplies-donation.jpg" alt="Classroom supplies donation" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">Classroom Supply Donation</h3>
+                        <p class="text-gray-600 mb-4">Many teachers spend their own money on classroom supplies. Show appreciation by donating items from their wish list or giving gift cards to teacher supply stores.</p>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Supply List Ideas
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/student-video-tribute.jpg" alt="Student video tribute" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">Video Testimonials</h3>
+                        <p class="text-gray-600 mb-4">Compile short video clips from students and parents expressing their gratitude. This personal touch creates a memorable keepsake teachers can revisit.</p>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Video Creation Tips
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/memory-book-teacher.jpg" alt="Memory book for teacher" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">Class Memory Book</h3>
+                        <p class="text-gray-600 mb-4">Create a collaborative book with notes, drawings, and photos from the school year. Each student can contribute a page expressing their appreciation.</p>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Memory Book Templates
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/teacher-appreciation-breakfast.jpg" alt="Teacher appreciation breakfast" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">Appreciation Breakfast</h3>
+                        <p class="text-gray-600 mb-4">Organize a special breakfast or luncheon for teachers. This gesture of hospitality shows thoughtfulness and gives teachers a well-deserved break.</p>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Event Planning Guide
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/classroom-door-decoration.jpg" alt="Classroom door decoration" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">Classroom Door Decoration</h3>
+                        <p class="text-gray-600 mb-4">Surprise your teacher by decorating their classroom door with notes of appreciation, photos, and colorful designs celebrating their impact.</p>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Decoration Ideas
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Design Studio Section -->
+    <section id="studio" class="py-20 px-6 sm:px-10 bg-white">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-medium text-indigo-600 uppercase tracking-wider">Visual Expression</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Design Your Own Thank You Card</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Create beautiful custom thank you cards with our easy-to-use design tools. Add photos, choose colors, and personalize your message.</p>
+            </div>
+            
+            <div class="bg-white rounded-xl card-shadow p-6 md:p-10 max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+                    <div class="lg:col-span-2">
+                        <h3 class="text-xl font-semibold mb-4">Card Designer</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Card Style:</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <div class="aspect-w-1 aspect-h-1 border-2 border-indigo-600 rounded cursor-pointer overflow-hidden">
+                                        <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/card-template-1.jpg" alt="Card template 1" class="object-cover w-full h-full">
+                                    </div>
+                                    <div class="aspect-w-1 aspect-h-1 border border-gray-200 rounded cursor-pointer overflow-hidden">
+                                        <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/card-template-2.jpg" alt="Card template 2" class="object-cover w-full h-full">
+                                    </div>
+                                    <div class="aspect-w-1 aspect-h-1 border border-gray-200 rounded cursor-pointer overflow-hidden">
+                                        <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/card-template-3.jpg" alt="Card template 3" class="object-cover w-full h-full">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Color Scheme:</label>
+                                <div class="flex space-x-2">
+                                    <div class="w-8 h-8 rounded-full bg-indigo-600 cursor-pointer border-2 border-gray-300"></div>
+                                    <div class="w-8 h-8 rounded-full bg-pink-500 cursor-pointer"></div>
+                                    <div class="w-8 h-8 rounded-full bg-emerald-500 cursor-pointer"></div>
+                                    <div class="w-8 h-8 rounded-full bg-amber-500 cursor-pointer"></div>
+                                    <div class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer"></div>
+                                    <div class="w-8 h-8 rounded-full bg-gray-800 cursor-pointer"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Layout:</label>
+                                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500">
+                                    <option>Portrait (5x7)</option>
+                                    <option>Landscape (7x5)</option>
+                                    <option>Square (6x6)</option>
+                                    <option>Folded Card</option>
+                                    <option>Postcard</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Add Photo (Optional):</label>
+                                <button class="w-full border border-dashed border-gray-300 rounded-lg p-4 text-gray-500 hover:bg-gray-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    Click to upload
+                                </button>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Add Decoration:</label>
+                                <div class="flex flex-wrap gap-2">
+                                    <div class="w-10 h-10 border border-gray-200 rounded p-1 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-red-500">
+                                            <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                                        </svg>
+                                    </div>
+                                    <div class="w-10 h-10 border border-gray-200 rounded p-1 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-yellow-500">
+                                            <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                    <div class="w-10 h-10 border border-gray-200 rounded p-1 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-blue-500">
+                                            <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
+                                        </svg>
+                                    </div>
+                                    <div class="w-10 h-10 border border-gray-200 rounded p-1 cursor-pointer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="text-green-500">
+                                            <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 00-1.071-.136 9.742 9.742 0 00-3.539 6.177A7.547 7.547 0 016.648 6.61a.75.75 0 00-1.152.082A9 9 0 1015.68 4.534a7.46 7.46 0 01-2.717-2.248zM15.75 14.25a3.75 3.75 0 11-7.313-1.172c.628.465 1.35.81 2.133 1a5.99 5.99 0 011.925-3.545 3.75 3.75 0 013.255 3.717z" clip-rule="evenodd" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Your Message:</label>
+                                <textarea rows="4" placeholder="Enter your thank you message here..." class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500"></textarea>
+                            </div>
+                            
+                            <button class="btn-primary w-full py-3 rounded-lg text-white font-medium mt-4">
+                                Preview Card
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="lg:col-span-3 flex justify-center items-center">
+                        <div class="w-full max-w-md aspect-[5/7] rounded-lg overflow-hidden card-shadow relative bg-white">
+                            <div class="absolute inset-0 bg-gradient-to-br from-indigo-100 to-white"></div>
+                            
+                            <div class="absolute inset-0 p-8 flex flex-col">
+                                <div class="text-center mb-4">
+                                    <h3 class="playfair text-3xl text-indigo-900 font-bold">Thank You</h3>
+                                </div>
+                                
+                                <div class="flex-1 flex items-center justify-center">
+                                    <div class="text-center px-4">
+                                        <p class="text-gray-700 leading-relaxed mb-6">Dear Mrs. Smith,</p>
+                                        <p class="text-gray-700 leading-relaxed mb-6">Thank you for being such an amazing teacher this year. Your dedication, patience, and creativity have made such a difference in my child's education. We are truly grateful for everything you do!</p>
+                                        <p class="text-gray-700 leading-relaxed">With appreciation,</p>
+                                        <p class="text-gray-700 font-medium">The Johnson Family</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center mt-8 space-x-4">
+                    <button class="btn-secondary py-2 px-5 rounded-lg font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                        </svg>
+                        Download
+                    </button>
+                    <button class="btn-secondary py-2 px-5 rounded-lg font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        Print
+                    </button>
+                    <button class="btn-secondary py-2 px-5 rounded-lg font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                        Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resource Center Section -->
+    <section id="resources" class="py-20 px-6 sm:px-10 bg-gray-50">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-medium text-indigo-600 uppercase tracking-wider">Writing Guides</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Resource Center</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Access our library of guides, tips, and best practices for creating meaningful teacher appreciation messages.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <div class="h-40 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center p-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">The Art of Thank You Notes</h3>
+                        <p class="text-gray-600 mb-4">Learn the essential elements of effective thank you notes and how to structure your message to express genuine gratitude.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Opening salutations and closings
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Body structure and content
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Personalizing your message
+                            </li>
+                        </ul>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Read the Guide
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <div class="h-40 bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center p-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">Teacher Appreciation by Age Group</h3>
+                        <p class="text-gray-600 mb-4">Tailored approaches for expressing gratitude based on your child's age and educational stage.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Preschool and daycare teachers
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Elementary school educators
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Middle and high school teachers
+                            </li>
+                        </ul>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Read the Guide
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <div class="h-40 bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center p-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white opacity-80" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-2">Timing Your Thank You</h3>
+                        <p class="text-gray-600 mb-4">Learn about the best occasions to express gratitude to teachers and how to make your timing meaningful.</p>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Teacher Appreciation Week
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                End of school year
+                            </li>
+                            <li class="flex items-center text-sm text-gray-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                Special achievements
+                            </li>
+                        </ul>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center">
+                            Read the Guide
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12">
+                <h3 class="text-xl font-semibold mb-6 text-center">Popular Articles & Guides</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="#" class="p-4 bg-white rounded-lg hover:bg-gray-50 flex items-center">
+                        <div class="bg-indigo-100 rounded-full p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">10 Powerful Words to Include in Your Teacher Thank You Note</h4>
+                            <p class="text-sm text-gray-600">Learn which words create the most emotional impact</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="p-4 bg-white rounded-lg hover:bg-gray-50 flex items-center">
+                        <div class="bg-indigo-100 rounded-full p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">How to Write a Thank You Note for a Difficult Teacher</h4>
+                            <p class="text-sm text-gray-600">Finding gratitude in challenging relationships</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="p-4 bg-white rounded-lg hover:bg-gray-50 flex items-center">
+                        <div class="bg-indigo-100 rounded-full p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">Group Thank You Notes: Tips for Class Parents</h4>
+                            <p class="text-sm text-gray-600">Coordinating appreciation from multiple families</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="p-4 bg-white rounded-lg hover:bg-gray-50 flex items-center">
+                        <div class="bg-indigo-100 rounded-full p-3 mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">The Science of Gratitude: Why Thank You Notes Matter</h4>
+                            <p class="text-sm text-gray-600">Research on the impact of appreciation</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-20 px-6 sm:px-10 bg-white">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-medium text-indigo-600 uppercase tracking-wider">Join Our Community</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Share & Get Inspired</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Connect with others, share your thank you notes, and find inspiration from real success stories.</p>
+            </div>
+            
+            <div class="bg-indigo-50 rounded-xl p-8 mb-16">
+                <div class="flex flex-col md:flex-row items-center">
+                    <div class="md:w-1/2 md:pr-10 mb-8 md:mb-0">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Submit Your Success Story</h3>
+                        <p class="text-gray-600 mb-6">Share your experience about how your thank you note made a difference. Tell us about your teacher's reaction and the impact of your gesture.</p>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Your Name:</label>
+                                <input type="text" class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Your Story:</label>
+                                <textarea rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-2 ai-input focus:border-indigo-500"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Upload Photo (Optional):</label>
+                                <div class="border border-dashed border-gray-300 rounded-lg p-4 text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto mb-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                    <p class="text-sm text-gray-500">Drag and drop or click to upload</p>
+                                </div>
+                            </div>
+                            <button class="btn-primary px-6 py-2 rounded-lg text-white font-medium">
+                                Submit Your Story
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-1/2 md:pl-10">
+                        <img src="https://cdn.jsdelivr.net/gh/user-attachments/images/community-sharing.jpg" alt="Community sharing" class="rounded-lg shadow-lg">
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-center mb-8">Community Testimonials</h3>
+            
+            <div class="carousel-scroll overflow-x-auto pb-4">
+                <div class="flex">
+                    <div class="testimonial-card">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                                <span class="text-indigo-600 font-medium">SJ</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">Sarah Johnson</h4>
+                                <p class="text-xs text-gray-500">Parent of 2nd Grader</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">"I used the AI generator to create a thank you note for my son's teacher at the end of the school year. She was so touched that she sent us a heartfelt email saying it made her entire year. The personalized touches really made a difference!"</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                                <span class="text-indigo-600 font-medium">MT</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">Mike Thomas</h4>
+                                <p class="text-xs text-gray-500">High School Student</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">"As a senior about to graduate, I wanted to thank my math teacher who helped me through four years. The templates here helped me express my gratitude when I couldn't find the right words. She actually cried when reading it!"</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                                <span class="text-indigo-600 font-medium">LL</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">Lisa Lewis</h4>
+                                <p class="text-xs text-gray-500">Preschool Parent</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">"I used the design studio to create a custom card for my daughter's daycare teacher, complete with my daughter's artwork. The teacher told me she framed it and keeps it on her desk as a reminder of why she loves teaching."</p>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center mr-3">
+                                <span class="text-indigo-600 font-medium">AW</span>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">Alex Washington</h4>
+                                <p class="text-xs text-gray-500">Class Parent</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 text-sm">"As the class parent, I used the templates to organize a group thank you for our kids' music teacher. The creative ideas section gave us inspiration to put together a video montage along with our notes. It was a huge hit!"</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Join Our Newsletter</h3>
+                <p class="text-gray-600 max-w-2xl mx-auto mb-8">Get weekly inspiration, new templates, and tips for expressing gratitude to the special teachers in your life.</p>
+                
+                <div class="max-w-md mx-auto">
+                    <div class="flex">
+                        <input type="email" placeholder="Your email address" class="flex-1 rounded-l-lg border border-gray-300 px-4 py-3 ai-input focus:border-indigo-500">
+                        <button class="btn-primary px-6 py-3 rounded-r-lg text-white font-medium">
+                            Subscribe
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">We respect your privacy. Unsubscribe at any time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote Section -->
+    <section class="py-20 px-6 sm:px-10 bg-indigo-600">
+        <div class="container mx-auto text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-indigo-300 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+            </svg>
+            <blockquote class="text-2xl md:text-3xl font-medium text-white mb-6 max-w-3xl mx-auto leading-relaxed playfair">
+                "A teacher affects eternity; he can never tell where his influence stops."
+            </blockquote>
+            <p class="text-indigo-200">- Henry Brooks Adams</p>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 px-6 sm:px-10 bg-white">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <span class="text-sm font-medium text-indigo-600 uppercase tracking-wider">Common Questions</span>
+                <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Find answers to common questions about creating meaningful thank you notes for teachers.</p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">When is the best time to send a thank you note to a teacher?</h3>
+                    <p class="text-gray-600">While Teacher Appreciation Week (first full week of May) and the end of the school year are popular times, thank you notes are appreciated any time. Consider sending one after a parent-teacher conference, when your child achieves a milestone, or simply when you notice the teacher's positive impact.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">What should I include in a thank you note to a daycare teacher?</h3>
+                    <p class="text-gray-600">For daycare teachers, mention specific ways they care for your child, developmental milestones they've supported, and how they've made your child feel safe and happy. Personal anecdotes about your child's experience or things they've learned are especially meaningful.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">How do I write a thank you note on behalf of my young child?</h3>
+                    <p class="text-gray-600">For very young children, you can write from your perspective as a parent, but include specific observations about your child's growth or happiness. If possible, have your child contribute something personal like a drawing or signature, or dictate a simple message that you can include.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Is it appropriate to include a gift with my thank you note?</h3>
+                    <p class="text-gray-600">A sincere thank you note is meaningful on its own, but a small gift can be a nice addition. Consider the school's policies regarding gifts and teacher preferences. Often, thoughtful, personalized gifts like classroom supplies, gift cards, or homemade items are appreciated.</p>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">How long should my thank you note be?</h3>
+                    <p class="text-gray-600">There's no perfect length for a thank you note. Short notes of 3-5 sentences can be heartfelt and effective, while longer letters allow for more detailed expressions of gratitude. The key is sincerity and specificity, not length.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-6 sm:px-10 bg-indigo-50">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Ready to Create Your Heartfelt Thank You?</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto mb-8">Express your appreciation with a personalized message that will make a lasting impression.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#generator" class="btn-primary px-8 py-3 rounded-full text-white font-medium inline-block">
+                    Use AI Generator
+                </a>
+                <a href="#templates" class="btn-secondary px-8 py-3 rounded-full font-medium inline-block">
+                    Browse Templates
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6 sm:px-10">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                        <h3 class="ml-2 text-xl font-bold text-white">TeacherThankYou.com</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">Helping you express heartfelt gratitude to the educators who make a difference.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#generator" class="text-gray-400 hover:text-white">AI Generator</a></li>
+                        <li><a href="#templates" class="text-gray-400 hover:text-white">Templates</a></li>
+                        <li><a href="#creative" class="text-gray-400 hover:text-white">Creative Ideas</a></li>
+                        <li><a href="#studio" class="text-gray-400 hover:text-white">Design Studio</a></li>
+                        <li><a href="#resources" class="text-gray-400 hover:text-white">Resources</a></li>
+                        <li><a href="#community" class="text-gray-400 hover:text-white">Community</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Writing Guides</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Template Library</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Creative Expression</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Card Design Tips</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Gift Ideas</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Teacher Appreciation</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            <span class="text-gray-400">support@teacherthankyou.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            <span class="text-gray-400">(555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            <span class="text-gray-400">123 Education Lane<br>Teaching City, TC 12345</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">© 2023 TeacherThankYou.com. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple scroll behavior
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle functionality would be added here
+        
+        // For a real implementation, additional JavaScript would be added for:
+        // - AI generator functionality
+        // - Card designer interactive elements
+        // - Form validation and submission
+        // - Content filtering in templates section
+        // - Testimonial carousel controls
+    </script>
+</body>
+</html>

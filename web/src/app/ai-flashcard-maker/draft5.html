@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashAI - Free AI Flashcard Generator | Instant, No Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            scroll-behavior: smooth;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        .card {
+            perspective: 1000px;
+            height: 250px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        .file-upload-zone {
+            border: 2px dashed #d1d5db;
+            transition: all 0.3s ease;
+        }
+        .file-upload-zone:hover, .file-upload-zone.dragover {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        .sample-topic {
+            transition: all 0.2s ease;
+        }
+        .sample-topic:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .tab-button.active {
+            border-bottom: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .flashcard-table tr {
+            transition: all 0.2s ease;
+        }
+        .flashcard-table tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        .editable:focus {
+            outline: 2px solid #3b82f6;
+            background-color: #f3f4f6;
+        }
+        @keyframes pulseAnimation {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+        .pulse {
+            animation: pulseAnimation 2s infinite;
+        }
+        .progress-item {
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+        .progress-item.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-3xl font-bold text-blue-600">FlashAI</h1>
+                <span class="ml-2 text-gray-500">| Free AI Flashcard Generator</span>
+            </div>
+            <div class="flex space-x-2">
+                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">100% Free</span>
+                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">No Login</span>
+                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">AI-Powered</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-500"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        This is an interactive demo. All processes are simulated for demonstration purposes.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="mb-6 flex border-b border-gray-200">
+            <button id="tab1" class="tab-button active px-4 py-2 font-medium text-sm focus:outline-none">
+                1. Upload Content
+            </button>
+            <button id="tab2" class="tab-button px-4 py-2 font-medium text-sm focus:outline-none">
+                2. AI Processing
+            </button>
+            <button id="tab3" class="tab-button px-4 py-2 font-medium text-sm focus:outline-none">
+                3. Edit Flashcards
+            </button>
+            <button id="tab4" class="tab-button px-4 py-2 font-medium text-sm focus:outline-none">
+                4. Study Mode
+            </button>
+        </div>
+
+        <!-- Tab 1: Upload Content -->
+        <div id="content1" class="tab-content active">
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Upload Your Study Material</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- File Upload -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-medium mb-4">Upload Files</h3>
+                        <div id="upload-zone" class="file-upload-zone rounded-lg h-40 flex flex-col items-center justify-center cursor-pointer">
+                            <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-sm text-gray-500 text-center">Drag & drop files here or click to browse</p>
+                            <p class="text-xs text-gray-400 mt-1">Supports PDF, DOCX, PPT, JPG, PNG, TXT</p>
+                            <input type="file" id="file-input" class="hidden" multiple>
+                        </div>
+                        <div id="file-list" class="mt-4 space-y-2 hidden">
+                            <div id="file-item" class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <div class="flex items-center">
+                                    <i class="fas fa-file-pdf text-red-500 mr-2"></i>
+                                    <span class="text-sm">Biology_Chapter5.pdf</span>
+                                </div>
+                                <button class="text-gray-500 hover:text-red-500">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Text Input -->
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-medium mb-4">Paste Text</h3>
+                        <textarea id="text-input" class="w-full h-40 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" placeholder="Enter or paste your study material here..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sample Topics -->
+            <div class="mb-8">
+                <h3 class="text-lg font-medium mb-4">Or Try Sample Topics:</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="sample-topic bg-white p-4 rounded-lg shadow-sm text-center cursor-pointer" data-topic="biology">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-leaf text-green-600"></i>
+                        </div>
+                        <h4 class="font-medium">Biology</h4>
+                        <p class="text-xs text-gray-500">Cell structure & function</p>
+                    </div>
+                    <div class="sample-topic bg-white p-4 rounded-lg shadow-sm text-center cursor-pointer" data-topic="history">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-landmark text-yellow-600"></i>
+                        </div>
+                        <h4 class="font-medium">History</h4>
+                        <p class="text-xs text-gray-500">World War II timeline</p>
+                    </div>
+                    <div class="sample-topic bg-white p-4 rounded-lg shadow-sm text-center cursor-pointer" data-topic="physics">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-atom text-blue-600"></i>
+                        </div>
+                        <h4 class="font-medium">Physics</h4>
+                        <p class="text-xs text-gray-500">Laws of thermodynamics</p>
+                    </div>
+                    <div class="sample-topic bg-white p-4 rounded-lg shadow-sm text-center cursor-pointer" data-topic="languages">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-language text-purple-600"></i>
+                        </div>
+                        <h4 class="font-medium">Spanish</h4>
+                        <p class="text-xs text-gray-500">Basic vocabulary</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="process-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center">
+                    <span>Generate Flashcards</span>
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab 2: AI Processing -->
+        <div id="content2" class="tab-content">
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">AI is Processing Your Content</h2>
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-robot text-blue-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-medium">Analyzing content...</h3>
+                            <p class="text-sm text-gray-500">This typically takes 10-30 seconds</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-1">
+                            <span class="text-sm font-medium text-gray-700">Progress</span>
+                            <span id="progress-percentage" class="text-sm font-medium text-gray-700">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div id="progress-bar" class="progress-bar bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h4 class="text-md font-medium">AI Analysis Steps:</h4>
+                        <div id="progress-step-1" class="progress-item flex items-center">
+                            <i class="fas fa-circle-notch fa-spin text-blue-500 mr-2"></i>
+                            <span class="text-sm">Extracting key concepts from your content...</span>
+                        </div>
+                        <div id="progress-step-2" class="progress-item flex items-center">
+                            <i class="fas fa-circle-notch fa-spin text-blue-500 mr-2"></i>
+                            <span class="text-sm">Identifying important terms and definitions...</span>
+                        </div>
+                        <div id="progress-step-3" class="progress-item flex items-center">
+                            <i class="fas fa-circle-notch fa-spin text-blue-500 mr-2"></i>
+                            <span class="text-sm">Formulating effective question-answer pairs...</span>
+                        </div>
+                        <div id="progress-step-4" class="progress-item flex items-center">
+                            <i class="fas fa-circle-notch fa-spin text-blue-500 mr-2"></i>
+                            <span class="text-sm">Organizing flashcards for optimal learning...</span>
+                        </div>
+                        <div id="progress-step-5" class="progress-item flex items-center">
+                            <i class="fas fa-circle-notch fa-spin text-blue-500 mr-2"></i>
+                            <span class="text-sm">Finalizing your personalized flashcard deck...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Edit Flashcards -->
+        <div id="content3" class="tab-content">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold">Your AI-Generated Flashcards</h2>
+                    <div class="text-sm bg-gray-100 px-3 py-1 rounded-full">
+                        <span id="filename" class="font-medium">Biology_Chapter5.pdf</span>
+                        <span class="text-gray-500">•</span>
+                        <span id="card-count" class="text-gray-500">15 cards</span>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div class="p-4 border-b">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                                <span class="text-sm">Click on any text to edit. All cards will be saved automatically.</span>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button id="add-card" class="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded flex items-center">
+                                    <i class="fas fa-plus mr-1"></i> Add Card
+                                </button>
+                                <button class="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded flex items-center">
+                                    <i class="fas fa-random mr-1"></i> Shuffle
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="flashcard-table min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        #
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Question
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Answer
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200" id="flashcard-table-body">
+                                <!-- Flashcards will be dynamically inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-lg font-medium mb-4">Export Options</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-file-pdf text-red-500 mr-2"></i>
+                            <h4 class="font-medium">PDF Export</h4>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Export as printable flashcards or study sheets.</p>
+                        <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                            Export as PDF
+                        </button>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-table text-green-500 mr-2"></i>
+                            <h4 class="font-medium">CSV Export</h4>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Export for spreadsheet programs like Excel.</p>
+                        <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                            Export as CSV
+                        </button>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-brain text-purple-500 mr-2"></i>
+                            <h4 class="font-medium">Anki Export</h4>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">Export for the Anki spaced repetition app.</p>
+                        <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">
+                            Export for Anki
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button id="study-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 flex items-center">
+                    <span>Start Studying</span>
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab 4: Study Mode -->
+        <div id="content4" class="tab-content">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold">Study Mode</h2>
+                    <div class="text-sm bg-gray-100 px-3 py-1 rounded-full flex items-center">
+                        <span id="study-progress" class="text-gray-700">Card 1 of 15</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="md:col-span-3">
+                        <div class="card bg-white rounded-lg shadow-sm">
+                            <div class="card-inner">
+                                <div class="card-front bg-white rounded-lg flex items-center justify-center p-6">
+                                    <div class="text-center">
+                                        <p id="current-question" class="text-xl font-medium mb-6">What is the primary function of mitochondria?</p>
+                                        <button id="flip-btn" class="mt-4 bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium py-2 px-4 rounded focus:outline-none">
+                                            Show Answer
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="card-back bg-blue-50 rounded-lg flex items-center justify-center p-6">
+                                    <div class="text-center">
+                                        <h4 class="text-sm text-blue-500 uppercase tracking-wider mb-2">Answer</h4>
+                                        <p id="current-answer" class="text-lg">Mitochondria are the powerhouse of the cell, responsible for generating ATP through cellular respiration, providing energy for cellular processes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between mt-4">
+                            <button id="prev-card" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 flex items-center">
+                                <i class="fas fa-arrow-left mr-2"></i>
+                                <span>Previous</span>
+                            </button>
+                            <div class="flex space-x-2" id="rating-buttons">
+                                <button class="rating-btn hidden bg-red-100 hover:bg-red-200 text-red-800 font-medium py-2 px-4 rounded focus:outline-none" data-rating="again">
+                                    Again
+                                </button>
+                                <button class="rating-btn hidden bg-yellow-100 hover:bg-yellow-200 text-yellow-800 font-medium py-2 px-4 rounded focus:outline-none" data-rating="hard">
+                                    Hard
+                                </button>
+                                <button class="rating-btn hidden bg-green-100 hover:bg-green-200 text-green-800 font-medium py-2 px-4 rounded focus:outline-none" data-rating="good">
+                                    Good
+                                </button>
+                                <button class="rating-btn hidden bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium py-2 px-4 rounded focus:outline-none" data-rating="easy">
+                                    Easy
+                                </button>
+                            </div>
+                            <button id="next-card" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50 flex items-center">
+                                <span>Next</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-lg shadow-sm">
+                        <h3 class="text-lg font-medium mb-4">Study Settings</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-gray-700">Auto-flip after</span>
+                                    <select class="bg-gray-100 border-0 rounded-lg text-sm px-3 py-2 focus:outline-none">
+                                        <option>Never</option>
+                                        <option>5 seconds</option>
+                                        <option>10 seconds</option>
+                                        <option>15 seconds</option>
+                                        <option>20 seconds</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="flex items-center mb-2">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2">
+                                    <span class="text-sm font-medium text-gray-700">Use spaced repetition</span>
+                                </label>
+                                <p class="text-xs text-gray-500 ml-6">Cards you find difficult will appear more frequently</p>
+                            </div>
+                            <div>
+                                <label class="flex items-center mb-2">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2">
+                                    <span class="text-sm font-medium text-gray-700">Hide mastered cards</span>
+                                </label>
+                                <p class="text-xs text-gray-500 ml-6">Focus only on cards you haven't mastered yet</p>
+                            </div>
+                            <div>
+                                <label class="flex items-center mb-2">
+                                    <input type="checkbox" class="rounded text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2" checked>
+                                    <span class="text-sm font-medium text-gray-700">Keyboard shortcuts</span>
+                                </label>
+                                <p class="text-xs text-gray-500 ml-6">Space to flip, arrows for navigation</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t">
+                            <h4 class="text-md font-medium mb-2">Progress</h4>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-xs text-gray-500">Cards studied</span>
+                                <span class="text-xs font-medium">5 / 15</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-1.5 mb-4">
+                                <div class="bg-blue-600 h-1.5 rounded-full" style="width: 33%"></div>
+                            </div>
+                            <div class="grid grid-cols-3 text-center">
+                                <div>
+                                    <div class="text-sm font-medium">3</div>
+                                    <div class="text-xs text-gray-500">Mastered</div>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium">8</div>
+                                    <div class="text-xs text-gray-500">Learning</div>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium">4</div>
+                                    <div class="text-xs text-gray-500">Not Seen</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">
+                FlashAI - Free AI Flashcard Generator | No login required | 100% Free
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Sample flashcard data
+        const sampleFlashcards = {
+            'biology': [
+                { id: 1, question: "What is the primary function of mitochondria?", answer: "Mitochondria are the powerhouse of the cell, responsible for generating ATP through cellular respiration, providing energy for cellular processes." },
+                { id: 2, question: "What are the three main stages of cellular respiration?", answer: "The three main stages are glycolysis, the Krebs cycle (citric acid cycle), and the electron transport chain." },
+                { id: 3, question: "What is the difference between active and passive transport?", answer: "Active transport requires energy (ATP) to move molecules against their concentration gradient, while passive transport doesn't require energy as molecules move from high to low concentration." },
+                { id: 4, question: "Describe the structure of DNA.", answer: "DNA consists of two nucleotide strands coiled around each other in a double helix. Each nucleotide contains a phosphate group, a deoxyribose sugar, and one of four nitrogenous bases (adenine, guanine, cytosine, or thymine)." },
+                { id: 5, question: "What is the function of the endoplasmic reticulum?", answer: "The rough ER synthesizes proteins, while the smooth ER synthesizes lipids and steroids, detoxifies drugs, and regulates calcium concentration." },
+                { id: 6, question: "Define homeostasis.", answer: "Homeostasis is the tendency of biological systems to maintain relatively stable internal conditions that support life processes, even in the face of external changes." },
+                { id: 7, question: "What is the role of chloroplasts in plant cells?", answer: "Chloroplasts are organelles in plant cells that conduct photosynthesis, converting light energy into chemical energy stored in glucose or other organic compounds." },
+                { id: 8, question: "What happens during the process of meiosis?", answer: "Meiosis is a type of cell division that reduces the chromosome number by half, creating four haploid cells, each genetically distinct from the parent cell. It's essential for sexual reproduction." },
+                { id: 9, question: "Explain the difference between prokaryotic and eukaryotic cells.", answer: "Prokaryotic cells lack a membrane-bound nucleus and organelles, while eukaryotic cells have a true nucleus and various membrane-bound organelles. Prokaryotes include bacteria and archaea, while eukaryotes include plants, animals, fungi, and protists." },
+                { id: 10, question: "What is the function of enzymes in biological reactions?", answer: "Enzymes are biological catalysts that speed up the rate of chemical reactions without being consumed in the process. They work by lowering the activation energy required for reactions to occur." },
+                { id: 11, question: "List the major components of blood.", answer: "Blood consists of plasma (liquid component), red blood cells (erythrocytes), white blood cells (leukocytes), and platelets (thrombocytes)." },
+                { id: 12, question: "What is the central dogma of molecular biology?", answer: "The central dogma describes the flow of genetic information within a biological system: DNA → RNA → Protein. DNA is transcribed to RNA, which is then translated to proteins." },
+                { id: 13, question: "Describe the process of photosynthesis.", answer: "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy into chemical energy. It has two main stages: the light-dependent reactions and the Calvin cycle (light-independent reactions)." },
+                { id: 14, question: "What is the function of the Golgi apparatus?", answer: "The Golgi apparatus modifies, sorts, and packages proteins and lipids for storage in the cell or secretion outside the cell." },
+                { id: 15, question: "Define natural selection.", answer: "Natural selection is the process whereby organisms better adapted to their environment tend to survive and produce more offspring, driving evolution." }
+            ],
+            'history': [
+                { id: 1, question: "When did World War II begin?", answer: "World War II began on September 1, 1939, when Nazi Germany invaded Poland." },
+                { id: 2, question: "Who were the main Axis Powers during World War II?", answer: "The main Axis Powers were Nazi Germany, Italy, and Japan." },
+                { id: 3, question: "What was D-Day?", answer: "D-Day (June 6, 1944) was the Allied invasion of Normandy, France, which marked the beginning of the liberation of Western Europe from Nazi control." }
+                // Add more history flashcards as needed
+            ],
+            'physics': [
+                { id: 1, question: "What is the First Law of Thermodynamics?", answer: "The First Law of Thermodynamics states that energy cannot be created or destroyed, only transformed from one form to another or transferred from one object to another." },
+                { id: 2, question: "What is the Second Law of Thermodynamics?", answer: "The Second Law of Thermodynamics states that the total entropy of an isolated system always increases over time, or remains constant in ideal cases where the system is in a steady state or undergoing a reversible process." },
+                { id: 3, question: "What is the Third Law of Thermodynamics?", answer: "The Third Law of Thermodynamics states that as the temperature approaches absolute zero, the entropy of a system approaches a constant minimum value." }
+                // Add more physics flashcards as needed
+            ],
+            'languages': [
+                { id: 1, question: "¿Cómo te llamas?", answer: "What is your name?" },
+                { id: 2, question: "Buenos días", answer: "Good morning" },
+                { id: 3, question: "¿Dónde está la biblioteca?", answer: "Where is the library?" }
+                // Add more language flashcards as needed
+            ]
+        };
+
+        let currentFlashcards = [];
+        let currentCardIndex = 0;
+        let selectedTopic = 'biology';
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove 'active' class from all tabs
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Add 'active' class to clicked tab
+                button.classList.add('active');
+                const contentId = 'content' + button.id.charAt(button.id.length - 1);
+                document.getElementById(contentId).classList.add('active');
+            });
+        });
+
+        // File upload handling
+        const uploadZone = document.getElementById('upload-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+
+        uploadZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                showFileSelected('Biology_Chapter5.pdf');
+            }
+        });
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                showFileSelected('Biology_Chapter5.pdf');
+            }
+        });
+
+        function showFileSelected(filename) {
+            fileList.classList.remove('hidden');
+            document.getElementById('file-item').querySelector('span').textContent = filename;
+        }
+
+        // Sample topic selection
+        document.querySelectorAll('.sample-topic').forEach(topic => {
+            topic.addEventListener('click', () => {
+                selectedTopic = topic.dataset.topic;
+                document.getElementById('text-input').value = `Sample ${selectedTopic} content loaded...`;
+            });
+        });
+
+        // Process button - move to AI processing tab
+        document.getElementById('process-btn').addEventListener('click', () => {
+            // Switch to the AI processing tab
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.getElementById('tab2').classList.add('active');
+            document.getElementById('content2').classList.add('active');
+            
+            // Start the progress simulation
+            simulateAiProcessing();
+        });
+
+        // Simulate AI processing
+        function simulateAiProcessing() {
+            let progress = 0;
+            const progressBar = document.getElementById('progress-bar');
+            const progressPercentage = document.getElementById('progress-percentage');
+            const steps = document.querySelectorAll('.progress-item');
+            
+            // Initially show the first step
+            steps[0].classList.add('active');
+            
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+                progressPercentage.textContent = `${progress}%`;
+                
+                // Update progress steps
+                if (progress >= 20) {
+                    steps[0].classList.remove('active');
+                    steps[1].classList.add('active');
+                }
+                if (progress >= 40) {
+                    steps[1].classList.remove('active');
+                    steps[2].classList.add('active');
+                }
+                if (progress >= 60) {
+                    steps[2].classList.remove('active');
+                    steps[3].classList.add('active');
+                }
+                if (progress >= 80) {
+                    steps[3].classList.remove('active');
+                    steps[4].classList.add('active');
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        // Load the flashcards
+                        currentFlashcards = sampleFlashcards[selectedTopic];
+                        populateFlashcardTable();
+                        
+                        // Switch to the flashcards tab
+                        document.querySelectorAll('.tab-button').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        document.querySelectorAll('.tab-content').forEach(content => {
+                            content.classList.remove('active');
+                        });
+                        
+                        document.getElementById('tab3').classList.add('active');
+                        document.getElementById('content3').classList.add('active');
+                        
+                        // Update filename and card count
+                        document.getElementById('filename').textContent = selectedTopic === 'biology' ? 'Biology_Chapter5.pdf' : `${selectedTopic}.pdf`;
+                        document.getElementById('card-count').textContent = `${currentFlashcards.length} cards`;
+                    }, 500);
+                }
+            }, 100);
+        }
+
+        // Populate flashcard table
+        function populateFlashcardTable() {
+            const tableBody = document.getElementById('flashcard-table-body');
+            tableBody.innerHTML = '';
+            
+            currentFlashcards.forEach((card, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        ${index + 1}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="editable text-sm text-gray-900 p-2 rounded-md" contenteditable="true">${card.question}</div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="editable text-sm text-gray-900 p-2 rounded-md" contenteditable="true">${card.answer}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="text-blue-600 hover:text-blue-900 mr-3">
+                            <i class="fas fa-images"></i>
+                        </button>
+                        <button class="text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Make cells editable
+            document.querySelectorAll('.editable').forEach(element => {
+                element.addEventListener('focus', () => {
+                    element.classList.add('bg-gray-50');
+                });
+                
+                element.addEventListener('blur', () => {
+                    element.classList.remove('bg-gray-50');
+                });
+            });
+            
+            // Add event listeners for the trash buttons
+            document.querySelectorAll('.fa-trash').forEach((button, index) => {
+                button.parentElement.addEventListener('click', () => {
+                    if (confirm("Are you sure you want to delete this flashcard?")) {
+                        currentFlashcards.splice(index, 1);
+                        populateFlashcardTable();
+                    }
+                });
+            });
+        }
+
+        // Add new card functionality
+        document.getElementById('add-card').addEventListener('click', () => {
+            const newId = currentFlashcards.length > 0 ? Math.max(...currentFlashcards.map(card => card.id)) + 1 : 1;
+            currentFlashcards.push({ id: newId, question: "New question", answer: "New answer" });
+            populateFlashcardTable();
+        });
+
+        // Study button - move to study mode tab
+        document.getElementById('study-btn').addEventListener('click', () => {
+            // Switch to the study mode tab
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            document.getElementById('tab4').classList.add('active');
+            document.getElementById('content4').classList.add('active');
+            
+            // Reset card index and update display
+            currentCardIndex = 0;
+            updateStudyCard();
+        });
+
+        // Update the study card display
+        function updateStudyCard() {
+            if (currentFlashcards.length === 0) return;
+            
+            const card = currentFlashcards[currentCardIndex];
+            document.getElementById('current-question').textContent = card.question;
+            document.getElementById('current-answer').textContent = card.answer;
+            document.getElementById('study-progress').textContent = `Card ${currentCardIndex + 1} of ${currentFlashcards.length}`;
+            
+            // Reset card to question side
+            document.querySelector('.card').classList.remove('flipped');
+            document.getElementById('flip-btn').textContent = 'Show Answer';
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.add('hidden'));
+        }
+
+        // Flip card functionality
+        document.getElementById('flip-btn').addEventListener('click', () => {
+            const card = document.querySelector('.card');
+            card.classList.toggle('flipped');
+            
+            if (card.classList.contains('flipped')) {
+                document.getElementById('flip-btn').textContent = 'Show Question';
+                document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.remove('hidden'));
+            } else {
+                document.getElementById('flip-btn').textContent = 'Show Answer';
+                document.querySelectorAll('.rating-btn').forEach(btn => btn.classList.add('hidden'));
+            }
+        });
+
+        // Previous card button
+        document.getElementById('prev-card').addEventListener('click', () => {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateStudyCard();
+            }
+        });
+
+        // Next card button
+        document.getElementById('next-card').addEventListener('click', () => {
+            if (currentCardIndex < currentFlashcards.length - 1) {
+                currentCardIndex++;
+                updateStudyCard();
+            }
+        });
+
+        // Rating buttons
+        document.querySelectorAll('.rating-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // In a real app, this would update the card's spaced repetition data
+                // For this demo, we'll just move to the next card
+                if (currentCardIndex < currentFlashcards.length - 1) {
+                    currentCardIndex++;
+                    updateStudyCard();
+                }
+            });
+        });
+
+        // Keyboard shortcuts for study mode
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('content4').classList.contains('active')) {
+                if (e.code === 'Space') {
+                    // Space to flip card
+                    e.preventDefault();
+                    document.getElementById('flip-btn').click();
+                } else if (e.code === 'ArrowLeft') {
+                    // Left arrow for previous card
+                    document.getElementById('prev-card').click();
+                } else if (e.code === 'ArrowRight') {
+                    // Right arrow for next card
+                    document.getElementById('next-card').click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

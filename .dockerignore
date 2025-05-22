@@ -1,0 +1,28 @@
+# Ignore the test directory
+test/
+
+# Ignore all .md files
+*.md
+
+# Ignore all .git and .hg directories
+.git
+.hg
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.bak
+
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ingore data
+
+# Ingore env
+venv/
+.env
+
+# Ignore templates
+templates/

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TranscriptPro - Free YouTube Transcript Generator | Convert YouTube Videos to Text</title>
+    <meta name="description" content="Generate accurate YouTube transcripts for free. Download or copy YouTube video text with timestamps. No signup required. Best YouTube transcript generator tool.">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
+        .gradient-bg {
+            background: linear-gradient(90deg, #4338ca, #3b82f6);
+        }
+        .shadow-custom {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .faq-item:hover {
+            border-color: #3b82f6;
+        }
+        .step-number {
+            width: 36px;
+            height: 36px;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-2xl font-bold text-blue-600">TranscriptPro</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#features" class="text-gray-700 hover:text-blue-600 font-medium">Features</a>
+                <a href="#how-it-works" class="text-gray-700 hover:text-blue-600 font-medium">How It Works</a>
+                <a href="#use-cases" class="text-gray-700 hover:text-blue-600 font-medium">Use Cases</a>
+                <a href="#faq" class="text-gray-700 hover:text-blue-600 font-medium">FAQ</a>
+            </div>
+            <div>
+                <a href="#generator" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition duration-300">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg py-16 md:py-24">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 text-white mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">Free YouTube Transcript Generator</h1>
+                    <p class="text-xl mb-8">Convert any YouTube video to text with our fast, accurate transcript generator. Download, copy, and use your YouTube transcripts instantly - no signup required.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#generator" class="bg-white text-blue-600 hover:bg-gray-100 px-6 py-3 rounded-lg font-medium text-center transition duration-300">Generate Transcript</a>
+                        <a href="#features" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-6 py-3 rounded-lg font-medium text-center transition duration-300">Learn More</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="bg-white p-4 rounded-lg shadow-lg max-w-md">
+                        <img src="https://cdn.jsdelivr.net/gh/example/youtube-transcript-generator/hero-image.svg" alt="YouTube Transcript Generator" class="w-full">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generator Tool Section -->
+    <section id="generator" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">YouTube Transcript Generator</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Enter any YouTube video URL and instantly generate a transcript. Our tool extracts accurate transcripts with timestamps from YouTube videos.</p>
+            </div>
+            <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-custom p-6 md:p-8">
+                <div class="mb-6">
+                    <label for="youtube-url" class="block text-sm font-medium text-gray-700 mb-2">Enter YouTube Video URL</label>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0">
+                        <input type="text" id="youtube-url" placeholder="https://www.youtube.com/watch?v=..." class="flex-grow px-4 py-3 border border-gray-300 rounded-lg sm:rounded-r-none focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <button id="generate-transcript" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg sm:rounded-l-none font-medium transition duration-300">Generate Transcript</button>
+                    </div>
+                </div>
+                <div id="transcript-result" class="hidden">
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <h3 class="font-medium mb-2">Transcript Generated!</h3>
+                        <div class="h-64 overflow-y-auto p-3 bg-white border border-gray-200 rounded-lg">
+                            <p id="transcript-text" class="text-gray-700 whitespace-pre-line">Your YouTube video transcript will appear here...</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                        <button id="copy-transcript" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition duration-300">
+                            <i class="fas fa-copy mr-2"></i> Copy Transcript
+                        </button>
+                        <button id="download-transcript" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg font-medium transition duration-300">
+                            <i class="fas fa-download mr-2"></i> Download as TXT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">How to Generate YouTube Transcripts</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Complete the process in three simple steps and get accurate YouTube video transcripts in seconds.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="flex items-center mb-4">
+                        <div class="step-number bg-blue-600 text-white rounded-full flex items-center justify-center mr-3">
+                            <span class="font-bold">1</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Copy Video URL</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">Copy the YouTube video URL from your browser's address bar or from the share button below any YouTube video.</p>
+                    <img src="https://cdn.jsdelivr.net/gh/example/youtube-transcript-generator/step1.svg" alt="Copy YouTube URL" class="w-full">
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="flex items-center mb-4">
+                        <div class="step-number bg-blue-600 text-white rounded-full flex items-center justify-center mr-3">
+                            <span class="font-bold">2</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Paste & Generate</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">Paste the URL into our transcript generator tool above and click the "Generate Transcript" button.</p>
+                    <img src="https://cdn.jsdelivr.net/gh/example/youtube-transcript-generator/step2.svg" alt="Paste URL and Generate" class="w-full">
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="flex items-center mb-4">
+                        <div class="step-number bg-blue-600 text-white rounded-full flex items-center justify-center mr-3">
+                            <span class="font-bold">3</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Use Your Transcript</h3>
+                    </div>
+                    <p class="text-gray-600 mb-4">Copy, download, or directly view the generated transcript with timestamps for your YouTube video.</p>
+                    <img src="https://cdn.jsdelivr.net/gh/example/youtube-transcript-generator/step3.svg" alt="Use Your Transcript" class="w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Key Features & Benefits</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Our YouTube transcript generator offers powerful features to help you quickly convert YouTube videos to text.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-bolt text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Fast & Efficient</h3>
+                    <p class="text-gray-600">Generate YouTube video transcripts in seconds. No waiting or processing delays. Get instant access to your video text.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-lock-open text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">100% Free</h3>
+                    <p class="text-gray-600">Our YouTube transcript generator is completely free to use with no hidden costs, sign-ups, or credit card requirements.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-clock text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Timestamps Included</h3>
+                    <p class="text-gray-600">Get accurate timestamps with each transcript segment, making it easy to reference specific parts of the video.</p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-download text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Easy Download</h3>
+                    <p class="text-gray-600">Download your YouTube transcripts as TXT files for easy storage, editing, and sharing with others.</p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-language text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Multiple Languages</h3>
+                    <p class="text-gray-600">Generate transcripts in the video's original language and even translate them to other languages.</p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-shield-alt text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Privacy Focused</h3>
+                    <p class="text-gray-600">We don't store your transcripts or video data. Everything stays private and secure on your device.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section id="use-cases" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">YouTube Transcript Generator Use Cases</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover how our YouTube video transcript generator can help different users extract value from video content.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Use Case 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-video text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Content Creators</h3>
+                    <p class="text-gray-600 mb-4">Generate transcripts from your YouTube videos to:</p>
+                    <ul class="text-gray-600 space-y-2 list-disc pl-5">
+                        <li>Create blog posts from video content</li>
+                        <li>Add accurate captions to videos</li>
+                        <li>Improve video SEO with keyword-rich transcripts</li>
+                        <li>Repurpose content for social media posts</li>
+                    </ul>
+                </div>
+                
+                <!-- Use Case 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-graduation-cap text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Students & Researchers</h3>
+                    <p class="text-gray-600 mb-4">Extract valuable information from educational videos:</p>
+                    <ul class="text-gray-600 space-y-2 list-disc pl-5">
+                        <li>Take notes from lecture videos</li>
+                        <li>Create study materials from educational content</li>
+                        <li>Quote and cite video sources in academic work</li>
+                        <li>Search for specific information within videos</li>
+                    </ul>
+                </div>
+                
+                <!-- Use Case 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-briefcase text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Professionals & Businesses</h3>
+                    <p class="text-gray-600 mb-4">Leverage video content for business purposes:</p>
+                    <ul class="text-gray-600 space-y-2 list-disc pl-5">
+                        <li>Create records of webinars and presentations</li>
+                        <li>Extract insights from industry-specific videos</li>
+                        <li>Generate meeting notes from recorded sessions</li>
+                        <li>Develop training materials from video content</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Get answers to the most common questions about our YouTube transcript generator.</p>
+            </div>
+            <div class="max-w-3xl mx-auto">
+                <!-- FAQ Item 1 -->
+                <div class="mb-6 border border-gray-200 rounded-lg p-5 faq-item">
+                    <h3 class="text-xl font-medium mb-3">Is this YouTube transcript generator really free?</h3>
+                    <p class="text-gray-600">Yes, our YouTube transcript generator is completely free to use. There are no hidden costs, no sign-up requirements, and no credit card needed. We believe in providing accessible tools for everyone.</p>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="mb-6 border border-gray-200 rounded-lg p-5 faq-item">
+                    <h3 class="text-xl font-medium mb-3">How accurate are the generated transcripts?</h3>
+                    <p class="text-gray-600">Our tool accesses the same transcripts generated by YouTube's official systems. The accuracy depends on the original video's audio quality, speaking clarity, and whether the video creator has manually reviewed the transcripts. For most videos, the accuracy is very good.</p>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="mb-6 border border-gray-200 rounded-lg p-5 faq-item">
+                    <h3 class="text-xl font-medium mb-3">Can I generate transcripts for any YouTube video?</h3>
+                    <p class="text-gray-600">You can generate transcripts for any YouTube video that has captions available. Most popular and recent videos have automatic captions, but some videos might not have them enabled by the creator. If a video doesn't have captions, our tool won't be able to generate a transcript.</p>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="mb-6 border border-gray-200 rounded-lg p-5 faq-item">
+                    <h3 class="text-xl font-medium mb-3">Do you support languages other than English?</h3>
+                    <p class="text-gray-600">Yes, our YouTube transcript generator supports multiple languages. You can generate transcripts in whatever language the video captions are available in. Some videos offer captions in multiple languages, allowing you to choose your preferred language.</p>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="mb-6 border border-gray-200 rounded-lg p-5 faq-item">
+                    <h3 class="text-xl font-medium mb-3">Is there a limit on video length or how many transcripts I can generate?</h3>
+                    <p class="text-gray-600">There is no limit on the length of videos you can transcribe or the number of transcripts you can generate. Whether it's a short 2-minute clip or a 3-hour lecture, our tool can handle it all at no cost.</p>
+                </div>
+                
+                <!-- FAQ Item 6 -->
+                <div class="border border-gray-200 rounded-lg p-5 faq-item">
+                    <h3 class="text-xl font-medium mb-3">How can I use the generated transcript?</h3>
+                    <p class="text-gray-600">You can use the generated transcript in many ways: copy it to your clipboard, download it as a text file, use it for note-taking, content creation, research, or accessibility purposes. You can also edit the transcript or use it with AI tools to create summaries or other content.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">What Our Users Say</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Thousands of users rely on our YouTube transcript generator for their content needs.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400">
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic mb-6">"This YouTube transcript generator is a game-changer for my content creation workflow. I can quickly extract text from videos and repurpose it for my blog. The timestamps make it easy to find specific sections."</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-blue-600 font-medium">JM</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">James Miller</h4>
+                            <p class="text-sm text-gray-500">Content Creator</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400">
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic mb-6">"As a researcher, I need to cite video content accurately. This free YouTube transcript generator makes it so easy to quote exact timestamps and sections from educational videos. Absolutely invaluable tool!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-blue-600 font-medium">SC</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Sarah Chen</h4>
+                            <p class="text-sm text-gray-500">Academic Researcher</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-xl shadow-custom">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400 mr-1">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="text-yellow-400">
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 italic mb-6">"I use this tool to generate transcripts from industry webinars and training videos. Being able to download the text format helps me share important information with my team. And it's free!"</p>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-blue-600 font-medium">RJ</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">Robert Johnson</h4>
+                            <p class="text-sm text-gray-500">Project Manager</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 gradient-bg">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Ready to Generate Your YouTube Transcript?</h2>
+            <p class="text-xl text-white mb-8 max-w-2xl mx-auto">Get started for free today and convert any YouTube video to text in seconds.</p>
+            <a href="#generator" class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 rounded-lg font-medium text-center transition duration-300 inline-block">Generate Transcript Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Column 1 -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">TranscriptPro</h3>
+                    <p class="text-gray-400 mb-4">The best free YouTube transcript generator tool. Convert YouTube videos to text with ease.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#generator" class="text-gray-400 hover:text-white transition duration-300">Generate Transcript</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition duration-300">Features</a></li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition duration-300">How It Works</a></li>
+                        <li><a href="#use-cases" class="text-gray-400 hover:text-white transition duration-300">Use Cases</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white transition duration-300">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">API Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Help Center</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-medium mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Disclaimer</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center">
+                <p class="text-gray-400">© 2025 TranscriptPro | YouTube Transcript Generator. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Simple JavaScript for Interaction -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // For demo purposes only - this would be replaced with actual API calls
+            document.getElementById('generate-transcript').addEventListener('click', function() {
+                const urlInput = document.getElementById('youtube-url');
+                const url = urlInput.value.trim();
+                
+                if (!url) {
+                    alert('Please enter a valid YouTube URL');
+                    return;
+                }
+                
+                // Show loading state
+                this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
+                
+                // Simulate API call with timeout
+                setTimeout(() => {
+                    // Show result
+                    document.getElementById('transcript-result').classList.remove('hidden');
+                    document.getElementById('transcript-text').innerText = 'This is a sample transcript for demonstration purposes.\n\n00:00 - Hello and welcome to this video.\n00:05 - Today we\'re going to discuss an important topic.\n00:12 - Let\'s get started with the main points.\n\n[... Transcript content would continue here ...]';
+                    
+                    // Reset button
+                    this.innerHTML = 'Generate Transcript';
+                }, 1500);
+            });
+            
+            // Copy transcript functionality
+            document.getElementById('copy-transcript').addEventListener('click', function() {
+                const transcriptText = document.getElementById('transcript-text').innerText;
+                navigator.clipboard.writeText(transcriptText).then(() => {
+                    this.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-copy mr-2"></i> Copy Transcript';
+                    }, 2000);
+                });
+            });
+            
+            // Download as TXT functionality
+            document.getElementById('download-transcript').addEventListener('click', function() {
+                const transcriptText = document.getElementById('transcript-text').innerText;
+                const element = document.createElement('a');
+                const file = new Blob([transcriptText], {type: 'text/plain'});
+                element.href = URL.createObjectURL(file);
+                element.download = 'youtube-transcript.txt';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            });
+        });
+    </script>
+</body>
+</html>

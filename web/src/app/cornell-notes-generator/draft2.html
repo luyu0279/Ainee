@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornell Notes Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            background-color: #fafafa;
+        }
+        
+        .cornell-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            grid-template-rows: auto 1fr auto;
+            grid-template-areas:
+                "header header"
+                "cues notes"
+                "summary summary";
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .cornell-header {
+            grid-area: header;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 1rem;
+            background-color: #f8fafc;
+        }
+        
+        .cornell-cues {
+            grid-area: cues;
+            border-right: 1px solid #e2e8f0;
+            padding: 1rem;
+            background-color: #f8fafc;
+        }
+        
+        .cornell-notes {
+            grid-area: notes;
+            padding: 1rem;
+            background-color: #ffffff;
+        }
+        
+        .cornell-summary {
+            grid-area: summary;
+            border-top: 1px solid #e2e8f0;
+            padding: 1rem;
+            background-color: #f8fafc;
+        }
+        
+        .btn-primary {
+            background-color: #3b82f6;
+            color: white;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #475569;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+        
+        .step-item {
+            position: relative;
+        }
+        
+        .step-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+        
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .file-drop-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+        
+        .file-drop-area:hover, .file-drop-area.active {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        
+        .template-card {
+            transition: all 0.2s;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .animated-gradient {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+                </svg>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">Cornell Notes Converter</h1>
+            </div>
+            <nav class="hidden md:flex space-x-4">
+                <a href="#how-it-works" class="text-gray-600 hover:text-blue-500 transition">How It Works</a>
+                <a href="#upload" class="text-gray-600 hover:text-blue-500 transition">Convert</a>
+                <a href="#templates" class="text-gray-600 hover:text-blue-500 transition">Templates</a>
+                <a href="#about" class="text-gray-600 hover:text-blue-500 transition">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-blue-50 to-indigo-50 py-20">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4 leading-tight">Transform Your Documents into <span class="text-blue-500">Cornell Notes</span></h1>
+                    <p class="text-lg text-gray-600 mb-6">Upload any PDF, Word, or PowerPoint file and instantly convert it into the powerful Cornell note-taking format. Improve retention and organize your study materials with ease.</p>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <a href="#upload" class="btn-primary px-6 py-3 rounded-lg font-medium text-center">
+                            Get Started
+                        </a>
+                        <a href="#templates" class="btn-secondary px-6 py-3 rounded-lg font-medium text-center">
+                            Download Templates
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="w-full max-w-md cornell-layout h-96">
+                        <div class="cornell-header">
+                            <h3 class="font-medium text-gray-700">Title: Introduction to Cornell Note-Taking</h3>
+                            <p class="text-sm text-gray-500">Date: 2024-04-09</p>
+                        </div>
+                        <div class="cornell-cues">
+                            <p class="text-sm font-medium mb-3">What is the Cornell method?</p>
+                            <p class="text-sm font-medium mb-3">Who developed it?</p>
+                            <p class="text-sm font-medium mb-3">Key components?</p>
+                            <p class="text-sm font-medium mb-3">Benefits?</p>
+                        </div>
+                        <div class="cornell-notes">
+                            <p class="text-sm mb-2">The Cornell Note-Taking System is a method for organizing and reviewing notes.</p>
+                            <p class="text-sm mb-2">Developed by Walter Pauk at Cornell University in the 1950s.</p>
+                            <p class="text-sm mb-2">Three sections: notes column, cue column, and summary area.</p>
+                            <p class="text-sm mb-2">Benefits include better organization, improved recall, and active learning engagement.</p>
+                        </div>
+                        <div class="cornell-summary">
+                            <p class="text-sm">The Cornell method is an effective note-taking system with a specific layout that enhances learning through organization and active review, making it ideal for students at all levels.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="step-item flex flex-col items-center text-center px-4">
+                    <div class="step-circle mb-4">1</div>
+                    <h3 class="text-xl font-semibold mb-2">Upload Your Document</h3>
+                    <p class="text-gray-600">Upload your PDF, Word document, or PowerPoint presentation through our secure interface.</p>
+                </div>
+                <div class="step-item flex flex-col items-center text-center px-4">
+                    <div class="step-circle mb-4">2</div>
+                    <h3 class="text-xl font-semibold mb-2">AI Processing</h3>
+                    <p class="text-gray-600">Our system analyzes your content, identifies key concepts, and organizes them into the Cornell format.</p>
+                </div>
+                <div class="step-item flex flex-col items-center text-center px-4">
+                    <div class="step-circle mb-4">3</div>
+                    <h3 class="text-xl font-semibold mb-2">Download Your Notes</h3>
+                    <p class="text-gray-600">Review, customize, and download your Cornell notes in multiple formats for effective studying.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Convert Your Documents</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10">Upload your document and we'll transform it into Cornell-formatted notes. Our AI will analyze your content and structure it appropriately.</p>
+            
+            <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="p-8">
+                    <div class="file-drop-area flex flex-col items-center justify-center p-8 mb-6 cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-blue-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <h3 class="text-lg font-medium mb-2">Drag & Drop your file here</h3>
+                        <p class="text-gray-500 text-sm mb-4">or</p>
+                        <button class="btn-primary px-6 py-2 rounded-lg text-sm font-medium">Browse Files</button>
+                        <p class="text-xs text-gray-500 mt-3">Supported formats: PDF, DOCX, PPTX</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <div class="w-full sm:w-1/2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                            <input type="text" placeholder="Enter title for your notes" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div class="w-full sm:w-1/2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button class="w-full btn-primary py-3 rounded-lg font-medium">
+                            Convert to Cornell Notes
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto mt-10 bg-white rounded-xl shadow-md overflow-hidden hidden" id="progress-section">
+                <div class="p-8">
+                    <h3 class="text-lg font-medium mb-4">Processing your document...</h3>
+                    <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full animated-gradient rounded-full" style="width: 75%"></div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">This may take a few moments depending on document size.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preview Section -->
+    <section class="py-20 bg-white hidden" id="preview-section">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Your Cornell Notes</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10">Review your generated notes and make any necessary adjustments.</p>
+            
+            <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                <div class="p-6">
+                    <div class="cornell-layout min-h-[500px]">
+                        <div class="cornell-header">
+                            <h3 class="font-medium text-gray-700">Title: Document Name</h3>
+                            <p class="text-sm text-gray-500">Date: 2024-04-09</p>
+                        </div>
+                        <div class="cornell-cues">
+                            <p class="text-sm font-medium mb-3">Key concept 1?</p>
+                            <p class="text-sm font-medium mb-3">Definition?</p>
+                            <p class="text-sm font-medium mb-3">Important dates?</p>
+                            <p class="text-sm font-medium mb-3">Main theories?</p>
+                        </div>
+                        <div class="cornell-notes">
+                            <p class="text-sm mb-2">Detailed explanation of concept 1 and its applications in various contexts.</p>
+                            <p class="text-sm mb-2">The formal definition as presented in the document with essential components highlighted.</p>
+                            <p class="text-sm mb-2">Chronological listing of significant dates and events mentioned in the document.</p>
+                            <p class="text-sm mb-2">Overview of the main theoretical frameworks discussed in the document with brief descriptions.</p>
+                        </div>
+                        <div class="cornell-summary">
+                            <p class="text-sm">This document covers the fundamental concepts, definitions, historical context, and theoretical frameworks of the subject matter, providing a comprehensive overview suitable for both beginners and advanced learners.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <button class="btn-primary px-8 py-3 rounded-lg font-medium flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Download PDF
+                </button>
+                <button class="btn-secondary px-8 py-3 rounded-lg font-medium flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                    Edit Notes
+                </button>
+                <button class="btn-secondary px-8 py-3 rounded-lg font-medium flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+                    </svg>
+                    Print
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Templates Section -->
+    <section id="templates" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Download Templates</h2>
+            <p class="text-center text-gray-600 max-w-2xl mx-auto mb-10">Ready-to-use Cornell note templates in multiple formats. Download and start taking notes right away.</p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Word Template -->
+                <div class="template-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex items-center justify-center h-20 w-20 bg-blue-100 rounded-lg mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-700" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22 8a2 2 0 0 0-2-2h-7.414l-1.293-1.293A2 2 0 0 0 9.879 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8zm-4.293 5.293l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L12 14.586V8a1 1 0 0 1 2 0v6.586l2.293-2.293a1 1 0 0 1 1.414 1.414z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center mb-3">Microsoft Word</h3>
+                        <p class="text-gray-600 text-sm text-center mb-4">Editable Cornell note templates for Microsoft Word.</p>
+                        <div class="flex justify-center">
+                            <a href="https://www.wordlayouts.com/gl-type/educational/college/cornell-notes/" target="_blank" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                Download
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PDF Template -->
+                <div class="template-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex items-center justify-center h-20 w-20 bg-red-100 rounded-lg mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-700" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22 8a2 2 0 0 0-2-2h-7.414l-1.293-1.293A2 2 0 0 0 9.879 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8zm-4.293 5.293l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L12 14.586V8a1 1 0 0 1 2 0v6.586l2.293-2.293a1 1 0 0 1 1.414 1.414z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center mb-3">PDF</h3>
+                        <p class="text-gray-600 text-sm text-center mb-4">Printable Cornell note templates in PDF format.</p>
+                        <div class="flex justify-center">
+                            <a href="https://templatelab.com/cornell-notes/" target="_blank" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                Download
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Google Docs Template -->
+                <div class="template-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex items-center justify-center h-20 w-20 bg-green-100 rounded-lg mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-700" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22 8a2 2 0 0 0-2-2h-7.414l-1.293-1.293A2 2 0 0 0 9.879 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8zm-4.293 5.293l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L12 14.586V8a1 1 0 0 1 2 0v6.586l2.293-2.293a1 1 0 0 1 1.414 1.414z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center mb-3">Google Docs</h3>
+                        <p class="text-gray-600 text-sm text-center mb-4">Cornell notes template for Google Docs.</p>
+                        <div class="flex justify-center">
+                            <a href="https://docs.google.com/document/d/1X5vuSm8piiUwnsoYlyTt28inijWNTBvj7-jGWTUSmSQ/edit" target="_blank" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                Open Template
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Notion Template -->
+                <div class="template-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex items-center justify-center h-20 w-20 bg-purple-100 rounded-lg mx-auto mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-purple-700" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22 8a2 2 0 0 0-2-2h-7.414l-1.293-1.293A2 2 0 0 0 9.879 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8zm-4.293 5.293l-4 4a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 1.414-1.414L12 14.586V8a1 1 0 0 1 2 0v6.586l2.293-2.293a1 1 0 0 1 1.414 1.414z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-center mb-3">Notion</h3>
+                        <p class="text-gray-600 text-sm text-center mb-4">Digital Cornell notes template for Notion.</p>
+                        <div class="flex justify-center">
+                            <a href="https://www.notion.so/Cornell-Notes-System-13093d4566534228b3dcd82bae34eb8b" target="_blank" class="btn-primary px-4 py-2 rounded-lg text-sm font-medium flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                                Open Template
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Cornell Notes Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">About Cornell Notes Method</h2>
+            
+            <div class="flex flex-col lg:flex-row items-center max-w-5xl mx-auto">
+                <div class="lg:w-1/2 mb-10 lg:mb-0 lg:pr-10">
+                    <h3 class="text-2xl font-semibold mb-4">What is the Cornell Note-Taking Method?</h3>
+                    <p class="text-gray-600 mb-4">The Cornell Note-Taking Method was developed in the 1950s by Walter Pauk, a professor at Cornell University. It's designed to help students organize and review their notes more effectively.</p>
+                    
+                    <h4 class="text-lg font-semibold mb-2 mt-6">The Structure</h4>
+                    <p class="text-gray-600 mb-4">Cornell notes divide the page into three sections:</p>
+                    <ul class="list-disc pl-6 mb-6 text-gray-600">
+                        <li><strong>Notes Column (70%)</strong> - The main area for recording lecture notes</li>
+                        <li><strong>Cue Column (30%)</strong> - Area for questions, key terms, and main ideas</li>
+                        <li><strong>Summary Area</strong> - Space at the bottom to summarize the content</li>
+                    </ul>
+                    
+                    <h4 class="text-lg font-semibold mb-2">The 5 R's Process</h4>
+                    <ul class="list-disc pl-6 mb-6 text-gray-600">
+                        <li><strong>Record</strong> - Write down facts and ideas in the notes column</li>
+                        <li><strong>Reduce</strong> - Summarize these ideas in the cue column</li>
+                        <li><strong>Recite</strong> - Cover the notes column and using the cues, recite the information</li>
+                        <li><strong>Reflect</strong> - Think about the material and form your own opinions</li>
+                        <li><strong>Review</strong> - Spend time reviewing your notes regularly</li>
+                    </ul>
+                </div>
+                
+                <div class="lg:w-1/2">
+                    <div class="cornell-layout h-[500px]">
+                        <div class="cornell-header">
+                            <h3 class="font-medium text-gray-700">Title: Cornell Note-Taking Method Explained</h3>
+                            <p class="text-sm text-gray-500">Date: 2024-04-09</p>
+                        </div>
+                        <div class="cornell-cues h-full">
+                            <p class="text-sm font-medium mb-3">What?</p>
+                            <p class="text-sm font-medium mb-3">Who?</p>
+                            <p class="text-sm font-medium mb-3">When?</p>
+                            <p class="text-sm font-medium mb-3">Structure?</p>
+                            <p class="text-sm font-medium mb-3">Process?</p>
+                            <p class="text-sm font-medium mb-3">Benefits?</p>
+                        </div>
+                        <div class="cornell-notes h-full">
+                            <p class="text-sm mb-2">A systematic format for condensing and organizing notes.</p>
+                            <p class="text-sm mb-2">Developed by Walter Pauk, a professor at Cornell University.</p>
+                            <p class="text-sm mb-2">Created in the 1950s and published in "How to Study in College".</p>
+                            <p class="text-sm mb-2">Three distinct sections: notes column (70%), cue column (30%), and summary area.</p>
+                            <p class="text-sm mb-2">The 5 R's: Record, Reduce, Recite, Reflect, and Review.</p>
+                            <p class="text-sm mb-2">Improves critical thinking, enhances material retention, fosters active learning, and creates an organized study resource.</p>
+                        </div>
+                        <div class="cornell-summary">
+                            <p class="text-sm">The Cornell Note-Taking Method is a structured system that divides notes into organized sections, promoting active engagement with material through questioning, summarizing, and regular review, ultimately leading to better understanding and retention.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 max-w-3xl mx-auto">
+                <h3 class="text-2xl font-semibold mb-6 text-center">Benefits of Cornell Notes</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-xl">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <h4 class="text-lg font-medium">Active Learning</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm">Engages you in the material through questioning and summarizing, rather than passive note-taking.</p>
+                    </div>
+                    
+                    <div class="bg-green-50 p-6 rounded-xl">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <h4 class="text-lg font-medium">Improved Organization</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm">Structures information in a logical format that makes review and studying more efficient.</p>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-6 rounded-xl">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-500 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <h4 class="text-lg font-medium">Enhanced Recall</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm">Creates connections between ideas and questions, strengthening memory and understanding.</p>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-6 rounded-xl">
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-500 mr-3" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            <h4 class="text-lg font-medium">Test Preparation</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm">Naturally creates a study guide with questions similar to those likely to appear on exams.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQs Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Frequently Asked Questions</h2>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">What file formats are supported?</h3>
+                    <p class="text-gray-600">Our system currently supports PDF, Microsoft Word (DOCX), and PowerPoint (PPTX) files. We plan to add support for additional formats in the future.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">How accurate is the conversion?</h3>
+                    <p class="text-gray-600">Our AI system analyzes the content of your documents and identifies key concepts and supporting details. While the conversion is highly accurate, you may want to review and adjust the generated notes to ensure they align with your specific study needs.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Can I customize the Cornell note format?</h3>
+                    <p class="text-gray-600">Yes, after conversion you can customize the format, including column widths, summary section size, and more to suit your preferences before downloading or printing.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Are my documents secure?</h3>
+                    <p class="text-gray-600">Yes, we take data security seriously. Your uploaded documents are processed securely and automatically deleted after conversion. We do not store or share your document content.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Can I use this tool on my mobile device?</h3>
+                    <p class="text-gray-600">Yes, our website is fully responsive and works on mobile phones and tablets, allowing you to convert documents to Cornell notes on any device.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between">
+                <div class="mb-8 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+                        </svg>
+                        <h2 class="text-xl font-bold">Cornell Notes Converter</h2>
+                    </div>
+                    <p class="text-gray-400 max-w-md">Transform your documents into effective Cornell notes for better learning and retention. Our tool makes it easy to organize your study materials.</p>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition">How It Works</a></li>
+                            <li><a href="#upload" class="text-gray-400 hover:text-white transition">Convert</a></li>
+                            <li><a href="#templates" class="text-gray-400 hover:text-white transition">Templates</a></li>
+                            <li><a href="#about" class="text-gray-400 hover:text-white transition">About</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Help Center</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Tutorials</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg font-semibold mb-4">Legal</h3>
+                        <ul class="space-y-2">
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+                            <li><a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2024 Cornell Notes Converter. All rights reserved.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple toggle for demonstration purposes
+        document.querySelector('.btn-primary').addEventListener('click', function() {
+            // Normally this would upload the file and process it
+            // For demo, we'll show the progress section
+            document.getElementById('progress-section').classList.remove('hidden');
+            
+            // After a simulated processing time, show the preview
+            setTimeout(function() {
+                document.getElementById('progress-section').classList.add('hidden');
+                document.getElementById('preview-section').classList.remove('hidden');
+                // Scroll to preview section
+                document.getElementById('preview-section').scrollIntoView({behavior: 'smooth'});
+            }, 3000);
+        });
+        
+        // File drop area interaction
+        const fileDropArea = document.querySelector('.file-drop-area');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileDropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            fileDropArea.classList.add('active');
+        }
+        
+        function unhighlight() {
+            fileDropArea.classList.remove('active');
+        }
+    </script>
+</body>
+</html>

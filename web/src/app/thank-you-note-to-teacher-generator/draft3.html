@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Thank You Note Generator | Express Your Gratitude</title>
+    <meta name="description" content="Create personalized thank you notes for teachers with our AI-powered generator. Browse templates for parents, students, and daycare teachers or design custom cards.">
+    <meta name="keywords" content="thank you note to teacher, thank you note to teacher from parent, short thank you note to teacher, thank you note to teacher from student, thank you note to daycare teacher">
+    
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #5271ff;
+            --secondary-color: #ff5757;
+            --accent-color: #43cea2;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --gradient-bg: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .hero-gradient {
+            background: var(--gradient-bg);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5ae8;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e34c4c;
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .template-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .template-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .card-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: grid;
+        }
+        
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .step-container {
+            position: relative;
+        }
+        
+        .step-container:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 40px;
+            right: -30px;
+            width: 60px;
+            height: 2px;
+            background-color: #ddd;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        
+        .card-design-container {
+            display: none;
+        }
+        
+        .card-design-container.active {
+            display: block;
+        }
+        
+        .card-template {
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .card-template:hover, .card-template.selected {
+            border-color: var(--primary-color);
+            transform: scale(1.03);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        /* Animation classes */
+        .fadeIn {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .step-container:not(:last-child)::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md py-4 px-6 fixed w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-gradient">
+                TeacherThankYou.com
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#generator" class="hover:text-primary-color transition">AI Generator</a>
+                <a href="#templates" class="hover:text-primary-color transition">Templates</a>
+                <a href="#creative" class="hover:text-primary-color transition">Creative Ideas</a>
+                <a href="#about" class="hover:text-primary-color transition">About</a>
+            </div>
+            <button class="btn-primary py-2 px-6 rounded-full shadow-lg">Get Started</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-gradient text-white pt-32 pb-20 px-6">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">Express Your Gratitude to Teachers</h1>
+            <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto">Create personalized thank you notes and beautiful cards for teachers with our AI-powered generator.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-4">
+                <a href="#generator" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold shadow-xl">Create Thank You Note</a>
+                <a href="#templates" class="bg-white text-gray-800 py-3 px-8 rounded-full text-lg font-semibold shadow-xl hover:bg-gray-100 transition">Browse Templates</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="py-20 px-6 bg-gray-50">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-16">Why Choose Our Thank You Note Generator?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="text-5xl text-primary-color mb-6">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">AI-Powered</h3>
+                    <p class="text-gray-600">Our advanced AI creates personalized, heartfelt messages tailored to your specific relationship with the teacher.</p>
+                </div>
+                
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="text-5xl text-primary-color mb-6">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Beautiful Designs</h3>
+                    <p class="text-gray-600">Turn your message into a stunning thank you card with our professional design templates.</p>
+                </div>
+                
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="text-5xl text-primary-color mb-6">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Extensive Templates</h3>
+                    <p class="text-gray-600">Browse our library of templates for parents, students, and daycare teachers to find the perfect message.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Generator Section -->
+    <section id="generator" class="py-20 px-6">
+        <div class="container mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Create Your Perfect Thank You Note</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Our 3-step process makes it easy to create a personalized thank you note for any teacher in your life.</p>
+        </div>
+        
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
+                <div class="step-container text-center">
+                    <div class="step-number">1</div>
+                    <h3 class="text-2xl font-semibold mb-4">Enter Information</h3>
+                    <p class="text-gray-600">Tell us about the teacher and your relationship. Add specific details you'd like to include.</p>
+                </div>
+                
+                <div class="step-container text-center">
+                    <div class="step-number">2</div>
+                    <h3 class="text-2xl font-semibold mb-4">Generate Message</h3>
+                    <p class="text-gray-600">Our AI will craft a personalized thank you note based on your input.</p>
+                </div>
+                
+                <div class="step-container text-center">
+                    <div class="step-number">3</div>
+                    <h3 class="text-2xl font-semibold mb-4">Design Your Card</h3>
+                    <p class="text-gray-600">Choose a design and customize your thank you card for download or sharing.</p>
+                </div>
+            </div>
+            
+            <!-- Generator Tool -->
+            <div class="bg-white rounded-xl shadow-xl p-8">
+                <!-- Step 1: Input Form -->
+                <div id="step1" class="step-content active">
+                    <h3 class="text-2xl font-semibold mb-6 text-center">Tell Us About Your Teacher</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 mb-2">Who is this thank you note from?</label>
+                            <select class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                                <option value="parent">Parent</option>
+                                <option value="student">Student</option>
+                                <option value="class">Class/Group</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2">Type of Teacher</label>
+                            <select class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                                <option value="elementary">Elementary School Teacher</option>
+                                <option value="middle">Middle School Teacher</option>
+                                <option value="high">High School Teacher</option>
+                                <option value="daycare">Daycare/Preschool Teacher</option>
+                                <option value="special">Special Education Teacher</option>
+                                <option value="subject">Subject-Specific Teacher</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2">Teacher's Name</label>
+                            <input type="text" placeholder="Mrs. Smith" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2">Occasion</label>
+                            <select class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                                <option value="eoy">End of School Year</option>
+                                <option value="holiday">Holiday Season</option>
+                                <option value="appreciation">Teacher Appreciation Week</option>
+                                <option value="retirement">Retirement</option>
+                                <option value="special">Special Achievement</option>
+                                <option value="general">General Thanks</option>
+                            </select>
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label class="block text-gray-700 mb-2">What specifically would you like to thank them for?</label>
+                            <textarea rows="4" placeholder="Example: Helping my child gain confidence in math, organizing the class play, etc." class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color"></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2">Tone</label>
+                            <select class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                                <option value="heartfelt">Heartfelt & Emotional</option>
+                                <option value="formal">Formal & Professional</option>
+                                <option value="casual">Casual & Friendly</option>
+                                <option value="funny">Humorous & Light</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2">Message Length</label>
+                            <select class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                                <option value="short">Short (2-3 sentences)</option>
+                                <option value="medium">Medium (Paragraph)</option>
+                                <option value="long">Long (Multiple Paragraphs)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 text-center">
+                        <button id="generateBtn" class="btn-primary py-3 px-10 rounded-lg text-lg font-semibold">Generate Thank You Note</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Generated Message -->
+                <div id="step2" class="step-content hidden">
+                    <h3 class="text-2xl font-semibold mb-6 text-center">Your Personalized Thank You Note</h3>
+                    
+                    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+                        <div id="generatedText" class="text-lg leading-relaxed">
+                            <p>Dear Mrs. Thompson,</p>
+                            <br>
+                            <p>As this school year comes to a close, I wanted to take a moment to express my heartfelt gratitude for everything you've done for Emily. Your dedication to helping her overcome her challenges with math has made such a difference in her confidence and ability. I've noticed how she no longer dreads math homework and even gets excited about solving problems!</p>
+                            <br>
+                            <p>The patience and individualized attention you've shown has truly been above and beyond. The strategies you taught her aren't just helping with math – they're teaching her persistence and the value of working through difficult tasks. These are life skills that will serve her well beyond the classroom.</p>
+                            <br>
+                            <p>Teachers like you who genuinely care make all the difference in a child's educational journey. We feel so fortunate that Emily had you as her teacher this year.</p>
+                            <br>
+                            <p>With deepest appreciation,</p>
+                            <p>Sarah Johnson</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-wrap justify-center gap-4 mb-10">
+                        <button id="regenerateBtn" class="btn-secondary py-2 px-6 rounded-lg">
+                            <i class="fas fa-redo mr-2"></i> Regenerate
+                        </button>
+                        <button id="editBtn" class="bg-gray-700 text-white py-2 px-6 rounded-lg hover:bg-gray-800 transition">
+                            <i class="fas fa-edit mr-2"></i> Edit
+                        </button>
+                        <button id="copyBtn" class="bg-gray-700 text-white py-2 px-6 rounded-lg hover:bg-gray-800 transition">
+                            <i class="fas fa-copy mr-2"></i> Copy Text
+                        </button>
+                    </div>
+                    
+                    <div class="mt-10 text-center">
+                        <button id="designCardBtn" class="btn-primary py-3 px-10 rounded-lg text-lg font-semibold">Design Your Thank You Card</button>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Card Design -->
+                <div id="step3" class="step-content hidden">
+                    <h3 class="text-2xl font-semibold mb-6 text-center">Design Your Thank You Card</h3>
+                    
+                    <div class="mb-8">
+                        <h4 class="text-xl font-medium mb-4">Choose a Template</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="card-template rounded-lg overflow-hidden">
+                                <img src="https://cdn.jsdelivr.net/gh/davidjerleke/img-host@main/teacher-card-1.jpg" alt="Card Template 1" class="w-full h-40 object-cover">
+                            </div>
+                            <div class="card-template rounded-lg overflow-hidden">
+                                <img src="https://cdn.jsdelivr.net/gh/davidjerleke/img-host@main/teacher-card-2.jpg" alt="Card Template 2" class="w-full h-40 object-cover">
+                            </div>
+                            <div class="card-template rounded-lg overflow-hidden">
+                                <img src="https://cdn.jsdelivr.net/gh/davidjerleke/img-host@main/teacher-card-3.jpg" alt="Card Template 3" class="w-full h-40 object-cover">
+                            </div>
+                            <div class="card-template rounded-lg overflow-hidden">
+                                <img src="https://cdn.jsdelivr.net/gh/davidjerleke/img-host@main/teacher-card-4.jpg" alt="Card Template 4" class="w-full h-40 object-cover">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                        <div>
+                            <h4 class="text-xl font-medium mb-4">Personalize Your Card</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Font Style</label>
+                                    <select class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                                        <option value="modern">Modern</option>
+                                        <option value="classic">Classic</option>
+                                        <option value="handwritten">Handwritten</option>
+                                        <option value="bold">Bold</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Color Theme</label>
+                                    <div class="flex gap-3">
+                                        <span class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer"></span>
+                                        <span class="w-8 h-8 rounded-full bg-green-500 cursor-pointer"></span>
+                                        <span class="w-8 h-8 rounded-full bg-purple-500 cursor-pointer"></span>
+                                        <span class="w-8 h-8 rounded-full bg-red-500 cursor-pointer"></span>
+                                        <span class="w-8 h-8 rounded-full bg-yellow-500 cursor-pointer"></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-2">Add Your Signature</label>
+                                    <input type="text" placeholder="Your Name" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-color">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-xl font-medium mb-4">Preview</h4>
+                            <div class="border rounded-lg p-4 h-64 flex items-center justify-center bg-gray-50">
+                                <div class="text-center">
+                                    <img src="https://cdn.jsdelivr.net/gh/davidjerleke/img-host@main/teacher-card-preview.jpg" alt="Card Preview" class="max-h-full max-w-full">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10 text-center">
+                        <button id="downloadCardBtn" class="btn-primary py-3 px-10 rounded-lg text-lg font-semibold">Download Your Card</button>
+                        <button id="startOverBtn" class="ml-4 bg-gray-200 text-gray-800 py-3 px-6 rounded-lg hover:bg-gray-300 transition">Start Over</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Templates Section -->
+    <section id="templates" class="py-20 px-6 bg-gray-50">
+        <div class="container mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Browse Our Template Library</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Find inspiration from our collection of thank you note templates for different situations.</p>
+        </div>
+        
+        <div class="container mx-auto">
+            <!-- Tabs -->
+            <div class="flex flex-wrap justify-center mb-10">
+                <button class="tab-btn active px-6 py-3 mx-2 mb-3 rounded-full bg-gray-200 hover:bg-gray-300 transition" data-tab="parents">From Parents</button>
+                <button class="tab-btn px-6 py-3 mx-2 mb-3 rounded-full bg-gray-200 hover:bg-gray-300 transition" data-tab="students">From Students</button>
+                <button class="tab-btn px-6 py-3 mx-2 mb-3 rounded-full bg-gray-200 hover:bg-gray-300 transition" data-tab="short">Short & Sweet</button>
+                <button class="tab-btn px-6 py-3 mx-2 mb-3 rounded-full bg-gray-200 hover:bg-gray-300 transition" data-tab="daycare">For Daycare Teachers</button>
+            </div>
+            
+            <!-- Tab Content: From Parents -->
+            <div class="tab-content active" id="parents-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Template Cards -->
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="parent1">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">End of Year Gratitude</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for your dedication throughout this school year. Your impact on my child's education has been remarkable...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-2">Elementary</span>
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Heartfelt</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="parent2">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Special Support Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Your exceptional support during a challenging time made all the difference. Thank you for going above and beyond...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-2">Middle School</span>
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Emotional</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="parent3">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Academic Progress Appreciation</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for helping my child make tremendous academic progress this year. Your teaching methods have been incredibly effective...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mr-2">Any Grade</span>
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Professional</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="parent4">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Teacher Appreciation Week</h3>
+                            <p class="text-gray-600 line-clamp-3">During this Teacher Appreciation Week, we want to express our deepest gratitude for all that you do...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-2">Any Grade</span>
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Formal</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="parent5">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Behavioral Improvement Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for your patience and strategies that have helped improve my child's behavior in class...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-2">Elementary</span>
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Grateful</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="parent6">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Holiday Season Gratitude</h3>
+                            <p class="text-gray-600 line-clamp-3">As we enter the holiday season, we wanted to take a moment to thank you for your wonderful influence...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-2">Any Grade</span>
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Warm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Content: From Students -->
+            <div class="tab-content" id="students-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Template Cards -->
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="student1">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Graduation Thank You</h3>
+                            <p class="text-gray-600 line-clamp-3">As I graduate, I want to thank you for being an incredible teacher who inspired me to pursue my dreams...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-2">High School</span>
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Emotional</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="student2">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Subject Passion Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for making science so interesting and fun. You've sparked a passion I never knew I had...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mr-2">Middle School</span>
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Enthusiastic</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="student3">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Personal Growth Appreciation</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for helping me believe in myself. Your encouragement has helped me grow not just as a student...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-2">Any Grade</span>
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Reflective</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="student4">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Elementary Student Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for being the best teacher ever! I love coming to school because you make learning fun...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-2">Elementary</span>
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Simple</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="student5">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">College Recommendation Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for writing my college recommendation letter. Your support of my academic journey means so much...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-2">High School</span>
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Formal</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="student6">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Extra Help Appreciation</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for staying after school to help me understand math. Your extra time made a huge difference...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-2">Any Grade</span>
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Grateful</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Content: Short & Sweet -->
+            <div class="tab-content" id="short-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Template Cards -->
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="short1">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Quick Gratitude Note</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for being an amazing teacher. Your passion for teaching inspires us every day!</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mr-2">Any Grade</span>
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Brief</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="short2">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Gift Tag Message</h3>
+                            <p class="text-gray-600 line-clamp-3">Your dedication makes all the difference. Thank you for being such an exceptional teacher!</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-2">Gift Tag</span>
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Concise</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="short3">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Quick Parent Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for your patience and guidance. You're making a wonderful difference in my child's life.</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-2">From Parent</span>
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Short</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="short4">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Student Quick Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">You made learning fun! Thank you for being the best teacher ever and helping me love school.</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-2">From Student</span>
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Sweet</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="short5">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Special Occasion Quick Note</h3>
+                            <p class="text-gray-600 line-clamp-3">Happy Teacher Appreciation Week! Thank you for all you do – you're truly appreciated!</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-2">Special Day</span>
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Brief</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="short6">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">End of Year Brief Note</h3>
+                            <p class="text-gray-600 line-clamp-3">As the school year ends, thank you for making it a great one. Your impact will last a lifetime!</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mr-2">Year End</span>
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Concise</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Content: For Daycare Teachers -->
+            <div class="tab-content" id="daycare-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Template Cards -->
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="daycare1">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Daycare Transition Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for making my child's transition to daycare so smooth. Your gentle approach has made all the difference...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-2">New Student</span>
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Grateful</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="daycare2">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Child Development Appreciation</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for fostering my child's development. The skills they're learning with you are amazing to witness...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full mr-2">Toddler</span>
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Developmental</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="daycare3">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Special Care Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for the special attention you give to my child's unique needs. Your understanding approach means so much...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full mr-2">Special Needs</span>
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Heartfelt</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="daycare4">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Daily Updates Appreciation</h3>
+                            <p class="text-gray-600 line-clamp-3">Thank you for keeping me updated on my child's day. Your detailed communications help me feel connected...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full mr-2">Communication</span>
+                                <span class="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Appreciative</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="daycare5">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Preschool Graduation Thanks</h3>
+                            <p class="text-gray-600 line-clamp-3">As my child graduates from preschool, thank you for preparing them so well for kindergarten...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full mr-2">Graduation</span>
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Milestone</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="template-card bg-white rounded-lg shadow-md overflow-hidden" data-template="daycare6">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold mb-3">Working Parent Gratitude</h3>
+                            <p class="text-gray-600 line-clamp-3">As a working parent, I'm so grateful for the exceptional care you provide. You make it possible for me to work with peace of mind...</p>
+                            <div class="mt-4">
+                                <span class="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full mr-2">Working Parent</span>
+                                <span class="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Grateful</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creative Ideas Section -->
+    <section id="creative" class="py-20 px-6">
+        <div class="container mx-auto text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Creative Ways to Say Thank You</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Beyond a note or card, here are some unique ways to show your appreciation to teachers.</p>
+        </div>
+        
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="text-4xl text-primary-color mb-6">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Create a Thank You Video</h3>
+                    <p class="text-gray-600 mb-6">Record a short video message expressing your gratitude. Include specific memories and the impact the teacher has made.</p>
+                    <a href="#" class="text-primary-color font-medium hover:underline">Learn how to create a video <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+                
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="text-4xl text-primary-color mb-6">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Thoughtful Gift Baskets</h3>
+                    <p class="text-gray-600 mb-6">Curate a personalized gift basket with items that reflect the teacher's interests, paired with your thank you note.</p>
+                    <a href="#" class="text-primary-color font-medium hover:underline">Gift basket ideas <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+                
+                <div class="card bg-white p-8 rounded-xl shadow-lg">
+                    <div class="text-4xl text-primary-color mb-6">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">Organize a Group Appreciation</h3>
+                    <p class="text-gray-600 mb-6">Coordinate with other parents or students to create a collective expression of thanks, such as a shared memory book.</p>
+                    <a href="#" class="text-primary-color font-medium hover:underline">Group appreciation tips <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-6 bg-gray-50">
+        <div class="container mx-auto">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Why Thank Teachers?</h2>
+                <p class="text-xl text-gray-600 mb-8">Teachers play a crucial role in shaping the future by educating and inspiring our children. Studies show that teacher appreciation is linked to higher job satisfaction and improved classroom outcomes.</p>
+                <p class="text-xl text-gray-600 mb-10">Our mission is to help you express genuine gratitude to the educators who make a difference every day.</p>
+                
+                <div class="flex justify-center space-x-4">
+                    <a href="#generator" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold shadow-xl">Create a Thank You Note</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-6">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">TeacherThankYou.com</h3>
+                    <p class="text-gray-400">The perfect way to express gratitude to the special teachers in your life.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#generator" class="text-gray-400 hover:text-white transition">AI Generator</a></li>
+                        <li><a href="#templates" class="text-gray-400 hover:text-white transition">Templates</a></li>
+                        <li><a href="#creative" class="text-gray-400 hover:text-white transition">Creative Ideas</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Teacher Appreciation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Teacher Appreciation Week</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">End of Year Thanks</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Holiday Thank You</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Special Occasions</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition text-xl"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                    <p class="text-gray-400">Stay updated with new templates and features.</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-400">
+                <p>&copy; 2023 TeacherThankYou.com - All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Template Modal -->
+    <div id="templateModal" class="card-modal">
+        <div class="card-modal-content">
+            <span class="close-modal">&times;</span>
+            <h3 id="modal-title" class="text-2xl font-semibold mb-4">Template Title</h3>
+            <div id="modal-content" class="mb-6">
+                <p class="text-gray-600 mb-4">Template content will appear here.</p>
+            </div>
+            <div class="flex justify-between">
+                <button id="useTemplateBtn" class="btn-primary py-2 px-6 rounded-lg">Use This Template</button>
+                <button id="copyTemplateBtn" class="bg-gray-700 text-white py-2 px-6 rounded-lg hover:bg-gray-800 transition">
+                    <i class="fas fa-copy mr-2"></i> Copy Text
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Tab Switching
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and content
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding content
+                btn.classList.add('active');
+                document.getElementById(`${tabId}-content`).classList.add('active');
+            });
+        });
+        
+        // Step Navigation
+        const generateBtn = document.getElementById('generateBtn');
+        const regenerateBtn = document.getElementById('regenerateBtn');
+        const designCardBtn = document.getElementById('designCardBtn');
+        const downloadCardBtn = document.getElementById('downloadCardBtn');
+        const startOverBtn = document.getElementById('startOverBtn');
+        
+        const step1 = document.getElementById('step1');
+        const step2 = document.getElementById('step2');
+        const step3 = document.getElementById('step3');
+        
+        generateBtn.addEventListener('click', () => {
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+        });
+        
+        designCardBtn.addEventListener('click', () => {
+            step2.classList.add('hidden');
+            step3.classList.remove('hidden');
+        });
+        
+        startOverBtn.addEventListener('click', () => {
+            step3.classList.add('hidden');
+            step1.classList.remove('hidden');
+        });
+        
+        regenerateBtn.addEventListener('click', () => {
+            // Simulate regenerating content
+            const generatedText = document.getElementById('generatedText');
+            generatedText.innerHTML = '<p>Loading new content...</p>';
+            
+            setTimeout(() => {
+                generatedText.innerHTML = `
+                    <p>Dear Mrs. Anderson,</p>
+                    <br>
+                    <p>As this school year draws to a close, I wanted to take a moment to express my deepest gratitude for everything you've done for Jacob. Your dedication to helping him overcome his reading challenges has made such a remarkable difference.</p>
+                    <br>
+                    <p>The strategies you've taught him have not only improved his reading skills but have also boosted his confidence. He now picks up books voluntarily, which is something I never thought I'd see!</p>
+                    <br>
+                    <p>Your patience, creativity, and genuine care for your students is truly inspirational. Jacob often comes home excited to share what he learned in your class.</p>
+                    <br>
+                    <p>Thank you for being such an exceptional teacher who goes above and beyond.</p>
+                    <br>
+                    <p>With heartfelt appreciation,</p>
+                    <p>Michael Wilson</p>
+                `;
+            }, 1000);
+        });
+        
+        // Template Cards Modal
+        const templateCards = document.querySelectorAll('.template-card');
+        const templateModal = document.getElementById('templateModal');
+        const closeModal = document.querySelector('.close-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const useTemplateBtn = document.getElementById('useTemplateBtn');
+        const copyTemplateBtn = document.getElementById('copyTemplateBtn');
+        
+        // Template content mapping
+        const templateContent = {
+            'parent1': {
+                title: 'End of Year Gratitude',
+                content: `
+                    <p>Dear [Teacher's Name],</p>
+                    <br>
+                    <p>As this school year comes to a close, I wanted to take a moment to express my heartfelt gratitude for your dedication, patience, and exceptional teaching. The impact you've had on [Child's Name]'s education this year has been truly remarkable.</p>
+                    <br>
+                    <p>I've noticed such wonderful growth in [him/her], not just academically but also in confidence and enthusiasm for learning. The way you've encouraged [Child's Name] to think critically and creatively while providing a supportive environment has made all the difference.</p>
+                    <br>
+                    <p>Thank you for your tireless work, for the extra time you've spent providing feedback, and for truly caring about each student's success. Your passion for teaching shines through in everything you do.</p>
+                    <br>
+                    <p>We feel incredibly fortunate that [Child's Name] had the opportunity to be in your class this year.</p>
+                    <br>
+                    <p>With deepest appreciation,</p>
+                    <p>[Your Name]</p>
+                `
+            },
+            'parent2': {
+                title: 'Special Support Thanks',
+                content: `
+                    <p>Dear [Teacher's Name],</p>
+                    <br>
+                    <p>I wanted to express my profound gratitude for your exceptional support during what has been a challenging time for our family. When [Child's Name] was struggling with [specific challenge], your understanding, patience, and proactive approach made all the difference in the world.</p>
+                    <br>
+                    <p>The individualized attention you provided, including [mention specific actions taken], showed us just how deeply you care about your students' wellbeing. [Child's Name] has shown remarkable improvement, and we attribute so much of that progress to your dedicated support.</p>
+                    <br>
+                    <p>Teachers like you who go above and beyond are rare, and we are incredibly thankful that [Child's Name] has had you in [his/her] corner. Your compassion and commitment have not only helped academically but have also restored [his/her] confidence.</p>
+                    <br>
+                    <p>With heartfelt appreciation,</p>
+                    <p>[Your Name]</p>
+                `
+            },
+            'student1': {
+                title: 'Graduation Thank You',
+                content: `
+                    <p>Dear [Teacher's Name],</p>
+                    <br>
+                    <p>As I prepare to graduate, I wanted to take this opportunity to thank you for being such an incredible teacher and mentor to me. Your [subject] class was so much more than just a course requirement – it was a highlight of my high school experience.</p>
+                    <br>
+                    <p>I still remember when you [mention a specific memory or lesson]. That moment, along with many others in your classroom, helped shape my thinking and inspired me to pursue [mention future plans if applicable].</p>
+                    <br>
+                    <p>Your passion for teaching and genuine interest in your students' success has made such a difference in my life. You challenged me to think critically, encouraged me when I doubted myself, and always maintained high standards that pushed me to do my best work.</p>
+                    <br>
+                    <p>I'll carry the lessons I learned in your class with me far beyond high school. Thank you for everything.</p>
+                    <br>
+                    <p>With gratitude,</p>
+                    <p>[Your Name]</p>
+                `
+            },
+            'short1': {
+                title: 'Quick Gratitude Note',
+                content: `
+                    <p>Dear [Teacher's Name],</p>
+                    <br>
+                    <p>Thank you for being an amazing teacher. Your passion for teaching inspires us every day!</p>
+                    <br>
+                    <p>Gratefully,</p>
+                    <p>[Your Name]</p>
+                `
+            },
+            'daycare1': {
+                title: 'Daycare Transition Thanks',
+                content: `
+                    <p>Dear [Teacher's Name],</p>
+                    <br>
+                    <p>I wanted to thank you from the bottom of my heart for making [Child's Name]'s transition to daycare so smooth and positive. The care and attention you've shown during these first weeks have been nothing short of amazing.</p>
+                    <br>
+                    <p>Starting daycare is such a big step, and I was understandably anxious. Your gentle approach, consistent communication, and obvious affection for the children have completely put my mind at ease. [Child's Name] already looks forward to seeing you each morning!</p>
+                    <br>
+                    <p>The way you've helped [him/her] adjust to the new routine, make friends, and feel secure in this new environment means so much to our family. It's clear that you truly understand the needs of young children and their parents during this transition.</p>
+                    <br>
+                    <p>Thank you for being such a nurturing and supportive presence in [Child's Name]'s life.</p>
+                    <br>
+                    <p>Warmly,</p>
+                    <p>[Your Name]</p>
+                `
+            }
+        };
+        
+        // Functions to populate and show modal
+        function showTemplateModal(templateId) {
+            const template = templateContent[templateId];
+            
+            if (template) {
+                modalTitle.textContent = template.title;
+                modalContent.innerHTML = template.content;
+                templateModal.style.display = 'flex';
+            }
+        }
+        
+        // Add click event to template cards
+        templateCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const templateId = card.getAttribute('data-template');
+                showTemplateModal(templateId);
+            });
+        });
+        
+        // Close modal
+        closeModal.addEventListener('click', () => {
+            templateModal.style.display = 'none';
+        });
+        
+        // Close modal when clicking outside content
+        window.addEventListener('click', (e) => {
+            if (e.target === templateModal) {
+                templateModal.style.display = 'none';
+            }
+        });
+        
+        // Use template button
+        useTemplateBtn.addEventListener('click', () => {
+            // Move to generator and populate with template content
+            window.location.href = '#generator';
+            
+            // Show step 2 with the template content
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            
+            // Get content from modal and set in generator
+            const templateText = modalContent.innerHTML;
+            document.getElementById('generatedText').innerHTML = templateText;
+            
+            // Close modal
+            templateModal.style.display = 'none';
+        });
+        
+        // Copy template button
+        copyTemplateBtn.addEventListener('click', () => {
+            // Create a temporary textarea to copy HTML content
+            const textarea = document.createElement('textarea');
+            textarea.value = modalContent.innerText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            // Change button text temporarily
+            const originalText = copyTemplateBtn.innerHTML;
+            copyTemplateBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+            
+            setTimeout(() => {
+                copyTemplateBtn.innerHTML = originalText;
+            }, 2000);
+        });
+        
+        // Card template selection
+        const cardTemplates = document.querySelectorAll('.card-template');
+        
+        cardTemplates.forEach(template => {
+            template.addEventListener('click', () => {
+                // Remove selected class from all templates
+                cardTemplates.forEach(t => t.classList.remove('selected'));
+                
+                // Add selected class to clicked template
+                template.classList.add('selected');
+            });
+        });
+        
+        // Download card button
+        downloadCardBtn.addEventListener('click', () => {
+            // Simulate download
+            alert('Your card would be downloaded here in a real implementation.');
+        });
+        
+        // Copy text button
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            const generatedText = document.getElementById('generatedText').innerText;
+            
+            // Copy to clipboard
+            const textarea = document.createElement('textarea');
+            textarea.value = generatedText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            // Change button text temporarily
+            const copyBtn = document.getElementById('copyBtn');
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+            
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

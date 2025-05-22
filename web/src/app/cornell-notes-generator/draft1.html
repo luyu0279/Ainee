@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cornell Notes Generator - Convert Any Document to Cornell Notes</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        /* Custom styles */
+        .cornell-note {
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .cornell-header {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .cornell-body {
+            display: flex;
+        }
+        .cornell-cue {
+            border-right: 1px solid #e5e7eb;
+            width: 30%;
+        }
+        .cornell-notes {
+            width: 70%;
+        }
+        .cornell-summary {
+            border-top: 1px solid #e5e7eb;
+        }
+        .drop-zone {
+            border: 2px dashed #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .drop-zone:hover, .drop-zone.active {
+            border-color: #3b82f6;
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+        /* Cornell note template */
+        .template-preview {
+            max-width: 100%;
+            overflow: hidden;
+        }
+        /* Hide scrollbars for PDF export */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .screen-only {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm sticky top-0 z-10 screen-only">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="text-xl font-bold text-gray-800">Cornell Notes Generator</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#how-it-works" class="text-gray-600 hover:text-blue-600 transition">How It Works</a>
+                <a href="#about-cornell" class="text-gray-600 hover:text-blue-600 transition">About Cornell Notes</a>
+                <a href="#upload" class="text-gray-600 hover:text-blue-600 transition">Upload Document</a>
+            </div>
+            <button class="md:hidden text-gray-600 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-12 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Transform Any Document Into Cornell Notes</h1>
+                <p class="text-xl text-gray-600 mb-8">Upload your PDFs, Word documents, or presentations and convert them into the effective Cornell note-taking format instantly.</p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#upload" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition shadow-md screen-only">Upload Document</a>
+                    <a href="#about-cornell" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition border border-blue-600 shadow-md">Learn About Cornell Notes</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Step 1 -->
+                <div class="text-center">
+                    <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Upload Your Document</h3>
+                    <p class="text-gray-600">Drag and drop or select your PDF, Word document, or PowerPoint presentation.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="text-center">
+                    <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Automatic Processing</h3>
+                    <p class="text-gray-600">Our system extracts content and intelligently formats it into Cornell notes structure.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="text-center">
+                    <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Get Your Cornell Notes</h3>
+                    <p class="text-gray-600">Preview, customize, and download your organized Cornell notes for effective studying.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Cornell Notes -->
+    <section id="about-cornell" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">About Cornell Notes</h2>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center mb-12">
+                    <div>
+                        <h3 class="text-2xl font-semibold mb-4">What Are Cornell Notes?</h3>
+                        <p class="text-gray-600 mb-4">The Cornell Note-taking System was developed by Dr. Walter Pauk at Cornell University in the 1950s. It's a systematic format for condensing and organizing notes that promotes active learning and facilitates review.</p>
+                        <p class="text-gray-600">Cornell notes divide the page into specific sections:</p>
+                        <ul class="list-disc pl-6 text-gray-600 mb-6">
+                            <li class="mb-1"><span class="font-medium">Notes column (right):</span> For recording lecture or reading content</li>
+                            <li class="mb-1"><span class="font-medium">Cue column (left):</span> For key terms, questions, or prompts</li>
+                            <li class="mb-1"><span class="font-medium">Summary area (bottom):</span> For synthesizing main ideas</li>
+                        </ul>
+                    </div>
+                    <div class="cornell-note bg-white rounded-lg overflow-hidden">
+                        <div class="cornell-header p-4 bg-blue-50">
+                            <div class="flex justify-between text-sm">
+                                <span>Subject: Example Topic</span>
+                                <span>Date: Today</span>
+                            </div>
+                        </div>
+                        <div class="cornell-body">
+                            <div class="cornell-cue p-4 bg-gray-50">
+                                <p class="text-gray-500 font-medium mb-3">Key questions</p>
+                                <p class="mb-2 text-sm">What are Cornell Notes?</p>
+                                <p class="mb-2 text-sm">Who developed them?</p>
+                                <p class="mb-2 text-sm">Benefits?</p>
+                            </div>
+                            <div class="cornell-notes p-4">
+                                <p class="mb-3">Cornell Notes are a note-taking system designed to help organize and structure information.</p>
+                                <p class="mb-3">Developed by Dr. Walter Pauk at Cornell University in the 1950s.</p>
+                                <p class="mb-3">Benefits include:</p>
+                                <ul class="list-disc pl-5 mb-3">
+                                    <li>Improved organization</li>
+                                    <li>Enhanced recall</li>
+                                    <li>Facilitated review</li>
+                                    <li>Active engagement with material</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="cornell-summary p-4 bg-blue-50">
+                            <p class="text-sm font-medium mb-1">Summary:</p>
+                            <p class="text-sm">Cornell Notes provide a structured method for taking and reviewing notes, featuring a unique layout that promotes active learning and better information retention.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-sm p-8 mb-12">
+                    <h3 class="text-2xl font-semibold mb-6">Benefits of Cornell Notes</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Enhanced Organization</h4>
+                                <p class="text-gray-600 text-sm">Structured format helps organize information logically and clearly.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Active Learning</h4>
+                                <p class="text-gray-600 text-sm">Encourages engagement with material by identifying key questions and concepts.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Efficient Review</h4>
+                                <p class="text-gray-600 text-sm">Cue column facilitates quick review and self-testing.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Better Retention</h4>
+                                <p class="text-gray-600 text-sm">Summary section reinforces learning and promotes long-term memory.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Critical Thinking</h4>
+                                <p class="text-gray-600 text-sm">Promotes deeper analysis by requiring synthesis of information.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-full mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium mb-1">Study Efficiency</h4>
+                                <p class="text-gray-600 text-sm">Reduces time needed for review by organizing information effectively.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 rounded-lg p-8">
+                    <h3 class="text-2xl font-semibold mb-6">How to Use Cornell Notes</h3>
+                    <ol class="space-y-6">
+                        <li class="flex">
+                            <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">1</div>
+                            <div>
+                                <h4 class="font-medium mb-1">Record</h4>
+                                <p class="text-gray-600">Write down key information in the notes column (right side) during lectures or while reading.</p>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">2</div>
+                            <div>
+                                <h4 class="font-medium mb-1">Reduce</h4>
+                                <p class="text-gray-600">After class, create questions, keywords, or cues in the left column that relate to your notes.</p>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">3</div>
+                            <div>
+                                <h4 class="font-medium mb-1">Recite</h4>
+                                <p class="text-gray-600">Cover the notes column and use the cues to recall information, testing your understanding.</p>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">4</div>
+                            <div>
+                                <h4 class="font-medium mb-1">Reflect</h4>
+                                <p class="text-gray-600">Think about the material and how it connects to what you already know.</p>
+                            </div>
+                        </li>
+                        <li class="flex">
+                            <div class="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center flex-shrink-0 mr-4">5</div>
+                            <div>
+                                <h4 class="font-medium mb-1">Review</h4>
+                                <p class="text-gray-600">Regularly review your notes to reinforce learning and improve retention.</p>
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Upload Your Document</h2>
+                
+                <div class="bg-gray-50 rounded-lg p-8 mb-8">
+                    <div class="drop-zone h-64 rounded-lg flex flex-col items-center justify-center cursor-pointer bg-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-blue-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <h3 class="text-xl font-medium mb-2">Drag & Drop your file here</h3>
+                        <p class="text-gray-500 mb-4">or</p>
+                        <button class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">Browse Files</button>
+                        <p class="text-gray-400 text-sm mt-4">Supported formats: PDF, DOCX, PPT, PPTX</p>
+                    </div>
+                </div>
+                
+                <!-- Settings Panel -->
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <!-- Template Settings -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                        <h3 class="text-xl font-semibold mb-4">Template Settings</h3>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Template Style</label>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="border border-blue-600 rounded-md p-2 bg-blue-50 flex justify-center">
+                                    <div class="h-12 w-12 cornell-note bg-white overflow-hidden scale-[0.7]" style="transform: scale(0.7);">
+                                        <div class="h-2 bg-blue-100"></div>
+                                        <div class="flex h-8">
+                                            <div class="w-3 bg-blue-50"></div>
+                                            <div class="flex-1"></div>
+                                        </div>
+                                        <div class="h-2 bg-blue-100"></div>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-md p-2 flex justify-center">
+                                    <div class="h-12 w-12 cornell-note bg-white overflow-hidden scale-[0.7]" style="transform: scale(0.7);">
+                                        <div class="h-2 bg-gray-100"></div>
+                                        <div class="flex h-8">
+                                            <div class="w-3 bg-gray-50"></div>
+                                            <div class="flex-1"></div>
+                                        </div>
+                                        <div class="h-2 bg-gray-100"></div>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-md p-2 flex justify-center">
+                                    <div class="h-12 w-12 cornell-note bg-white overflow-hidden scale-[0.7]" style="transform: scale(0.7);">
+                                        <div class="h-2 bg-green-100"></div>
+                                        <div class="flex h-8">
+                                            <div class="w-3 bg-green-50"></div>
+                                            <div class="flex-1"></div>
+                                        </div>
+                                        <div class="h-2 bg-green-100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Cue Column Width</label>
+                            <input type="range" min="20" max="40" value="30" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>Narrow</span>
+                                <span>Default</span>
+                                <span>Wide</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Summary Height</label>
+                            <input type="range" min="10" max="30" value="15" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>Short</span>
+                                <span>Default</span>
+                                <span>Tall</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Include Header</label>
+                            <div class="flex items-center">
+                                <input type="checkbox" checked class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="ml-2 text-sm text-gray-600">Add name, date, and subject fields</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Settings -->
+                    <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                        <h3 class="text-xl font-semibold mb-4">Content Settings</h3>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">AI Processing Level</label>
+                            <select class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <option>Basic - Extract text only</option>
+                                <option selected>Standard - Generate cues and summary</option>
+                                <option>Advanced - Detailed organization and analysis</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Note Density</label>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-500">Concise</span>
+                                <input type="range" min="1" max="5" value="3" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <span class="text-sm text-gray-500">Detailed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Page Division</label>
+                            <select class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                                <option>Auto (Recommended)</option>
+                                <option>One page per section</option>
+                                <option>All content on single note</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 text-sm font-medium mb-2">Additional Options</label>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" checked class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-600">Include diagrams and images</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" checked class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-600">Generate questions in cue column</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" checked class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                    <span class="ml-2 text-sm text-gray-600">Create summary for each page</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition shadow-md screen-only">
+                        Generate Cornell Notes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preview Section (Initially Hidden) -->
+    <section id="preview" class="py-16 bg-gray-50 hidden">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Your Cornell Notes</h2>
+                
+                <div class="bg-white rounded-lg shadow-md p-4 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-semibold">Preview</h3>
+                        <div class="flex space-x-3">
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Download
+                            </button>
+                            <button class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded hover:bg-gray-50 transition flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                </svg>
+                                Print
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Preview Content (Example) -->
+                    <div class="template-preview">
+                        <div class="cornell-note bg-white border border-gray-200 mb-8">
+                            <div class="cornell-header p-4 bg-blue-50">
+                                <div class="flex justify-between text-sm">
+                                    <span>Subject: Introduction to Machine Learning</span>
+                                    <span>Date: April 9, 2025</span>
+                                </div>
+                            </div>
+                            <div class="cornell-body">
+                                <div class="cornell-cue p-4 bg-gray-50">
+                                    <p class="text-gray-500 font-medium mb-3">Key questions & terms</p>
+                                    <p class="mb-2 text-sm">What is Machine Learning?</p>
+                                    <p class="mb-2 text-sm">Types of ML?</p>
+                                    <p class="mb-2 text-sm">Supervised Learning</p>
+                                    <p class="mb-2 text-sm">Unsupervised Learning</p>
+                                    <p class="mb-2 text-sm">Key applications?</p>
+                                </div>
+                                <div class="cornell-notes p-4">
+                                    <p class="mb-3">Machine Learning is a subset of artificial intelligence that enables computers to learn from data without explicit programming.</p>
+                                    <p class="mb-3">There are several approaches to machine learning:</p>
+                                    <ul class="list-disc pl-5 mb-3">
+                                        <li>Supervised Learning: Training with labeled data</li>
+                                        <li>Unsupervised Learning: Finding patterns in unlabeled data</li>
+                                        <li>Reinforcement Learning: Learning through trial and error</li>
+                                        <li>Semi-supervised Learning: Combination of labeled and unlabeled data</li>
+                                    </ul>
+                                    <p class="mb-3">Supervised learning algorithms include:</p>
+                                    <ul class="list-disc pl-5 mb-3">
+                                        <li>Linear Regression</li>
+                                        <li>Logistic Regression</li>
+                                        <li>Decision Trees</li>
+                                        <li>Neural Networks</li>
+                                    </ul>
+                                    <p class="mb-3">Unsupervised learning algorithms include:</p>
+                                    <ul class="list-disc pl-5 mb-3">
+                                        <li>Clustering (K-means, hierarchical)</li>
+                                        <li>Dimensionality Reduction (PCA)</li>
+                                        <li>Association Rule Learning</li>
+                                    </ul>
+                                    <p class="mb-3">Common applications of machine learning:</p>
+                                    <ul class="list-disc pl-5 mb-3">
+                                        <li>Image and speech recognition</li>
+                                        <li>Natural language processing</li>
+                                        <li>Recommendation systems</li>
+                                        <li>Fraud detection</li>
+                                        <li>Autonomous vehicles</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="cornell-summary p-4 bg-blue-50">
+                                <p class="text-sm font-medium mb-1">Summary:</p>
+                                <p class="text-sm">Machine learning enables computers to learn from data without explicit programming. The main approaches include supervised learning (using labeled data), unsupervised learning (finding patterns in unlabeled data), and reinforcement learning (learning through trial and error). ML has diverse applications across industries, from image recognition to autonomous vehicles.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional pages would go here -->
+                    </div>
+                </div>
+                
+                <div class="text-center space-x-4">
+                    <button class="bg-white text-blue-600 border border-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition">
+                        Upload Another Document
+                    </button>
+                    <button class="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition shadow-md">
+                        Download All Notes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Highlights -->
+    <section class="py-16 bg-blue-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Why Use Our Cornell Notes Generator</h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-blue-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Instant Conversion</h3>
+                        <p class="text-gray-600">Transform any document into Cornell notes in seconds, saving hours of manual formatting time.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-blue-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">AI-Powered Processing</h3>
+                        <p class="text-gray-600">Our system intelligently identifies key points, generates relevant questions, and creates comprehensive summaries.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-blue-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Fully Customizable</h3>
+                        <p class="text-gray-600">Adjust template styles, column proportions, and content density to match your personal preferences.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-blue-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Multiple Formats Support</h3>
+                        <p class="text-gray-600">Work with PDF, Word documents, PowerPoint presentations, and more to create consistent Cornell notes.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-blue-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Privacy Focused</h3>
+                        <p class="text-gray-600">Your documents are processed securely and never stored permanently on our servers.</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-blue-600 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Image Support</h3>
+                        <p class="text-gray-600">Retain diagrams, charts, and images from your original documents within your Cornell notes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+                
+                <div class="space-y-6">
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-2">What file types can I convert to Cornell notes?</h3>
+                        <p class="text-gray-600">Our tool supports a wide range of document formats, including PDF, DOCX, DOC, PPT, PPTX, TXT, and more. If you have a specific format not listed, you can contact us for support.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-2">How accurate is the AI-powered conversion?</h3>
+                        <p class="text-gray-600">Our system uses advanced natural language processing to identify key concepts, create relevant questions, and generate summaries. While generally very accurate, you can always edit the notes after conversion to refine the content.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-2">Can I customize the Cornell note template?</h3>
+                        <p class="text-gray-600">Yes! You can adjust the column proportions, colors, spacing, and other visual elements to match your preferences. We offer several pre-designed templates as well as custom options.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-2">Is there a limit to the document size I can convert?</h3>
+                        <p class="text-gray-600">Free users can convert documents up to 20 pages. For larger documents, we offer premium plans with increased limits and additional features.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-2">How can I save or share my Cornell notes?</h3>
+                        <p class="text-gray-600">After conversion, you can download your notes as PDF, share them via email, or print them directly. Premium users can also access cloud storage options for easy synchronization across devices.</p>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-2">Is my data secure and private?</h3>
+                        <p class="text-gray-600">Absolutely. We process your documents securely and don't store them permanently. Your uploads are automatically deleted after processing, and we never share your content with third parties.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-6">Ready to Transform Your Study Materials?</h2>
+                <p class="text-xl opacity-90 mb-8">Turn any document into effective Cornell notes with just a few clicks. Improve your learning, retention, and study efficiency today.</p>
+                <a href="#upload" class="bg-white text-blue-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-100 transition shadow-lg inline-block">Start Converting Now</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-300 py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <h3 class="text-white text-lg font-semibold mb-4">Cornell Notes Generator</h3>
+                        <p class="text-gray-400 text-sm">Transform any document into effective Cornell notes in seconds. Improve your study efficiency with our powerful conversion tool.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-white text-md font-medium mb-4">Quick Links</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="hover:text-white transition">Home</a></li>
+                            <li><a href="#how-it-works" class="hover:text-white transition">How It Works</a></li>
+                            <li><a href="#about-cornell" class="hover:text-white transition">About Cornell Notes</a></li>
+                            <li><a href="#upload" class="hover:text-white transition">Upload Document</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-white text-md font-medium mb-4">Resources</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                            <li><a href="#" class="hover:text-white transition">Tutorials</a></li>
+                            <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                            <li><a href="#" class="hover:text-white transition">Support</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-white text-md font-medium mb-4">Contact</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                <a href="mailto:support@cornellnotes.app" class="hover:text-white transition">support@cornellnotes.app</a>
+                            </li>
+                        </ul>
+                        <div class="mt-4">
+                            <h4 class="text-white text-md font-medium mb-2">Follow Us</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="text-gray-400 hover:text-white transition">
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-white transition">
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"></path>
+                                    </svg>
+                                </a>
+                                <a href="#" class="text-gray-400 hover:text-white transition">
+                                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-700 mt-12 pt-8 text-sm text-gray-400 text-center">
+                    <p>&copy; 2025 Cornell Notes Generator. All rights reserved.</p>
+                    <div class="mt-2 flex justify-center space-x-6">
+                        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                        <a href="#" class="hover:text-white transition">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Basic JavaScript for upload functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate drop zone functionality
+            const dropZone = document.querySelector('.drop-zone');
+            
+            if (dropZone) {
+                dropZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('active');
+                });
+                
+                dropZone.addEventListener('dragleave', function() {
+                    this.classList.remove('active');
+                });
+                
+                dropZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('active');
+                    // In a real application, here you would handle the file upload
+                    alert('File upload functionality would be implemented here in a complete application.');
+                });
+                
+                // Handle button click
+                const browseButton = dropZone.querySelector('button');
+                browseButton.addEventListener('click', function() {
+                    // In a real application, this would trigger file input
+                    alert('File selection would be implemented here in a complete application.');
+                });
+            }
+            
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

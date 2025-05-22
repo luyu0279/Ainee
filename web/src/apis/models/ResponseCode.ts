@@ -1,0 +1,15 @@
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+export enum ResponseCode {
+    SUCCESS = 'SUCCESS',
+    FAILED = 'FAILED',
+    FILE_NOT_FOUND = 'FILE_NOT_FOUND',
+    FILE_TYPE_NOT_SUPPORTED = 'FILE_TYPE_NOT_SUPPORTED',
+    FILE_SIZE_TOO_LARGE = 'FILE_SIZE_TOO_LARGE',
+    MISSING_DEVICE_ID = 'MISSING_DEVICE_ID',
+    FACE_CHECK_FAILED = 'FACE_CHECK_FAILED',
+    SINGLE_AUDIO_EXCEEDS_DURATION_LIMIT = 'SINGLE_AUDIO_EXCEEDS_DURATION_LIMIT',
+    TOTAL_AUDIO_EXCEEDS_DURATION_LIMIT = 'TOTAL_AUDIO_EXCEEDS_DURATION_LIMIT',
+}

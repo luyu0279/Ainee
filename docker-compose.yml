@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    # command: supervisord # This is already handled by the Dockerfile CMD
+    volumes:
+      # Optional: Uncomment the line below to mount your local code for development
+      # - .:/app 
+    environment:
+      # Example 1: Directly set an environment variable
+      - MY_VARIABLE=my_value
+
+      # Example 2: Reference an environment variable from the host machine
+      # - ANOTHER_VARIABLE=${HOST_VARIABLE}
+
+      # Example 3: Reference an environment variable from a .env file (create a .env file in the same directory)
+      # - DB_HOST=${DB_HOST}
+
+      # Example 4: Set a default value if the variable is not found
+      # - API_KEY=${API_KEY:-default_api_key}

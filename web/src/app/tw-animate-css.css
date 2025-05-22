@@ -1,0 +1,148 @@
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) }
+  50% { transform: translateY(-20px) }
+  100% { transform: translateY(0px) }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0% { text-shadow: 0 0 5px rgba(105, 218, 0, 0.2); }
+  50% { text-shadow: 0 0 20px rgba(105, 218, 0, 0.4); }
+  100% { text-shadow: 0 0 5px rgba(105, 218, 0, 0.2); }
+}
+
+.animate-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid;
+  width: 0;
+  animation: 
+    typing 2.5s steps(30, end) forwards,
+    blink 1s step-end infinite,
+    glow 3s ease-in-out infinite;
+  background: linear-gradient(120deg, #69DA00, #5BC500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.animate-float:hover {
+  transform: scale(1.05);
+}
+
+.animate-fade-in-up {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.card-3d:hover {
+  transform: rotateY(15deg) rotateX(15deg) scale(1.02);
+  box-shadow: 0 10px 30px rgba(105, 218, 0, 0.1);
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, rgba(105, 218, 0, 0.15) 0%, rgba(0, 0, 0, 0) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-bg::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(105, 218, 0, 0.15) 0%, rgba(0, 0, 0, 0) 60%);
+  animation: rotate 30s linear infinite;
+  opacity: 0.8;
+}
+
+.gradient-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2369DA00' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+  animation: particles 20s linear infinite;
+}
+
+@keyframes particles {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shine {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes border-flow {
+  0% { border-color: rgba(105, 218, 0, 0.3); }
+  50% { border-color: rgba(105, 218, 0, 0.8); }
+  100% { border-color: rgba(105, 218, 0, 0.3); }
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  animation: border-flow 3s ease-in-out infinite;
+  border-width: 2px;
+}
+
+.card-3d:hover {
+  transform: rotateY(15deg) rotateX(15deg) scale(1.02) translateZ(20px);
+  box-shadow: 
+    0 10px 30px rgba(105, 218, 0, 0.1),
+    0 0 20px rgba(105, 218, 0, 0.2);
+}

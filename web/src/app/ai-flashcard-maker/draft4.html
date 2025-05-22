@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashAI - Free AI Flashcard Maker | No Login Required</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: #333;
+            background-color: #f8fafc;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            border-radius: 5px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4f46e5;
+            transition: width 0.5s ease;
+        }
+        
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #4f46e5;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        
+        .flashcard {
+            perspective: 1000px;
+            height: 200px;
+            cursor: pointer;
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .flashcard-front {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .flashcard-back {
+            background-color: #f8fafc;
+            border: 1px solid #e5e7eb;
+            transform: rotateY(180deg);
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tag-pdf {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .tag-docx {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .tag-ppt {
+            background-color: #ffedd5;
+            color: #c2410c;
+        }
+        
+        .tag-text {
+            background-color: #ecfdf5;
+            color: #065f46;
+        }
+        
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+        }
+        
+        .checkbox-wrapper input {
+            margin-right: 0.5rem;
+        }
+        
+        .edit-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .edit-modal {
+            width: 90%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .study-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem;
+            background-color: #dcfce7;
+            color: #166534;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            transform: translateY(100px);
+            opacity: 0;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #374151;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .demo-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #f59e0b;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0 8px 0 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="my-6 text-center">
+            <h1 class="text-4xl font-bold text-indigo-600">FlashAI</h1>
+            <p class="text-lg text-gray-600 mt-2">Free AI Flashcard Maker | No Login Required</p>
+            <div class="flex justify-center mt-3">
+                <span class="badge badge-success mr-2"><i class="fas fa-check mr-1"></i> 100% Free</span>
+                <span class="badge badge-success mr-2"><i class="fas fa-check mr-1"></i> No Login</span>
+                <span class="badge badge-success"><i class="fas fa-check mr-1"></i> AI-Powered</span>
+            </div>
+            <div class="bg-yellow-100 text-yellow-800 rounded-lg p-3 mt-4 inline-block">
+                <i class="fas fa-info-circle mr-2"></i> 
+                <span class="font-semibold">Demo Mode:</span> This is a demonstration of functionality. All processes are simulated.
+            </div>
+        </header>
+        
+        <main class="space-y-8">
+            <!-- Step 1: Upload Section -->
+            <section id="upload-section" class="card p-6">
+                <h2 class="section-title flex items-center">
+                    <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span>
+                    Upload Your Study Material
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold mb-2">Upload Files</h3>
+                        <div id="upload-area" class="upload-area">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                            <p>Drag & drop files here or <span class="text-indigo-600 cursor-pointer">browse</span></p>
+                            <p class="text-sm text-gray-500 mt-2">Supports PDF, DOCX, PPT, JPG, PNG, TXT</p>
+                            <input type="file" id="file-input" class="hidden" multiple>
+                        </div>
+                        
+                        <div id="selected-files" class="mt-4 hidden">
+                            <h4 class="font-semibold mb-2">Selected Files:</h4>
+                            <ul id="file-list" class="space-y-2"></ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-semibold mb-2">Paste Text</h3>
+                        <textarea id="text-input" class="w-full h-40 border border-gray-300 rounded-lg p-3" placeholder="Enter or paste your text here..."></textarea>
+                        
+                        <h3 class="font-semibold mt-4 mb-2">Or Try Sample Topics:</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="sample-topic btn btn-secondary">Biology</button>
+                            <button class="sample-topic btn btn-secondary">World History</button>
+                            <button class="sample-topic btn btn-secondary">Chemistry</button>
+                            <button class="sample-topic btn btn-secondary">Spanish Vocab</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex justify-center">
+                    <button id="generate-btn" class="btn btn-primary px-6 py-3">
+                        <i class="fas fa-magic mr-2"></i> Generate Flashcards
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Step 2: Processing Section -->
+            <section id="processing-section" class="card p-6 hidden">
+                <h2 class="section-title flex items-center">
+                    <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span>
+                    AI is Processing Your Content
+                </h2>
+                
+                <div class="relative">
+                    <div class="demo-tag">Demo</div>
+                    <div class="text-center mb-6">
+                        <i class="fas fa-robot text-5xl text-indigo-500 mb-3"></i>
+                        <h3 class="text-xl font-semibold" id="processing-status">Analyzing content...</h3>
+                        <p class="text-gray-600" id="processing-substatus">This typically takes 10-30 seconds</p>
+                    </div>
+                    
+                    <div class="progress-bar mb-6">
+                        <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                    
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold mb-2">AI Analysis Steps:</h4>
+                        <ul id="analysis-steps" class="space-y-2">
+                            <li class="flex items-center"><i class="fas fa-spinner fa-spin mr-2 text-indigo-500"></i> Extracting key concepts...</li>
+                            <li class="flex items-center text-gray-400">Formulating questions and answers...</li>
+                            <li class="flex items-center text-gray-400">Creating balanced flashcard pairs...</li>
+                            <li class="flex items-center text-gray-400">Optimizing for learning efficiency...</li>
+                            <li class="flex items-center text-gray-400">Finalizing flashcard deck...</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button id="cancel-processing-btn" class="btn btn-secondary">
+                            <i class="fas fa-times mr-1"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Step 3: Generated Flashcards -->
+            <section id="flashcards-section" class="card p-6 hidden">
+                <h2 class="section-title flex items-center">
+                    <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center mr-2">3</span>
+                    Your AI-Generated Flashcards
+                </h2>
+                
+                <div class="relative">
+                    <div class="demo-tag">Demo</div>
+                
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <span id="file-name" class="font-semibold">Biology_Chapter5.pdf</span>
+                            <span class="tag tag-pdf">PDF</span>
+                            <span id="card-count" class="tag bg-gray-100 text-gray-800">15 cards</span>
+                        </div>
+                        
+                        <div class="flex">
+                            <button id="add-card-btn" class="btn btn-secondary mr-2">
+                                <i class="fas fa-plus mr-1"></i> Add Card
+                            </button>
+                            <button id="start-study-btn" class="btn btn-primary">
+                                <i class="fas fa-book-open mr-1"></i> Start Studying
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-auto" style="max-height: 500px;">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th class="py-2 px-4 text-left">#</th>
+                                    <th class="py-2 px-4 text-left">Question</th>
+                                    <th class="py-2 px-4 text-left">Answer</th>
+                                    <th class="py-2 px-4 text-left">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="flashcards-table">
+                                <!-- Flashcards will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-between">
+                        <button id="back-to-upload-btn" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left mr-1"></i> Back to Upload
+                        </button>
+                        
+                        <div class="flex">
+                            <div class="tooltip mr-2">
+                                <button id="export-pdf-btn" class="btn btn-secondary">
+                                    <i class="fas fa-file-pdf mr-1"></i> Export PDF
+                                </button>
+                                <span class="tooltip-text">Export your flashcards as PDF for printing</span>
+                            </div>
+                            
+                            <div class="tooltip mr-2">
+                                <button id="export-anki-btn" class="btn btn-secondary">
+                                    <i class="fas fa-download mr-1"></i> Export Anki
+                                </button>
+                                <span class="tooltip-text">Export to Anki compatible format</span>
+                            </div>
+                            
+                            <div class="tooltip">
+                                <button id="export-csv-btn" class="btn btn-secondary">
+                                    <i class="fas fa-file-csv mr-1"></i> Export CSV
+                                </button>
+                                <span class="tooltip-text">Export as CSV spreadsheet</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Step 4: Study Mode -->
+            <section id="study-section" class="card p-6 hidden">
+                <h2 class="section-title flex items-center">
+                    <span class="bg-indigo-100 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center mr-2">4</span>
+                    Study Mode
+                </h2>
+                
+                <div class="relative">
+                    <div class="demo-tag">Demo</div>
+                
+                    <div class="flex flex-col md:flex-row gap-6">
+                        <div class="md:w-3/4">
+                            <div class="flex justify-between items-center mb-4">
+                                <div>
+                                    <span id="study-progress" class="tag bg-indigo-100 text-indigo-800">Card 1 of 15</span>
+                                </div>
+                                
+                                <div class="flex">
+                                    <button id="shuffle-btn" class="btn btn-secondary mr-2">
+                                        <i class="fas fa-random"></i>
+                                    </button>
+                                    <button id="exit-study-btn" class="btn btn-secondary">
+                                        <i class="fas fa-times mr-1"></i> Exit Study
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div id="study-card" class="flashcard">
+                                <div class="flashcard-inner">
+                                    <div class="flashcard-front">
+                                        <h3 class="text-lg font-semibold text-center mb-4">What is the primary function of mitochondria?</h3>
+                                        <p class="text-center text-gray-500">Click to reveal answer</p>
+                                    </div>
+                                    <div class="flashcard-back">
+                                        <h3 class="text-lg font-semibold text-center mb-4">Answer:</h3>
+                                        <p class="text-center">Mitochondria are the powerhouse of the cell, responsible for generating ATP through cellular respiration, providing energy for cellular processes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="study-controls mt-4">
+                                <button id="prev-card-btn" class="btn btn-secondary" disabled>
+                                    <i class="fas fa-arrow-left mr-1"></i> Previous
+                                </button>
+                                
+                                <div>
+                                    <button id="know-btn" class="btn btn-secondary bg-green-100 text-green-800 mr-2 hidden">
+                                        <i class="fas fa-check mr-1"></i> Know
+                                    </button>
+                                    <button id="review-btn" class="btn btn-secondary bg-yellow-100 text-yellow-800 hidden">
+                                        <i class="fas fa-sync mr-1"></i> Review Again
+                                    </button>
+                                </div>
+                                
+                                <button id="next-card-btn" class="btn btn-secondary">
+                                    Next <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="text-center mt-4 text-sm text-gray-500">
+                                <p><i class="fas fa-keyboard mr-1"></i> Press <kbd class="px-2 py-1 bg-gray-100 rounded">Space</kbd> to flip card, <kbd class="px-2 py-1 bg-gray-100 rounded">←</kbd> previous, <kbd class="px-2 py-1 bg-gray-100 rounded">→</kbd> next</p>
+                            </div>
+                        </div>
+                        
+                        <div class="md:w-1/4">
+                            <h3 class="font-semibold mb-3">Study Settings</h3>
+                            
+                            <div class="space-y-3">
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="autoflip-checkbox" checked>
+                                    <label for="autoflip-checkbox">Auto-flip after</label>
+                                    <select id="autoflip-time" class="ml-2 border border-gray-300 rounded">
+                                        <option value="5">5s</option>
+                                        <option value="10" selected>10s</option>
+                                        <option value="15">15s</option>
+                                        <option value="20">20s</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="spaced-checkbox" checked>
+                                    <label for="spaced-checkbox">Use spaced repetition</label>
+                                </div>
+                                
+                                <div class="checkbox-wrapper">
+                                    <input type="checkbox" id="hide-easy-checkbox">
+                                    <label for="hide-easy-checkbox">Hide mastered cards</label>
+                                </div>
+                            </div>
+                            
+                            <h3 class="font-semibold mb-3 mt-6">Progress</h3>
+                            <div class="progress-bar mb-2">
+                                <div id="study-progress-bar" class="progress-bar-fill" style="width: 6.66%"></div>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-600">
+                                <span>Mastered: <span id="mastered-count">0</span></span>
+                                <span>To Review: <span id="review-count">15</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="mt-8 text-center text-gray-500 text-sm">
+            <p>FlashAI - Free AI Flashcard Maker | No Login Required</p>
+            <p class="mt-2">This is a demonstration of functionality using simulated data.</p>
+        </footer>
+    </div>
+    
+    <!-- Edit Flashcard Modal -->
+    <div id="edit-modal" class="edit-overlay hidden">
+        <div class="edit-modal">
+            <h3 class="text-xl font-semibold mb-4">Edit Flashcard</h3>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Question</label>
+                <textarea id="edit-question" class="w-full border border-gray-300 rounded-lg p-3" rows="3"></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Answer</label>
+                <textarea id="edit-answer" class="w-full border border-gray-300 rounded-lg p-3" rows="5"></textarea>
+            </div>
+            
+            <div class="flex justify-end">
+                <button id="cancel-edit-btn" class="btn btn-secondary mr-2">Cancel</button>
+                <button id="save-edit-btn" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="notification-text">Flashcards successfully generated!</span>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for demonstration
+        const sampleFlashcards = [
+            { 
+                id: 1, 
+                question: "What is the primary function of mitochondria?", 
+                answer: "Mitochondria are the powerhouse of the cell, responsible for generating ATP through cellular respiration, providing energy for cellular processes." 
+            },
+            { 
+                id: 2, 
+                question: "What are the three main stages of cellular respiration?", 
+                answer: "The three main stages are glycolysis, the Krebs cycle (citric acid cycle), and the electron transport chain." 
+            },
+            { 
+                id: 3, 
+                question: "Define osmosis and explain its importance in cellular function.", 
+                answer: "Osmosis is the passive movement of water molecules across a semipermeable membrane from an area of lower solute concentration to an area of higher solute concentration. It's essential for maintaining cell volume, turgor pressure in plants, and proper fluid balance in organisms." 
+            },
+            { 
+                id: 4, 
+                question: "What is the difference between active and passive transport?", 
+                answer: "Active transport requires energy (ATP) to move molecules against their concentration gradient, while passive transport doesn't require energy as molecules move from high to low concentration." 
+            },
+            { 
+                id: 5, 
+                question: "Explain the structure and function of DNA.", 
+                answer: "DNA (deoxyribonucleic acid) is a double-helix structure composed of nucleotides containing deoxyribose sugar, phosphate groups, and nitrogenous bases (A, T, G, C). It stores genetic information, replicates during cell division, and provides instructions for protein synthesis." 
+            },
+            { 
+                id: 6, 
+                question: "What is the role of enzymes in biochemical reactions?", 
+                answer: "Enzymes are biological catalysts that accelerate chemical reactions by lowering the activation energy without being consumed. They work by binding to specific substrates at their active sites, enabling reactions to occur more rapidly at biological temperatures." 
+            },
+            { 
+                id: 7, 
+                question: "Describe the process of meiosis and its significance.", 
+                answer: "Meiosis is a type of cell division that reduces chromosome number by half, creating four haploid cells. It involves two successive divisions (meiosis I and II) and is essential for sexual reproduction, genetic diversity through crossing over and random assortment, and maintaining chromosome number across generations." 
+            },
+            { 
+                id: 8, 
+                question: "What is photosynthesis and what are its main stages?", 
+                answer: "Photosynthesis is the process by which plants, algae, and some bacteria convert light energy into chemical energy. The main stages are the light-dependent reactions (which capture light energy and produce ATP and NADPH) and the Calvin cycle (which uses ATP and NADPH to fix carbon dioxide into glucose)." 
+            },
+            { 
+                id: 9, 
+                question: "Define homeostasis and provide examples of homeostatic mechanisms.", 
+                answer: "Homeostasis is the maintenance of a stable internal environment despite changes in external conditions. Examples include thermoregulation (body temperature), osmoregulation (water balance), blood glucose regulation, and pH balance in the blood." 
+            },
+            { 
+                id: 10, 
+                question: "What is the central dogma of molecular biology?", 
+                answer: "The central dogma describes the flow of genetic information: DNA is transcribed into RNA, which is then translated into proteins. This unidirectional flow (DNA → RNA → protein) is fundamental to understanding how genotypes lead to phenotypes." 
+            },
+            { 
+                id: 11, 
+                question: "Explain the process of natural selection.", 
+                answer: "Natural selection is a mechanism of evolution where organisms with favorable traits that help them adapt to their environment have a better chance of survival and reproduction, passing these traits to offspring. Over time, this leads to increased frequency of beneficial traits in a population." 
+            },
+            { 
+                id: 12, 
+                question: "What is the function of the endoplasmic reticulum?", 
+                answer: "The endoplasmic reticulum (ER) comes in two types: rough ER (with ribosomes) synthesizes proteins for secretion and membrane production, while smooth ER functions in lipid synthesis, detoxification, and calcium storage." 
+            },
+            { 
+                id: 13, 
+                question: "Compare and contrast prokaryotic and eukaryotic cells.", 
+                answer: "Prokaryotic cells lack a nucleus and membrane-bound organelles, have circular DNA, are typically smaller, and include bacteria and archaea. Eukaryotic cells have a nucleus, membrane-bound organelles, linear DNA organized into chromosomes, are larger, and include plants, animals, fungi, and protists." 
+            },
+            { 
+                id: 14, 
+                question: "What are the main components of blood and their functions?", 
+                answer: "Blood consists of plasma (carries nutrients, hormones, and waste), red blood cells (transport oxygen), white blood cells (immune defense), and platelets (blood clotting). Together they maintain homeostasis, transport substances, and protect against disease." 
+            },
+            { 
+                id: 15, 
+                question: "Describe the human digestive system and the function of each major organ.", 
+                answer: "The digestive system includes: mouth (mechanical breakdown, amylase), esophagus (transport), stomach (acid breakdown, protein digestion), small intestine (absorption of nutrients), large intestine (water absorption, waste formation), liver (bile production, detoxification), pancreas (digestive enzymes), and gallbladder (bile storage)." 
+            }
+        ];
+        
+        // Sample topics data
+        const sampleTopics = {
+            "Biology": sampleFlashcards,
+            "World History": [
+                { id: 1, question: "When did World War II begin and end?", answer: "World War II began on September 1, 1939, with Germany's invasion of Poland and ended on September 2, 1945, with Japan's formal surrender." },
+                { id: 2, question: "What was the Renaissance?", answer: "The Renaissance was a period of European cultural, artistic, political, and scientific 'rebirth' after the Middle Ages, spanning roughly from the 14th to the 17th century." },
+                // More history flashcards would be here
+            ],
+            "Chemistry": [
+                { id: 1, question: "What is the periodic table?", answer: "The periodic table is a tabular arrangement of chemical elements, organized by atomic number, electron configuration, and recurring chemical properties." },
+                { id: 2, question: "Define an acid and a base.", answer: "An acid is a substance that donates hydrogen ions (H+) in solution. A base is a substance that accepts hydrogen ions or donates hydroxide ions (OH-) in solution." },
+                // More chemistry flashcards would be here
+            ],
+            "Spanish Vocab": [
+                { id: 1, question: "¿Cómo se dice 'hello' en español?", answer: "Hola" },
+                { id: 2, question: "¿Cómo se dice 'thank you' en español?", answer: "Gracias" },
+                // More Spanish vocabulary flashcards would be here
+            ]
+        };
+        
+        // Current state
+        let currentFlashcards = [];
+        let currentCardIndex = 0;
+        let cardStatus = []; // 0: not seen, 1: reviewing, 2: mastered
+        let editingCardId = null;
+        
+        // DOM Elements
+        const uploadSection = document.getElementById('upload-section');
+        const processingSection = document.getElementById('processing-section');
+        const flashcardsSection = document.getElementById('flashcards-section');
+        const studySection = document.getElementById('study-section');
+        
+        const uploadArea = document.getElementById('upload-area');
+        const fileInput = document.getElementById('file-input');
+        const selectedFiles = document.getElementById('selected-files');
+        const fileList = document.getElementById('file-list');
+        const textInput = document.getElementById('text-input');
+        const sampleTopicButtons = document.querySelectorAll('.sample-topic');
+        
+        const generateBtn = document.getElementById('generate-btn');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const processingStatus = document.getElementById('processing-status');
+        const processingSubstatus = document.getElementById('processing-substatus');
+        const analysisSteps = document.getElementById('analysis-steps');
+        const cancelProcessingBtn = document.getElementById('cancel-processing-btn');
+        
+        const fileNameEl = document.getElementById('file-name');
+        const cardCountEl = document.getElementById('card-count');
+        const flashcardsTable = document.getElementById('flashcards-table');
+        const addCardBtn = document.getElementById('add-card-btn');
+        const startStudyBtn = document.getElementById('start-study-btn');
+        const backToUploadBtn = document.getElementById('back-to-upload-btn');
+        const exportPdfBtn = document.getElementById('export-pdf-btn');
+        const exportAnkiBtn = document.getElementById('export-anki-btn');
+        const exportCsvBtn = document.getElementById('export-csv-btn');
+        
+        const studyCard = document.getElementById('study-card');
+        const studyProgress = document.getElementById('study-progress');
+        const prevCardBtn = document.getElementById('prev-card-btn');
+        const nextCardBtn = document.getElementById('next-card-btn');
+        const knowBtn = document.getElementById('know-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const exitStudyBtn = document.getElementById('exit-study-btn');
+        
+        const autoflipCheckbox = document.getElementById('autoflip-checkbox');
+        const autoflipTime = document.getElementById('autoflip-time');
+        const spacedCheckbox = document.getElementById('spaced-checkbox');
+        const hideEasyCheckbox = document.getElementById('hide-easy-checkbox');
+        const studyProgressBar = document.getElementById('study-progress-bar');
+        const masteredCount = document.getElementById('mastered-count');
+        const reviewCount = document.getElementById('review-count');
+        
+        const editModal = document.getElementById('edit-modal');
+        const editQuestion = document.getElementById('edit-question');
+        const editAnswer = document.getElementById('edit-answer');
+        const cancelEditBtn = document.getElementById('cancel-edit-btn');
+        const saveEditBtn = document.getElementById('save-edit-btn');
+        
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+        
+        // Initialize
+        function init() {
+            // Upload area events
+            uploadArea.addEventListener('click', () => fileInput.click());
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+            
+            // Buttons
+            generateBtn.addEventListener('click', startGeneratingFlashcards);
+            cancelProcessingBtn.addEventListener('click', cancelProcessing);
+            backToUploadBtn.addEventListener('click', () => {
+                flashcardsSection.classList.add('hidden');
+                uploadSection.classList.remove('hidden');
+            });
+            
+            addCardBtn.addEventListener('click', addNewCard);
+            startStudyBtn.addEventListener('click', startStudyMode);
+            exitStudyBtn.addEventListener('click', exitStudyMode);
+            
+            // Export buttons
+            exportPdfBtn.addEventListener('click', () => showNotification('Flashcards exported as PDF!'));
+            exportAnkiBtn.addEventListener('click', () => showNotification('Flashcards exported for Anki!'));
+            exportCsvBtn.addEventListener('click', () => showNotification('Flashcards exported as CSV!'));
+            
+            // Study mode
+            studyCard.addEventListener('click', flipCard);
+            prevCardBtn.addEventListener('click', previousCard);
+            nextCardBtn.addEventListener('click', nextCard);
+            knowBtn.addEventListener('click', markAsKnown);
+            reviewBtn.addEventListener('click', markForReview);
+            shuffleBtn.addEventListener('click', shuffleCards);
+            
+            // Modal
+            cancelEditBtn.addEventListener('click', closeEditModal);
+            saveEditBtn.addEventListener('click', saveEditedCard);
+            
+            // Sample topics
+            sampleTopicButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const topic = button.textContent;
+                    selectSampleTopic(topic);
+                });
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', handleKeyboardNavigation);
+        }
+        
+        // Handle file upload
+        function handleFiles(files) {
+            if (files.length > 0) {
+                selectedFiles.classList.remove('hidden');
+                fileList.innerHTML = '';
+                
+                Array.from(files).forEach((file, index) => {
+                    const fileType = getFileType(file.name);
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center justify-between';
+                    li.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas fa-file mr-2 text-indigo-500"></i>
+                            <span>${file.name}</span>
+                            <span class="tag tag-${fileType.toLowerCase()} ml-2">${fileType}</span>
+                        </div>
+                        <button class="remove-file-btn text-red-500" data-index="${index}">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    fileList.appendChild(li);
+                });
+                
+                // Add remove file handlers
+                document.querySelectorAll('.remove-file-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const index = e.currentTarget.getAttribute('data-index');
+                        e.currentTarget.parentElement.remove();
+                        if (fileList.children.length === 0) {
+                            selectedFiles.classList.add('hidden');
+                        }
+                    });
+                });
+            }
+        }
+        
+        // Get file type from file name
+        function getFileType(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            switch (extension) {
+                case 'pdf': return 'PDF';
+                case 'docx': case 'doc': return 'DOCX';
+                case 'ppt': case 'pptx': return 'PPT';
+                case 'jpg': case 'jpeg': case 'png': return 'IMG';
+                case 'txt': return 'TEXT';
+                default: return 'DOC';
+            }
+        }
+        
+        // Start generating flashcards
+        function startGeneratingFlashcards() {
+            uploadSection.classList.add('hidden');
+            processingSection.classList.remove('hidden');
+            
+            // Simulate processing
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                
+                progressBarFill.style.width = `${progress}%`;
+                
+                // Update status messages
+                if (progress < 20) {
+                    processingStatus.textContent = 'Analyzing content...';
+                    processingSubstatus.textContent = 'Extracting key concepts';
+                    updateAnalysisSteps(0);
+                } else if (progress < 40) {
+                    processingStatus.textContent = 'Formulating questions...';
+                    processingSubstatus.textContent = 'Creating balanced question-answer pairs';
+                    updateAnalysisSteps(1);
+                } else if (progress < 60) {
+                    processingStatus.textContent = 'Generating flashcards...';
+                    processingSubstatus.textContent = 'Structuring information for optimal learning';
+                    updateAnalysisSteps(2);
+                } else if (progress < 85) {
+                    processingStatus.textContent = 'Optimizing for learning...';
+                    processingSubstatus.textContent = 'Applying spaced repetition principles';
+                    updateAnalysisSteps(3);
+                } else {
+                    processingStatus.textContent = 'Finalizing flashcards...';
+                    processingSubstatus.textContent = 'Almost done!';
+                    updateAnalysisSteps(4);
+                }
+                
+                if (progress === 100) {
+                    clearInterval(interval);
+                    setTimeout(showGeneratedFlashcards, 500);
+                }
+            }, 400);
+        }
+        
+        // Update analysis steps
+        function updateAnalysisSteps(activeStep) {
+            const steps = analysisSteps.querySelectorAll('li');
+            steps.forEach((step, index) => {
+                if (index < activeStep) {
+                    step.innerHTML = `<i class="fas fa-check mr-2 text-green-500"></i> ${step.textContent.substring(step.textContent.indexOf(' ') + 1)}`;
+                    step.classList.remove('text-gray-400');
+                } else if (index === activeStep) {
+                    step.innerHTML = `<i class="fas fa-spinner fa-spin mr-2 text-indigo-500"></i> ${step.textContent.substring(step.textContent.indexOf(' ') + 1)}`;
+                    step.classList.remove('text-gray-400');
+                } else {
+                    step.innerHTML = `<i class="fas fa-circle mr-2 text-gray-300"></i> ${step.textContent.substring(step.textContent.indexOf(' ') + 1)}`;
+                    step.classList.add('text-gray-400');
+                }
+            });
+        }
+        
+        // Cancel processing
+        function cancelProcessing() {
+            processingSection.classList.add('hidden');
+            uploadSection.classList.remove('hidden');
+            progressBarFill.style.width = '0%';
+        }
+        
+        // Show generated flashcards
+        function showGeneratedFlashcards() {
+            processingSection.classList.add('hidden');
+            flashcardsSection.classList.remove('hidden');
+            
+            // Set file info
+            if (fileList.children.length > 0) {
+                const fileName = fileList.querySelector('li span').textContent;
+                fileNameEl.textContent = fileName;
+                const fileType = getFileType(fileName);
+                document.querySelector('#flashcards-section .tag').className = `tag tag-${fileType.toLowerCase()}`;
+                document.querySelector('#flashcards-section .tag').textContent = fileType;
+            } else if (textInput.value.trim()) {
+                fileNameEl.textContent = 'Text Input';
+                document.querySelector('#flashcards-section .tag').className = 'tag tag-text';
+                document.querySelector('#flashcards-section .tag').textContent = 'TEXT';
+            } else {
+                // Use sample data
+                fileNameEl.textContent = 'Biology_Chapter5.pdf';
+                document.querySelector('#flashcards-section .tag').className = 'tag tag-pdf';
+                document.querySelector('#flashcards-section .tag').textContent = 'PDF';
+            }
+            
+            // Set flashcards
+            currentFlashcards = [...sampleFlashcards];
+            cardStatus = Array(currentFlashcards.length).fill(0);
+            
+            cardCountEl.textContent = `${currentFlashcards.length} cards`;
+            renderFlashcardsTable();
+            
+            showNotification('Flashcards successfully generated!');
+        }
+        
+        // Render flashcards table
+        function renderFlashcardsTable() {
+            flashcardsTable.innerHTML = '';
+            
+            currentFlashcards.forEach((card, index) => {
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                tr.innerHTML = `
+                    <td class="py-3 px-4 border-t">${index + 1}</td>
+                    <td class="py-3 px-4 border-t">${truncateText(card.question, 40)}</td>
+                    <td class="py-3 px-4 border-t">${truncateText(card.answer, 60)}</td>
+                    <td class="py-3 px-4 border-t">
+                        <button class="edit-card-btn text-indigo-600 mr-2" data-id="${card.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-card-btn text-red-500" data-id="${card.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                flashcardsTable.appendChild(tr);
+            });
+            
+            // Add edit and delete handlers
+            document.querySelectorAll('.edit-card-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    openEditModal(id);
+                });
+            });
+            
+            document.querySelectorAll('.delete-card-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    deleteCard(id);
+                });
+            });
+        }
+        
+        // Truncate text
+        function truncateText(text, maxLength) {
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+        
+        // Add new card
+        function addNewCard() {
+            openEditModal(null);
+        }
+        
+        // Open edit modal
+        function openEditModal(id) {
+            editingCardId = id;
+            
+            if (id !== null) {
+                const card = currentFlashcards.find(card => card.id === id);
+                editQuestion.value = card.question;
+                editAnswer.value = card.answer;
+            } else {
+                editQuestion.value = '';
+                editAnswer.value = '';
+            }
+            
+            editModal.classList.remove('hidden');
+        }
+        
+        // Close edit modal
+        function closeEditModal() {
+            editModal.classList.add('hidden');
+        }
+        
+        // Save edited card
+        function saveEditedCard() {
+            if (editQuestion.value.trim() === '' || editAnswer.value.trim() === '') {
+                return;
+            }
+            
+            if (editingCardId !== null) {
+                // Update existing card
+                const index = currentFlashcards.findIndex(card => card.id === editingCardId);
+                if (index !== -1) {
+                    currentFlashcards[index].question = editQuestion.value.trim();
+                    currentFlashcards[index].answer = editAnswer.value.trim();
+                }
+            } else {
+                // Add new card
+                const newId = Math.max(...currentFlashcards.map(card => card.id), 0) + 1;
+                currentFlashcards.push({
+                    id: newId,
+                    question: editQuestion.value.trim(),
+                    answer: editAnswer.value.trim()
+                });
+                cardStatus.push(0);
+            }
+            
+            renderFlashcardsTable();
+            cardCountEl.textContent = `${currentFlashcards.length} cards`;
+            closeEditModal();
+            
+            showNotification(editingCardId !== null ? 'Flashcard updated successfully!' : 'New flashcard added successfully!');
+        }
+        
+        // Delete card
+        function deleteCard(id) {
+            const index = currentFlashcards.findIndex(card => card.id === id);
+            if (index !== -1) {
+                currentFlashcards.splice(index, 1);
+                cardStatus.splice(index, 1);
+                renderFlashcardsTable();
+                cardCountEl.textContent = `${currentFlashcards.length} cards`;
+                showNotification('Flashcard deleted successfully!');
+            }
+        }
+        
+        // Start study mode
+        function startStudyMode() {
+            flashcardsSection.classList.add('hidden');
+            studySection.classList.remove('hidden');
+            
+            currentCardIndex = 0;
+            updateStudyCard();
+            updateStudyControls();
+        }
+        
+        // Update study card
+        function updateStudyCard() {
+            const card = currentFlashcards[currentCardIndex];
+            const front = studyCard.querySelector('.flashcard-front');
+            const back = studyCard.querySelector('.flashcard-back');
+            
+            front.innerHTML = `
+                <h3 class="text-lg font-semibold text-center mb-4">${card.question}</h3>
+                <p class="text-center text-gray-500">Click to reveal answer</p>
+            `;
+            
+            back.innerHTML = `
+                <h3 class="text-lg font-semibold text-center mb-4">Answer:</h3>
+                <p class="text-center">${card.answer}</p>
+            `;
+            
+            // Ensure card is showing front side
+            studyCard.classList.remove('flipped');
+            
+            // Update progress
+            studyProgress.textContent = `Card ${currentCardIndex + 1} of ${currentFlashcards.length}`;
+            studyProgressBar.style.width = `${((currentCardIndex + 1) / currentFlashcards.length) * 100}%`;
+            
+            // Auto-flip timer
+            if (autoflipCheckbox.checked) {
+                clearTimeout(window.autoFlipTimer);
+                window.autoFlipTimer = setTimeout(() => {
+                    if (!studyCard.classList.contains('flipped')) {
+                        flipCard();
+                    }
+                }, parseInt(autoflipTime.value) * 1000);
+            }
+        }
+        
+        // Update study controls
+        function updateStudyControls() {
+            prevCardBtn.disabled = currentCardIndex === 0;
+            nextCardBtn.disabled = currentCardIndex === currentFlashcards.length - 1;
+            
+            // Show/hide know/review buttons when card is flipped
+            knowBtn.classList.toggle('hidden', !studyCard.classList.contains('flipped'));
+            reviewBtn.classList.toggle('hidden', !studyCard.classList.contains('flipped'));
+        }
+        
+        // Flip card
+        function flipCard() {
+            studyCard.classList.toggle('flipped');
+            updateStudyControls();
+        }
+        
+        // Previous card
+        function previousCard() {
+            if (currentCardIndex > 0) {
+                currentCardIndex--;
+                updateStudyCard();
+                updateStudyControls();
+            }
+        }
+        
+        // Next card
+        function nextCard() {
+            if (currentCardIndex < currentFlashcards.length - 1) {
+                currentCardIndex++;
+                updateStudyCard();
+                updateStudyControls();
+            }
+        }
+        
+        // Mark card as known
+        function markAsKnown() {
+            cardStatus[currentCardIndex] = 2;
+            masteredCount.textContent = cardStatus.filter(status => status === 2).length;
+            reviewCount.textContent = currentFlashcards.length - parseInt(masteredCount.textContent);
+            
+            // Move to next card or end
+            if (currentCardIndex < currentFlashcards.length - 1) {
+                nextCard();
+            } else {
+                showNotification('Congratulations! You have reviewed all flashcards.');
+            }
+        }
+        
+        // Mark card for review
+        function markForReview() {
+            cardStatus[currentCardIndex] = 1;
+            
+            // Move to next card or end
+            if (currentCardIndex < currentFlashcards.length - 1) {
+                nextCard();
+            } else {
+                showNotification('Congratulations! You have reviewed all flashcards.');
+            }
+        }
+        
+        // Shuffle cards
+        function shuffleCards() {
+            // Create array of indices and shuffle them
+            let indices = Array.from(Array(currentFlashcards.length).keys());
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            
+            // Reorder the flashcards and status arrays
+            const newFlashcards = indices.map(i => currentFlashcards[i]);
+            const newStatus = indices.map(i => cardStatus[i]);
+            
+            currentFlashcards = newFlashcards;
+            cardStatus = newStatus;
+            
+            currentCardIndex = 0;
+            updateStudyCard();
+            updateStudyControls();
+            
+            showNotification('Flashcards have been shuffled!');
+        }
+        
+        // Exit study mode
+        function exitStudyMode() {
+            studySection.classList.add('hidden');
+            flashcardsSection.classList.remove('hidden');
+            
+            clearTimeout(window.autoFlipTimer);
+        }
+        
+        // Select sample topic
+        function selectSampleTopic(topic) {
+            textInput.value = `${topic} Sample Material\n\nThis is sample content that will be used to generate flashcards about ${topic.toLowerCase()}.`;
+            
+            showNotification(`${topic} sample selected! Click Generate to create flashcards.`);
+        }
+        
+        // Handle keyboard navigation
+        function handleKeyboardNavigation(e) {
+            if (studySection.classList.contains('hidden')) return;
+            
+            switch (e.key) {
+                case ' ': // Space to flip card
+                    flipCard();
+                    e.preventDefault();
+                    break;
+                case 'ArrowLeft': // Left arrow for previous card
+                    if (!prevCardBtn.disabled) previousCard();
+                    break;
+                case 'ArrowRight': // Right arrow for next card
+                    if (!nextCardBtn.disabled) nextCard();
+                    break;
+            }
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Initialize when page is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

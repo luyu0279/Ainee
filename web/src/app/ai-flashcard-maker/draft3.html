@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlashAI - Free AI Flashcard Generator | No Login Required</title>
+    <meta name="description" content="Generate high-quality flashcards instantly with AI. No login required. 100% free. Upload PDFs, PPT, text, or images.">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: #333;
+            background-color: #f8fafc;
+        }
+        
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .upload-area {
+            border: 2px dashed #ccd0d5;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #4f46e5;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        
+        .flashcard {
+            perspective: 1000px;
+            height: 280px;
+            margin: 15px 0;
+        }
+        
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .flashcard-front {
+            background-color: white;
+        }
+        
+        .flashcard-back {
+            background-color: #f3f4f6;
+            transform: rotateY(180deg);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .progress-value {
+            height: 100%;
+            border-radius: 4px;
+            background-color: #4f46e5;
+            transition: width 0.5s ease;
+        }
+        
+        .sample-topic {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sample-topic:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-button {
+            position: relative;
+            padding-bottom: 8px;
+        }
+        
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #4f46e5;
+        }
+        
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #4338ca;
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-1px);
+        }
+        
+        .editable {
+            border: 1px solid transparent;
+            padding: 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .editable:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        
+        /* Specific animations for the app states */
+        .app-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .app-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .typing-indicator::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Custom styling for checkboxes and other form elements */
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        
+        .custom-checkbox.checked {
+            background-color: #4f46e5;
+            border-color: #4f46e5;
+        }
+        
+        .custom-checkbox.checked i {
+            color: white;
+            display: block;
+        }
+        
+        .custom-checkbox i {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container px-4 py-8">
+        <!-- Header -->
+        <header class="mb-10">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <h1 class="text-3xl font-bold text-indigo-600">FlashAI</h1>
+                    <span class="ml-3 px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full">100% Free</span>
+                </div>
+                <div class="text-gray-500 text-sm">No login required • AI-powered</div>
+            </div>
+        </header>
+
+        <!-- Upload Section -->
+        <section id="uploadSection" class="app-section active">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Create AI Flashcards Instantly</h2>
+                <p class="text-xl text-gray-600">Upload your study material or paste text to generate flashcards</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <!-- File Upload -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4">Upload Files</h3>
+                    <p class="text-gray-600 mb-4">Supported formats: PDF, PPT, DOCX, JPG, PNG, TXT</p>
+                    
+                    <div id="uploadArea" class="upload-area p-8 text-center mb-4">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                        <p class="mb-3">Drag & drop files here</p>
+                        <p class="text-gray-500 text-sm">or</p>
+                        <button id="browseButton" class="mt-3 px-4 py-2 bg-indigo-50 text-indigo-600 rounded-lg hover:bg-indigo-100 transition">Browse files</button>
+                        <input type="file" id="fileInput" class="hidden" multiple accept=".pdf,.ppt,.pptx,.doc,.docx,.jpg,.jpeg,.png,.txt">
+                    </div>
+                    
+                    <div id="selectedFiles" class="mt-4">
+                        <h4 class="font-medium mb-2">Selected Files:</h4>
+                        <div id="fileList" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <!-- Text Input -->
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4">Paste Text</h3>
+                    <textarea id="textInput" class="w-full h-40 p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none" placeholder="Enter or paste any text to generate flashcards"></textarea>
+
+                    <h3 class="text-xl font-semibold mt-6 mb-4">Or try one of these sample topics:</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="sample-topic bg-green-50 p-3 rounded-lg border border-green-100" data-topic="biology">
+                            <div class="font-medium text-green-800">Biology</div>
+                            <div class="text-sm text-green-600">Cell structure & function</div>
+                        </div>
+                        <div class="sample-topic bg-blue-50 p-3 rounded-lg border border-blue-100" data-topic="history">
+                            <div class="font-medium text-blue-800">History</div>
+                            <div class="text-sm text-blue-600">World War II timeline</div>
+                        </div>
+                        <div class="sample-topic bg-yellow-50 p-3 rounded-lg border border-yellow-100" data-topic="physics">
+                            <div class="font-medium text-yellow-800">Physics</div>
+                            <div class="text-sm text-yellow-600">Laws of thermodynamics</div>
+                        </div>
+                        <div class="sample-topic bg-purple-50 p-3 rounded-lg border border-purple-100" data-topic="languages">
+                            <div class="font-medium text-purple-800">Languages</div>
+                            <div class="text-sm text-purple-600">Spanish vocabulary</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="generateButton" class="btn-primary text-lg px-8 py-4">
+                    <i class="fas fa-bolt mr-2"></i>Generate Flashcards
+                </button>
+            </div>
+        </section>
+
+        <!-- Processing Section -->
+        <section id="processingSection" class="app-section">
+            <div class="max-w-md mx-auto text-center py-16">
+                <div class="mb-8">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-indigo-100 text-indigo-600 rounded-full mb-4">
+                        <i class="fas fa-brain text-3xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">AI is analyzing your content</h2>
+                    <p class="text-gray-600" id="processingStage">Creating high-quality flashcards from your material...</p>
+                </div>
+
+                <div class="mb-8">
+                    <div class="progress-bar mb-2">
+                        <div id="progressValue" class="progress-value" style="width: 0%"></div>
+                    </div>
+                    <div class="text-sm text-gray-500" id="progressPercent">0%</div>
+                </div>
+
+                <div class="text-gray-600 italic text-sm">
+                    This usually takes 10-30 seconds depending on content length
+                </div>
+            </div>
+        </section>
+
+        <!-- Editing Section -->
+        <section id="editingSection" class="app-section">
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Your Flashcards <span id="cardCount" class="text-gray-500">(0)</span></h2>
+                    <div class="text-gray-600" id="sourceFile">file.pdf</div>
+                </div>
+
+                <div class="flex border-b border-gray-200 mb-6">
+                    <button class="tab-button active mr-8 text-lg font-medium" data-tab="edit">Edit Flashcards</button>
+                    <button class="tab-button mr-8 text-lg font-medium" data-tab="study">Study Mode</button>
+                    <button class="tab-button text-lg font-medium" data-tab="export">Export</button>
+                </div>
+            </div>
+
+            <!-- Edit Tab -->
+            <div id="editTab" class="tab-content active">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <button id="addCardButton" class="btn-secondary mr-3">
+                            <i class="fas fa-plus mr-2"></i>Add Card
+                        </button>
+                        <button id="shuffleCardsButton" class="btn-secondary">
+                            <i class="fas fa-random mr-2"></i>Shuffle
+                        </button>
+                    </div>
+                    <div class="text-gray-600">
+                        <span>Click on any text to edit</span>
+                    </div>
+                </div>
+
+                <div id="flashcardList" class="space-y-6">
+                    <!-- Flashcards will be inserted here -->
+                </div>
+
+                <div class="mt-8 text-center">
+                    <button id="saveChangesButton" class="btn-primary px-8">Save Changes</button>
+                </div>
+            </div>
+
+            <!-- Study Tab -->
+            <div id="studyTab" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                    <div class="md:col-span-3">
+                        <div id="studyFlashcard" class="flashcard">
+                            <div class="flashcard-inner">
+                                <div class="flashcard-front">
+                                    <div class="w-full text-center text-xl">
+                                        Click to start studying
+                                    </div>
+                                </div>
+                                <div class="flashcard-back">
+                                    <div class="w-full text-center text-xl">
+                                        Answer will appear here
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <button id="prevCardButton" class="btn-secondary">
+                                <i class="fas fa-arrow-left mr-2"></i>Previous
+                            </button>
+                            <div class="text-center">
+                                <span id="currentCardIndex">0</span>/<span id="totalCards">0</span>
+                            </div>
+                            <button id="nextCardButton" class="btn-secondary">
+                                Next<i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm">
+                            <h3 class="text-lg font-semibold mb-4">Study Progress</h3>
+                            <div class="progress-bar mb-2">
+                                <div id="studyProgressBar" class="progress-value" style="width: 0%"></div>
+                            </div>
+                            <div class="text-sm text-gray-600">
+                                Cards Reviewed <span id="cardsReviewed">0</span>/<span id="totalStudyCards">0</span>
+                            </div>
+
+                            <h3 class="text-lg font-semibold mt-6 mb-4">Study Settings</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <div class="custom-checkbox" data-setting="autoflip">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                    <span class="ml-2">Auto-flip after 10s</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="custom-checkbox checked" data-setting="spaced">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                    <span class="ml-2">Spaced repetition</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="custom-checkbox" data-setting="hide">
+                                        <i class="fas fa-check text-xs"></i>
+                                    </div>
+                                    <span class="ml-2">Hide easy cards</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div class="text-sm text-gray-500 mb-2">After revealing answer, rate:</div>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button class="difficulty-button bg-red-100 text-red-700 py-1 px-2 rounded">Hard</button>
+                                    <button class="difficulty-button bg-yellow-100 text-yellow-700 py-1 px-2 rounded">Medium</button>
+                                    <button class="difficulty-button bg-green-100 text-green-700 py-1 px-2 rounded">Easy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg text-gray-600 text-sm">
+                    <i class="fas fa-keyboard mr-2"></i>Keyboard shortcuts: Press <kbd class="px-2 py-1 bg-white rounded border">Space</kbd> to flip card, <kbd class="px-2 py-1 bg-white rounded border">←</kbd> previous, <kbd class="px-2 py-1 bg-white rounded border">→</kbd> next
+                </div>
+            </div>
+
+            <!-- Export Tab -->
+            <div id="exportTab" class="tab-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-8">
+                    <h3 class="text-xl font-semibold mb-4">Export Options</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-500 transition cursor-pointer">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-file-pdf text-2xl text-red-500 mr-3"></i>
+                                <h4 class="font-medium">PDF</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">Export as PDF document for printing or offline viewing</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-500 transition cursor-pointer">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-file-csv text-2xl text-green-500 mr-3"></i>
+                                <h4 class="font-medium">CSV</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">Export as CSV for importing into spreadsheets</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-500 transition cursor-pointer">
+                            <div class="flex items-center mb-3">
+                                <i class="fas fa-file-alt text-2xl text-blue-500 mr-3"></i>
+                                <h4 class="font-medium">Anki</h4>
+                            </div>
+                            <p class="text-sm text-gray-600">Export for Anki app with all formatting preserved</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4">Export Preview</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                        <div class="text-sm text-gray-600 mb-2">First 3 cards preview:</div>
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded border border-gray-200">
+                                <div class="font-medium">What is the primary function of mitochondria?</div>
+                                <div class="text-gray-600 mt-1">Mitochondria are the powerhouse of the cell, responsible for generating ATP through cellular respiration, providing energy for cellular processes.</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-gray-200">
+                                <div class="font-medium">What are the three main stages of cellular respiration?</div>
+                                <div class="text-gray-600 mt-1">The three main stages are glycolysis, the Krebs cycle (citric acid cycle), and the electron transport chain.</div>
+                            </div>
+                            <div class="bg-white p-3 rounded border border-gray-200">
+                                <div class="font-medium">What is the difference between active and passive transport?</div>
+                                <div class="text-gray-600 mt-1">Active transport requires energy (ATP) to move molecules against their concentration gradient, while passive transport doesn't require energy as molecules move from high to low concentration.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn-primary">
+                            <i class="fas fa-download mr-2"></i>Export Flashcards
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-16 pt-8 border-t border-gray-200 text-center text-gray-500 text-sm">
+            <p>FlashAI - Free AI Flashcard Generator | No Login Required</p>
+            <p class="mt-2">© 2023 FlashAI | All rights reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simulated flashcard data
+        const simulatedFlashcards = {
+            biology: [
+                { id: 1, question: 'What is the primary function of mitochondria?', answer: 'Mitochondria are the powerhouse of the cell, responsible for generating ATP through cellular respiration, providing energy for cellular processes.' },
+                { id: 2, question: 'What are the three main stages of cellular respiration?', answer: 'The three main stages are glycolysis, the Krebs cycle (citric acid cycle), and the electron transport chain.' },
+                { id: 3, question: 'What is the difference between active and passive transport?', answer: 'Active transport requires energy (ATP) to move molecules against their concentration gradient, while passive transport doesn\'t require energy as molecules move from high to low concentration.' },
+                { id: 4, question: 'What is the function of ribosomes?', answer: 'Ribosomes are responsible for protein synthesis. They read the information in messenger RNA and build proteins by adding amino acids in the correct sequence.' },
+                { id: 5, question: 'What is the structure and function of the cell membrane?', answer: 'The cell membrane is a phospholipid bilayer with embedded proteins that regulates what enters and leaves the cell, provides structure, and facilitates cellular communication.' },
+                { id: 6, question: 'What is DNA replication?', answer: 'DNA replication is the process by which DNA makes a copy of itself during cell division, ensuring that each new cell receives an exact copy of the genetic material.' },
+                { id: 7, question: 'Explain the process of meiosis.', answer: 'Meiosis is a type of cell division that results in four daughter cells with half the number of chromosomes as the parent cell, essential for sexual reproduction and genetic diversity.' }
+            ],
+            history: [
+                { id: 1, question: 'When did World War II begin and end?', answer: 'World War II began on September 1, 1939, when Germany invaded Poland, and ended on September 2, 1945, when Japan formally surrendered.' },
+                { id: 2, question: 'Who were the main Axis Powers in World War II?', answer: 'The main Axis Powers were Germany, Italy, and Japan.' },
+                { id: 3, question: 'Who were the main Allied Powers in World War II?', answer: 'The main Allied Powers were Great Britain, France, the United States, the Soviet Union, and China.' },
+                { id: 4, question: 'What was the Holocaust?', answer: 'The Holocaust was the systematic, state-sponsored persecution and murder of six million Jews and millions of others by the Nazi regime and its allies during World War II.' },
+                { id: 5, question: 'What was D-Day?', answer: 'D-Day (June 6, 1944) was the Allied invasion of Normandy, France, which marked the beginning of the liberation of Western Europe from Nazi control.' },
+                { id: 6, question: 'What was the Battle of Stalingrad?', answer: 'The Battle of Stalingrad (1942-1943) was a major battle between German and Soviet forces for control of the city of Stalingrad. It resulted in a decisive Soviet victory and marked a turning point on the Eastern Front.' }
+            ],
+            physics: [
+                { id: 1, question: 'What is the First Law of Thermodynamics?', answer: 'The First Law of Thermodynamics states that energy cannot be created or destroyed in an isolated system; it can only be transformed from one form to another. Also known as the Law of Energy Conservation.' },
+                { id: 2, question: 'What is the Second Law of Thermodynamics?', answer: 'The Second Law of Thermodynamics states that the entropy of an isolated system always increases over time. Heat flows spontaneously from hot to cold objects, and not vice versa.' },
+                { id: 3, question: 'What is the Third Law of Thermodynamics?', answer: 'The Third Law of Thermodynamics states that as the temperature approaches absolute zero, the entropy of a system approaches a constant minimum value.' },
+                { id: 4, question: 'What is entropy?', answer: 'Entropy is a measure of the disorder or randomness in a system. Higher entropy means greater disorder or more randomness.' },
+                { id: 5, question: 'What is the Zeroth Law of Thermodynamics?', answer: 'The Zeroth Law states that if two systems are each in thermal equilibrium with a third system, they are also in thermal equilibrium with each other.' }
+            ],
+            languages: [
+                { id: 1, question: '¿Cómo te llamas? (What\'s this phrase mean?)', answer: 'What is your name?' },
+                { id: 2, question: 'How do you say "hello" in Spanish?', answer: 'Hola' },
+                { id: 3, question: 'How do you say "thank you" in Spanish?', answer: 'Gracias' },
+                { id: 4, question: 'How do you say "goodbye" in Spanish?', answer: 'Adiós' },
+                { id: 5, question: 'How do you count from 1 to 5 in Spanish?', answer: 'Uno, dos, tres, cuatro, cinco' },
+                { id: 6, question: 'How do you say "I love you" in Spanish?', answer: 'Te quiero / Te amo' },
+                { id: 7, question: 'How do you say "How are you?" in Spanish?', answer: '¿Cómo estás?' },
+                { id: 8, question: 'What is the difference between "ser" and "estar"?', answer: 'Both mean "to be" but "ser" is used for permanent qualities, while "estar" is used for temporary states and locations.' }
+            ]
+        };
+
+        // DOM Elements
+        const uploadSection = document.getElementById('uploadSection');
+        const processingSection = document.getElementById('processingSection');
+        const editingSection = document.getElementById('editingSection');
+        const generateButton = document.getElementById('generateButton');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseButton = document.getElementById('browseButton');
+        const fileList = document.getElementById('fileList');
+        const processingStage = document.getElementById('processingStage');
+        const progressValue = document.getElementById('progressValue');
+        const progressPercent = document.getElementById('progressPercent');
+        const flashcardList = document.getElementById('flashcardList');
+        const cardCount = document.getElementById('cardCount');
+        const sourceFile = document.getElementById('sourceFile');
+        const textInput = document.getElementById('textInput');
+        const sampleTopics = document.querySelectorAll('.sample-topic');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const addCardButton = document.getElementById('addCardButton');
+        const shuffleCardsButton = document.getElementById('shuffleCardsButton');
+        const saveChangesButton = document.getElementById('saveChangesButton');
+        const studyFlashcard = document.getElementById('studyFlashcard');
+        const prevCardButton = document.getElementById('prevCardButton');
+        const nextCardButton = document.getElementById('nextCardButton');
+        const currentCardIndex = document.getElementById('currentCardIndex');
+        const totalCards = document.getElementById('totalCards');
+        const difficultyButtons = document.querySelectorAll('.difficulty-button');
+        const studyProgressBar = document.getElementById('studyProgressBar');
+        const cardsReviewed = document.getElementById('cardsReviewed');
+        const totalStudyCards = document.getElementById('totalStudyCards');
+        const customCheckboxes = document.querySelectorAll('.custom-checkbox');
+
+        // Current state
+        let currentFlashcards = [];
+        let currentTopicName = "";
+        let currentStudyIndex = 0;
+        let studiedCards = 0;
+
+        // Initialize the app
+        function initApp() {
+            // Setup event listeners
+            setupUploadArea();
+            setupSampleTopics();
+            setupGenerateButton();
+            setupTabs();
+            setupStudyMode();
+            setupCheckboxes();
+            setupEditingTools();
+        }
+
+        // Setup Upload Area
+        function setupUploadArea() {
+            // File input change
+            fileInput.addEventListener('change', function() {
+                handleFileSelection(this.files);
+            });
+
+            // Browse button click
+            browseButton.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            // Drag and drop
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function() {
+                this.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('dragover');
+                handleFileSelection(e.dataTransfer.files);
+            });
+        }
+
+        // Handle file selection
+        function handleFileSelection(files) {
+            fileList.innerHTML = '';
+            
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'flex items-center justify-between bg-gray-50 p-2 rounded';
+                    
+                    let icon = 'fa-file';
+                    let colorClass = 'text-gray-500';
+                    
+                    // Determine file type
+                    if (file.name.endsWith('.pdf')) {
+                        icon = 'fa-file-pdf';
+                        colorClass = 'text-red-500';
+                    } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                        icon = 'fa-file-word';
+                        colorClass = 'text-blue-500';
+                    } else if (file.name.endsWith('.ppt') || file.name.endsWith('.pptx')) {
+                        icon = 'fa-file-powerpoint';
+                        colorClass = 'text-orange-500';
+                    } else if (file.name.endsWith('.jpg') || file.name.endsWith('.png') || file.name.endsWith('.jpeg')) {
+                        icon = 'fa-file-image';
+                        colorClass = 'text-green-500';
+                    } else if (file.name.endsWith('.txt')) {
+                        icon = 'fa-file-alt';
+                        colorClass = 'text-yellow-500';
+                    }
+                    
+                    fileItem.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas ${icon} ${colorClass} mr-2"></i>
+                            <span class="text-sm font-medium">${file.name}</span>
+                        </div>
+                        <button class="remove-file text-gray-400 hover:text-red-500">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    fileList.appendChild(fileItem);
+                });
+                
+                // Add event listeners to remove buttons
+                const removeButtons = fileList.querySelectorAll('.remove-file');
+                removeButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        this.parentElement.remove();
+                    });
+                });
+            }
+        }
+
+        // Setup Sample Topics
+        function setupSampleTopics() {
+            sampleTopics.forEach(topic => {
+                topic.addEventListener('click', function() {
+                    const topicName = this.getAttribute('data-topic');
+                    currentTopicName = topicName.charAt(0).toUpperCase() + topicName.slice(1);
+                    
+                    // Simulate file selection
+                    fileList.innerHTML = '';
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'flex items-center justify-between bg-gray-50 p-2 rounded';
+                    
+                    let icon = 'fa-file-alt';
+                    let colorClass = 'text-yellow-500';
+                    
+                    if (topicName === 'biology') {
+                        icon = 'fa-file-pdf';
+                        colorClass = 'text-red-500';
+                    } else if (topicName === 'history') {
+                        icon = 'fa-file-word';
+                        colorClass = 'text-blue-500';
+                    } else if (topicName === 'physics') {
+                        icon = 'fa-file-powerpoint';
+                        colorClass = 'text-orange-500';
+                    }
+                    
+                    fileItem.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas ${icon} ${colorClass} mr-2"></i>
+                            <span class="text-sm font-medium">${currentTopicName} Notes.${topicName === 'biology' ? 'pdf' : topicName === 'history' ? 'docx' : topicName === 'physics' ? 'pptx' : 'txt'}</span>
+                        </div>
+                        <button class="remove-file text-gray-400 hover:text-red-500">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    
+                    fileList.appendChild(fileItem);
+                    
+                    // Add event listener to remove button
+                    const removeButton = fileItem.querySelector('.remove-file');
+                    removeButton.addEventListener('click', function() {
+                        this.parentElement.remove();
+                    });
+                    
+                    // Set text input value
+                    let sampleText = '';
+                    if (topicName === 'biology') {
+                        sampleText = 'Cell Structure and Function: The cell is the basic unit of life. Eukaryotic cells contain membrane-bound organelles like the nucleus, mitochondria, endoplasmic reticulum, and Golgi apparatus. Mitochondria are responsible for cellular respiration, producing ATP. The process of active transport requires energy, while passive transport does not.';
+                    } else if (topicName === 'history') {
+                        sampleText = 'World War II Timeline: World War II began in 1939 when Germany invaded Poland and ended in 1945 with Japan\'s surrender. The major Axis powers were Germany, Italy, and Japan, while the Allied powers included Great Britain, France, the United States, the Soviet Union, and China. Key events included the Holocaust, D-Day, and the Battle of Stalingrad.';
+                    } else if (topicName === 'physics') {
+                        sampleText = 'Laws of Thermodynamics: The First Law of Thermodynamics states that energy cannot be created or destroyed, only transformed. The Second Law states that the entropy of an isolated system always increases. The Third Law states that as temperature approaches absolute zero, entropy approaches a minimum value.';
+                    } else if (topicName === 'languages') {
+                        sampleText = 'Spanish Vocabulary: Hello = Hola, Thank you = Gracias, Goodbye = Adiós, How are you? = ¿Cómo estás?, My name is... = Me llamo..., Numbers 1-5: Uno, dos, tres, cuatro, cinco. Spanish has two forms of "to be": ser and estar.';
+                    }
+                    
+                    textInput.value = sampleText;
+                });
+            });
+        }
+
+        // Setup Generate Button
+        function setupGenerateButton() {
+            generateButton.addEventListener('click', function() {
+                // Check if either files or text is provided
+                if (fileList.children.length > 0 || textInput.value.trim() !== '') {
+                    // Show processing section
+                    showSection(processingSection);
+                    
+                    // Simulate processing
+                    simulateProcessing();
+                } else {
+                    alert('Please upload files or enter text to generate flashcards.');
+                }
+            });
+        }
+
+        // Simulate processing
+        function simulateProcessing() {
+            let progress = 0;
+            const processingTexts = [
+                'Analyzing content structure...',
+                'Identifying key concepts...',
+                'Creating question-answer pairs...',
+                'Optimizing flashcards...',
+                'Finalizing content...'
+            ];
+            let currentTextIndex = 0;
+            
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 10) + 1;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    // Short delay before showing editing section
+                    setTimeout(() => {
+                        // Determine which flashcards to use
+                        currentFlashcards = [];
+                        
+                        if (currentTopicName) {
+                            const topicKey = currentTopicName.toLowerCase();
+                            currentFlashcards = [...simulatedFlashcards[topicKey]];
+                            sourceFile.textContent = `${currentTopicName} Notes.${topicKey === 'biology' ? 'pdf' : topicKey === 'history' ? 'docx' : topicKey === 'physics' ? 'pptx' : 'txt'}`;
+                        } else {
+                            // If no sample topic was selected, use the Biology flashcards as default
+                            currentFlashcards = [...simulatedFlashcards.biology];
+                            sourceFile.textContent = 'Uploaded Content';
+                        }
+                        
+                        // Update card count
+                        cardCount.textContent = `(${currentFlashcards.length})`;
+                        
+                        // Populate flashcards
+                        populateFlashcards();
+                        
+                        // Setup study mode
+                        setupStudyCards();
+                        
+                        // Show editing section
+                        showSection(editingSection);
+                    }, 500);
+                }
+                
+                // Update progress bar and text
+                progressValue.style.width = `${progress}%`;
+                progressPercent.textContent = `${progress}%`;
+                
+                // Change processing text
+                if (progress > (currentTextIndex + 1) * 20) {
+                    currentTextIndex = Math.min(currentTextIndex + 1, processingTexts.length - 1);
+                    processingStage.textContent = processingTexts[currentTextIndex];
+                }
+            }, 200);
+        }
+
+        // Populate flashcards in the editing section
+        function populateFlashcards() {
+            flashcardList.innerHTML = '';
+            
+            currentFlashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'bg-white p-6 rounded-xl shadow-sm';
+                cardElement.dataset.id = card.id;
+                
+                cardElement.innerHTML = `
+                    <div class="flex justify-between items-center mb-4">
+                        <h4 class="font-semibold text-lg">Flashcard ${index + 1}</h4>
+                        <div>
+                            <button class="edit-card-button text-gray-400 hover:text-indigo-600 mr-2">
+                                <i class="fas fa-pen"></i>
+                            </button>
+                            <button class="delete-card-button text-gray-400 hover:text-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Question</label>
+                        <div class="editable question-content p-3 bg-gray-50 rounded-lg min-h-[60px]" contenteditable="true">${card.question}</div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Answer</label>
+                        <div class="editable answer-content p-3 bg-gray-50 rounded-lg min-h-[100px]" contenteditable="true">${card.answer}</div>
+                    </div>
+                `;
+                
+                flashcardList.appendChild(cardElement);
+            });
+            
+            // Add event listeners for delete buttons
+            const deleteButtons = flashcardList.querySelectorAll('.delete-card-button');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this flashcard?')) {
+                        const card = this.closest('[data-id]');
+                        const cardId = parseInt(card.dataset.id);
+                        
+                        // Remove card from array
+                        currentFlashcards = currentFlashcards.filter(c => c.id !== cardId);
+                        
+                        // Remove card from DOM
+                        card.remove();
+                        
+                        // Update card count
+                        cardCount.textContent = `(${currentFlashcards.length})`;
+                        
+                        // Update study mode
+                        setupStudyCards();
+                    }
+                });
+            });
+            
+            // Add event listeners for edit buttons
+            const editButtons = flashcardList.querySelectorAll('.edit-card-button');
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const card = this.closest('[data-id]');
+                    const questionContent = card.querySelector('.question-content');
+                    const answerContent = card.querySelector('.answer-content');
+                    
+                    // Focus on question content
+                    questionContent.focus();
+                });
+            });
+            
+            // Add event listeners for editable content
+            const editableContents = flashcardList.querySelectorAll('.editable');
+            editableContents.forEach(content => {
+                content.addEventListener('blur', function() {
+                    const card = this.closest('[data-id]');
+                    const cardId = parseInt(card.dataset.id);
+                    const questionContent = card.querySelector('.question-content');
+                    const answerContent = card.querySelector('.answer-content');
+                    
+                    // Update card in array
+                    const cardIndex = currentFlashcards.findIndex(c => c.id === cardId);
+                    if (cardIndex !== -1) {
+                        currentFlashcards[cardIndex].question = questionContent.textContent;
+                        currentFlashcards[cardIndex].answer = answerContent.textContent;
+                    }
+                });
+            });
+        }
+
+        // Setup tabs
+        function setupTabs() {
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tab = this.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update active tab content
+                    tabContents.forEach(content => {
+                        if (content.id === `${tab}Tab`) {
+                            content.classList.remove('hidden');
+                            content.classList.add('active');
+                        } else {
+                            content.classList.add('hidden');
+                            content.classList.remove('active');
+                        }
+                    });
+                    
+                    // If study tab is selected, reset the study mode
+                    if (tab === 'study') {
+                        resetStudyMode();
+                    }
+                });
+            });
+        }
+
+        // Setup study mode
+        function setupStudyMode() {
+            // Flip card on click
+            studyFlashcard.addEventListener('click', function() {
+                this.classList.toggle('flipped');
+            });
+            
+            // Previous button
+            prevCardButton.addEventListener('click', function() {
+                if (currentStudyIndex > 0) {
+                    currentStudyIndex--;
+                    updateStudyCard();
+                }
+            });
+            
+            // Next button
+            nextCardButton.addEventListener('click', function() {
+                if (currentStudyIndex < currentFlashcards.length - 1) {
+                    currentStudyIndex++;
+                    updateStudyCard();
+                    
+                    // Update studied cards if this is a new card
+                    if (currentStudyIndex >= studiedCards) {
+                        studiedCards = currentStudyIndex + 1;
+                        updateStudyProgress();
+                    }
+                }
+            });
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                const activeTab = document.querySelector('.tab-button.active');
+                if (activeTab && activeTab.getAttribute('data-tab') === 'study') {
+                    if (e.code === 'Space') {
+                        e.preventDefault();
+                        studyFlashcard.classList.toggle('flipped');
+                    } else if (e.code === 'ArrowLeft') {
+                        if (currentStudyIndex > 0) {
+                            currentStudyIndex--;
+                            updateStudyCard();
+                        }
+                    } else if (e.code === 'ArrowRight') {
+                        if (currentStudyIndex < currentFlashcards.length - 1) {
+                            currentStudyIndex++;
+                            updateStudyCard();
+                            
+                            // Update studied cards if this is a new card
+                            if (currentStudyIndex >= studiedCards) {
+                                studiedCards = currentStudyIndex + 1;
+                                updateStudyProgress();
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Difficulty buttons
+            difficultyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (currentStudyIndex < currentFlashcards.length - 1) {
+                        currentStudyIndex++;
+                        updateStudyCard();
+                        
+                        // Update studied cards if this is a new card
+                        if (currentStudyIndex >= studiedCards) {
+                            studiedCards = currentStudyIndex + 1;
+                            updateStudyProgress();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Setup study cards
+        function setupStudyCards() {
+            // Update total cards
+            totalCards.textContent = currentFlashcards.length;
+            totalStudyCards.textContent = currentFlashcards.length;
+            
+            // Reset study index and progress
+            currentStudyIndex = 0;
+            studiedCards = 0;
+            updateStudyProgress();
+            
+            // Update study card
+            updateStudyCard();
+        }
+
+        // Update study card
+        function updateStudyCard() {
+            // Reset flip state
+            studyFlashcard.classList.remove('flipped');
+            
+            // Update card content
+            if (currentFlashcards.length > 0) {
+                const card = currentFlashcards[currentStudyIndex];
+                const frontContent = studyFlashcard.querySelector('.flashcard-front div');
+                const backContent = studyFlashcard.querySelector('.flashcard-back div');
+                
+                frontContent.textContent = card.question;
+                backContent.textContent = card.answer;
+                
+                // Update current card index
+                currentCardIndex.textContent = currentStudyIndex + 1;
+            }
+        }
+
+        // Update study progress
+        function updateStudyProgress() {
+            const progress = (studiedCards / currentFlashcards.length) * 100;
+            studyProgressBar.style.width = `${progress}%`;
+            cardsReviewed.textContent = studiedCards;
+        }
+
+        // Reset study mode
+        function resetStudyMode() {
+            currentStudyIndex = 0;
+            updateStudyCard();
+        }
+
+        // Setup checkboxes
+        function setupCheckboxes() {
+            customCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                });
+            });
+        }
+
+        // Setup editing tools
+        function setupEditingTools() {
+            // Add card button
+            addCardButton.addEventListener('click', function() {
+                // Create new card
+                const newId = currentFlashcards.length > 0 ? Math.max(...currentFlashcards.map(c => c.id)) + 1 : 1;
+                const newCard = {
+                    id: newId,
+                    question: 'New Question',
+                    answer: 'New Answer'
+                };
+                
+                // Add to array
+                currentFlashcards.push(newCard);
+                
+                // Update card count
+                cardCount.textContent = `(${currentFlashcards.length})`;
+                
+                // Populate flashcards
+                populateFlashcards();
+                
+                // Update study mode
+                setupStudyCards();
+                
+                // Scroll to the new card
+                const newCardElement = flashcardList.lastElementChild;
+                newCardElement.scrollIntoView({ behavior: 'smooth' });
+                
+                // Focus on the question content
+                setTimeout(() => {
+                    const questionContent = newCardElement.querySelector('.question-content');
+                    questionContent.focus();
+                    
+                    // Select all text
+                    const range = document.createRange();
+                    range.selectNodeContents(questionContent);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }, 500);
+            });
+            
+            // Shuffle cards button
+            shuffleCardsButton.addEventListener('click', function() {
+                // Shuffle array
+                for (let i = currentFlashcards.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [currentFlashcards[i], currentFlashcards[j]] = [currentFlashcards[j], currentFlashcards[i]];
+                }
+                
+                // Populate flashcards
+                populateFlashcards();
+                
+                // Update study mode
+                setupStudyCards();
+            });
+            
+            // Save changes button
+            saveChangesButton.addEventListener('click', function() {
+                // Show confirmation message
+                const button = this;
+                const originalText = button.textContent;
+                
+                button.innerHTML = '<i class="fas fa-check mr-2"></i>Changes Saved!';
+                button.classList.add('bg-green-600');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-600');
+                }, 2000);
+            });
+        }
+
+        // Show section
+        function showSection(section) {
+            const sections = document.querySelectorAll('.app-section');
+            sections.forEach(s => {
+                s.classList.remove('active');
+            });
+            section.classList.add('active');
+        }
+
+        // Initialize the app when the page loads
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>

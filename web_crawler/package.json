@@ -1,0 +1,38 @@
+{
+  "name": "web_crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "build": "pnpm run compile",
+    "compile": "tsc -b"
+  },
+  "keywords": [],
+  "dependencies": {
+    "@mozilla/readability": "^0.5.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.1",
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "fast-xml-parser": "^5.0.8",
+    "highlight.js": "^11.11.1",
+    "jsdom": "^26.0.0",
+    "prettier": "^3.5.0",
+    "prismjs": "^1.29.0",
+    "puppeteer": "^24.2.0",
+    "puppeteer-pool": "^1.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/jsdom": "^21.1.7",
+    "@types/prismjs": "^1.26.5",
+    "nodemon": "^3.1.9"
+  },
+  "packageManager": "pnpm@8.15.4+sha256.cea6d0bdf2de3a0549582da3983c70c92ffc577ff4410cbf190817ddc35137c2"
+}

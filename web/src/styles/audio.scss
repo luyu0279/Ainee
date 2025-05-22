@@ -1,0 +1,106 @@
+.rhap_container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  font-family: inherit;
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #fff;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.rhap_progress-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 17px;
+  flex: 1 0 auto;
+}
+
+.rhap_progress-bar {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 4px;
+  background-color: #dddddd;
+  border-radius: 2px;
+}
+
+.rhap_time {
+  color: #333;
+  font-size: 16px;
+}
+
+.rhap_progress-indicator {
+  box-sizing: border-box;
+  position: absolute;
+  z-index: 3;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  top: -5px;
+  background: #868686;
+  border-radius: 50px;
+}
+
+.rhap_controls-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1 0 auto;
+}
+
+.rhap_additional-controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1 0 auto;
+  justify-content: flex-end;
+}
+
+.rhap_main-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 1 auto;
+}
+
+.rhap_stacked .rhap_controls-section {
+  margin-top: 8px;
+}
+
+.rhap_stacked .rhap_progress-section {
+  margin-top: 8px;
+}
+
+.rhap_play-pause-button {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.rhap_rewind-button, .rhap_forward-button {
+  font-size: 26px;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+  margin: 0 8px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+} 

@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create the perfect thank you note for your teacher with our AI-powered generator and browse our library of templates for parents, students, and daycare appreciation">
+    <meta name="keywords" content="thank you note to teacher, thank you note to teacher from parent, short thank you note to teacher, thank you note to teacher from student, thank you note to daycare teacher">
+    <title>TeacherThankYou - Create Perfect Thank You Notes for Teachers</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab-active {
+            border-bottom: 3px solid #6366f1;
+            color: #6366f1;
+            font-weight: 600;
+        }
+        
+        .template-container {
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        
+        /* Custom scrollbar styling */
+        .template-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .template-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .template-container::-webkit-scrollbar-thumb {
+            background: #a855f7;
+            border-radius: 10px;
+        }
+        
+        .template-container::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+        
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        
+        .animated-gradient {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .copy-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            display: none;
+        }
+        
+        .template-card:hover .copy-btn {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm py-4 fixed w-full z-10">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-indigo-600">TeacherThankYou</a>
+            <div class="flex space-x-6">
+                <a href="#generator" class="text-gray-700 hover:text-indigo-600">AI Generator</a>
+                <a href="#templates" class="text-gray-700 hover:text-indigo-600">Templates</a>
+                <a href="#creative" class="text-gray-700 hover:text-indigo-600">Creative Ideas</a>
+                <a href="#design" class="text-gray-700 hover:text-indigo-600">Design Studio</a>
+                <a href="#resources" class="text-gray-700 hover:text-indigo-600">Resources</a>
+            </div>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-full btn-hover transition duration-300">Get Started</button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 gradient-bg text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight animate__animated animate__fadeInUp">Create Heartfelt Thank You Notes for Teachers</h1>
+                    <p class="text-xl mb-8 animate__animated animate__fadeInUp animate__delay-1s">Express your gratitude with our AI-powered note generator and extensive template library. Perfect for parents, students, and appreciative individuals.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 animate__animated animate__fadeInUp animate__delay-2s">
+                        <a href="#generator" class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-full font-medium text-center btn-hover transition duration-300">Create with AI</a>
+                        <a href="#templates" class="bg-transparent border-2 border-white hover:bg-white hover:text-indigo-600 px-8 py-3 rounded-full font-medium text-center transition duration-300">Browse Templates</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 animate__animated animate__fadeInRight">
+                    <img src="https://cdn.jsdelivr.net/gh/Tes3awy/freepik-illustrations@main/svg/Thank-you-bro.svg" alt="Thank You Note Illustration" class="max-w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Overview -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Everything You Need to Express Gratitude</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg card-hover transition duration-300">
+                    <div class="feature-icon bg-indigo-100 text-indigo-600 mb-4">
+                        <i class="fas fa-robot text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">AI-Powered Generator</h3>
+                    <p class="text-gray-600">Create personalized thank you notes using our advanced AI that captures your unique sentiment.</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg card-hover transition duration-300">
+                    <div class="feature-icon bg-purple-100 text-purple-600 mb-4">
+                        <i class="fas fa-book-open text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Template Library</h3>
+                    <p class="text-gray-600">Browse our extensive collection of carefully crafted templates for various occasions and relationships.</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg card-hover transition duration-300">
+                    <div class="feature-icon bg-pink-100 text-pink-600 mb-4">
+                        <i class="fas fa-lightbulb text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Creative Ideas</h3>
+                    <p class="text-gray-600">Discover unique ways to express your appreciation beyond traditional thank you notes.</p>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg card-hover transition duration-300">
+                    <div class="feature-icon bg-blue-100 text-blue-600 mb-4">
+                        <i class="fas fa-paint-brush text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Design Studio</h3>
+                    <p class="text-gray-600">Create beautiful cards and visual messages with our easy-to-use design tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AI Generator Section -->
+    <section id="generator" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 pr-0 md:pr-12">
+                    <h2 class="text-3xl font-bold mb-6">AI-Powered Thank You Note Generator</h2>
+                    <p class="text-gray-600 mb-6">Our advanced AI technology creates personalized, heartfelt thank you notes for teachers based on your input. Simply provide a few details and let our AI craft the perfect message.</p>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <form>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Who is this from?</label>
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>Parent</option>
+                                    <option>Student</option>
+                                    <option>Class Group</option>
+                                    <option>School Administration</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Type of Teacher</label>
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>Elementary School Teacher</option>
+                                    <option>Middle School Teacher</option>
+                                    <option>High School Teacher</option>
+                                    <option>Daycare Teacher</option>
+                                    <option>Special Education Teacher</option>
+                                    <option>Music/Art Teacher</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">What qualities do you appreciate most?</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-indigo-600">
+                                        <span>Patience</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-indigo-600">
+                                        <span>Creativity</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-indigo-600">
+                                        <span>Dedication</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-indigo-600">
+                                        <span>Kindness</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-indigo-600">
+                                        <span>Inspiration</span>
+                                    </label>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" class="mr-2 text-indigo-600">
+                                        <span>Support</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Specific memory or achievement? (Optional)</label>
+                                <textarea class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="3" placeholder="Share a special moment or achievement that stands out..."></textarea>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Tone</label>
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>Heartfelt</option>
+                                    <option>Formal</option>
+                                    <option>Casual</option>
+                                    <option>Humorous</option>
+                                    <option>Inspirational</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="block text-gray-700 mb-2">Length</label>
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>Short (1-2 sentences)</option>
+                                    <option>Medium (paragraph)</option>
+                                    <option>Detailed (multiple paragraphs)</option>
+                                </select>
+                            </div>
+                            
+                            <button type="button" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-medium btn-hover transition duration-300">Generate Thank You Note</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2">
+                    <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold">Your Generated Note</h3>
+                            <button class="text-indigo-600 hover:text-indigo-800 text-sm flex items-center">
+                                <i class="far fa-copy mr-1"></i> Copy Text
+                            </button>
+                        </div>
+                        
+                        <div class="bg-indigo-50 p-6 rounded-lg mb-6 italic">
+                            <p class="text-gray-700 leading-relaxed">
+                                Dear Mrs. Johnson,
+                                <br><br>
+                                As this school year comes to a close, I wanted to take a moment to express my heartfelt gratitude for the incredible impact you've had on Emma's life. Your patience and creativity in the classroom have transformed her attitude toward learning, especially in mathematics which was once a challenge for her.
+                                <br><br>
+                                I'll never forget the day she came home excited about the interactive fraction project you designed. That hands-on approach made all the difference, and now she confidently tackles problems that once seemed impossible.
+                                <br><br>
+                                Your dedication extends far beyond academics. You've created a nurturing environment where Emma feels safe to express herself and take risks. The kindness you've shown when she struggled has taught her resilience and the importance of perseverance.
+                                <br><br>
+                                Thank you for being not just a teacher, but a mentor who truly sees and supports the potential in each child.
+                                <br><br>
+                                With deepest appreciation,
+                                <br>
+                                Sarah Williams
+                            </p>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button class="bg-white border border-indigo-600 text-indigo-600 hover:bg-indigo-50 px-4 py-2 rounded-lg flex items-center">
+                                <i class="fas fa-redo mr-2"></i> Regenerate
+                            </button>
+                            
+                            <div class="flex space-x-2">
+                                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center btn-hover transition duration-300">
+                                    <i class="fas fa-download mr-2"></i> Save as PDF
+                                </button>
+                                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center btn-hover transition duration-300">
+                                    <i class="far fa-envelope mr-2"></i> Email
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Template Library Section -->
+    <section id="templates" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Browse Our Template Library</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Explore our extensive collection of thank you note templates crafted for various occasions and relationships. Find the perfect starting point for your personalized message.</p>
+            </div>
+            
+            <!-- Template Categories Tabs -->
+            <div class="mb-8 flex justify-center">
+                <div class="flex flex-wrap border-b border-gray-200 w-full md:w-2/3">
+                    <button onclick="showTemplateCategory('parents')" id="parents-tab" class="tab-btn text-lg px-6 py-3 block focus:outline-none tab-active">From Parents</button>
+                    <button onclick="showTemplateCategory('students')" id="students-tab" class="tab-btn text-lg px-6 py-3 block focus:outline-none">From Students</button>
+                    <button onclick="showTemplateCategory('short')" id="short-tab" class="tab-btn text-lg px-6 py-3 block focus:outline-none">Short & Sweet</button>
+                    <button onclick="showTemplateCategory('daycare')" id="daycare-tab" class="tab-btn text-lg px-6 py-3 block focus:outline-none">For Daycare Teachers</button>
+                </div>
+            </div>
+            
+            <!-- Template Content -->
+            <div class="template-container">
+                <!-- From Parents Templates -->
+                <div id="parents-templates" class="template-category">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Template 1 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Year-End Appreciation</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As this school year comes to a close, I wanted to express my heartfelt gratitude for everything you've done for [Child's Name]. Your dedication, patience, and genuine care have made a tremendous impact on [his/her] growth, both academically and personally.<br><br>
+                                    I've watched [Child's Name] develop a newfound love for learning, particularly in [subject/area], and I know this is largely due to your engaging teaching style and personal encouragement. The way you [specific example of something positive the teacher did] truly made a difference.<br><br>
+                                    Teachers like you who go above and beyond are rare, and we feel incredibly fortunate that [Child's Name] had the opportunity to be in your class this year.<br><br>
+                                    Thank you for being not just an excellent educator, but a positive role model who [Child's Name] looks up to.<br><br>
+                                    With deepest appreciation,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: End of school year appreciation from parents who want to express detailed gratitude for a teacher's impact throughout the year.</p>
+                        </div>
+                        
+                        <!-- Template 2 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Overcoming Challenges</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I wanted to take a moment to thank you for your extraordinary support of [Child's Name] during [his/her] struggles with [specific challenge/subject]. When [he/she] was feeling discouraged, your patience and innovative teaching approaches made all the difference.<br><br>
+                                    The way you [specific strategy/accommodation the teacher provided] showed not only your expertise as an educator but also your compassion. [Child's Name] now approaches [subject/challenge] with confidence instead of anxiety, and we have you to thank for this transformation.<br><br>
+                                    Your willingness to work with us as partners in [Child's Name]'s education means more than words can express. You've taught us that with the right support, any challenge can be overcome.<br><br>
+                                    Thank you for never giving up on [Child's Name].<br><br>
+                                    Gratefully,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents whose child has overcome academic or personal challenges with a teacher's special support and guidance.</p>
+                        </div>
+                        
+                        <!-- Template 3 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Special Education Gratitude</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As parents of a child with [specific need/condition], we've learned that the right teacher can make an extraordinary difference in our child's life. You are that teacher for [Child's Name].<br><br>
+                                    The individualized attention you've given to addressing [Child's Name]'s unique learning needs while still challenging [him/her] to grow has been remarkable. We've seen progress we once only hoped for, like [specific improvement or milestone].<br><br>
+                                    Your expertise is evident, but it's your heart that truly sets you apart. You see beyond [Child's Name]'s challenges to [his/her] potential, and you've taught us to do the same.<br><br>
+                                    Thank you for being our partner, advocate, and guide on this journey. You've changed not just [Child's Name]'s educational experience, but our entire family's perspective.<br><br>
+                                    With immense gratitude,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents of children with special educational needs expressing gratitude for a teacher's specialized support and understanding.</p>
+                        </div>
+                        
+                        <!-- Template 4 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Building Confidence</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I'm writing to express our profound gratitude for the impact you've had on [Child's Name]'s confidence and self-esteem this year. When [he/she] started in your class, [he/she] was hesitant to participate and doubted [his/her] abilities. Now, [he/she] eagerly shares ideas and approaches new challenges with a positive attitude.<br><br>
+                                    Your encouraging words, the way you celebrate small victories, and your knack for creating a safe environment where mistakes are viewed as learning opportunities have made all the difference. [Child's Name] often mentions how you [specific encouraging action/words].<br><br>
+                                    The skills you're instilling go far beyond academics – you're helping shape a confident, resilient young person who believes in [himself/herself]. As parents, we couldn't ask for a greater gift.<br><br>
+                                    Thank you for seeing and nurturing [Child's Name]'s potential.<br><br>
+                                    Appreciatively,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents whose child has gained significant confidence or overcome anxiety under a teacher's supportive guidance.</p>
+                        </div>
+                        
+                        <!-- Template 5 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Igniting Passion for Learning</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I need to thank you for something quite remarkable – you've helped [Child's Name] discover a genuine love for [subject/activity]. Before your class, [he/she] viewed it as just another requirement, but now it's become a true passion.<br><br>
+                                    Your creative teaching methods, like [specific teaching approach/activity], and your own enthusiasm have been contagious. [Child's Name] now [example of new interest or activity related to the subject], even outside of school assignments!<br><br>
+                                    As a parent, watching your child find something that ignites their curiosity and excitement is a joy like no other. You've given [Child's Name] not just knowledge, but inspiration – a gift that will continue long after this school year ends.<br><br>
+                                    Thank you for being the kind of teacher who doesn't just teach a subject, but shares a love for learning that spreads to your students.<br><br>
+                                    Gratefully yours,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents whose child has developed a new interest or passion for a subject because of an inspiring teacher.</p>
+                        </div>
+                        
+                        <!-- Template 6 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Pandemic Teaching Hero</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Teaching is challenging enough in normal times, but navigating the complexities of education during a pandemic has required extraordinary dedication and flexibility. You have risen to this challenge with grace and innovation that deserves special recognition.<br><br>
+                                    We've been amazed by how you've [specific examples of adaptation: maintained engagement through virtual learning/created safe classroom procedures/balanced in-person and remote students, etc.]. Through all the uncertainty and changes, you've provided [Child's Name] with stability, support, and continued growth.<br><br>
+                                    As parents who witnessed the behind-the-scenes reality of remote learning, we have a newfound appreciation for the skill and heart that goes into teaching. You made what could have been a lost year into one of meaningful learning and connection.<br><br>
+                                    Thank you for your resilience, creativity, and unwavering commitment to your students during these unprecedented times.<br><br>
+                                    With deep appreciation,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Expressing gratitude to teachers who have shown exceptional adaptation and dedication during challenging times like the pandemic.</p>
+                        </div>
+                        
+                        <!-- Template 7 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Above and Beyond Recognition</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I'm writing to acknowledge the countless ways you've gone above and beyond what any parent could expect from their child's teacher this year.<br><br>
+                                    From [staying after school to provide extra help/creating personalized resources/organizing special events/communicating promptly and thoroughly], your dedication extends far beyond classroom hours. The time and energy you invest in your students is extraordinary.<br><br>
+                                    We particularly appreciate [specific example of something exceptional the teacher did], which shows your commitment to not just teaching curriculum, but nurturing the whole child.<br><br>
+                                    [Child's Name] has benefited immensely from your exceptional care, and we want you to know that your efforts don't go unnoticed. You exemplify the highest standard of what it means to be an educator.<br><br>
+                                    With sincere appreciation for all you do,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Recognizing teachers who consistently put in extra effort and go beyond basic job requirements to support their students.</p>
+                        </div>
+                        
+                        <!-- Template 8 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">First-Year Teacher Encouragement</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As we understand this is your first year of teaching, we wanted to take a moment to let you know what an incredible job you're doing. Many experienced educators struggle with the challenges you've navigated so skillfully.<br><br>
+                                    Your enthusiasm, fresh ideas, and genuine connection with your students have made [Child's Name]'s experience in your classroom exceptional. [He/She] often talks about [positive aspect of the teacher's class or teaching style].<br><br>
+                                    We've been impressed by your [communication with parents/classroom management/creative lessons/etc.], which reflect a natural talent for teaching that will only grow with time.<br><br>
+                                    Thank you for bringing your best to the classroom every day. If this is how you begin your teaching career, we can only imagine the positive impact you'll have on students for years to come.<br><br>
+                                    With appreciation and encouragement,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents who want to recognize and encourage a new teacher who has shown promise and dedication in their first year.</p>
+                        </div>
+                        
+                        <!-- Template 9 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Character Development</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    While academic growth is important, we especially want to thank you for the profound impact you've had on [Child's Name]'s character and values this year.<br><br>
+                                    The way you've modeled and cultivated [kindness/integrity/respect/responsibility/etc.] in your classroom has made a lasting impression. We've noticed [Child's Name] demonstrating these qualities at home, like when [specific example of positive behavior].<br><br>
+                                    Your classroom culture where [specific positive aspect: students support each other/differences are celebrated/mistakes are learning opportunities/etc.] has created an environment where children thrive as both learners and people.<br><br>
+                                    The lessons [Child's Name] is learning about character under your guidance are ones that will shape [him/her] far beyond this school year. As parents, we couldn't ask for a more valuable education.<br><br>
+                                    Thank you for teaching not just academic subjects, but lessons about what truly matters in life.<br><br>
+                                    With heartfelt appreciation,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Thanking teachers who place emphasis on character development and values alongside academic learning.</p>
+                        </div>
+                        
+                        <!-- Template 10 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-indigo-700">Teacher Retirement</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As you prepare to retire after [number] years of teaching, we wanted to express our gratitude for the privilege of having [Child's Name] be among your final students.<br><br>
+                                    Your decades of experience are evident in everything you do – from your masterful teaching techniques to your deep understanding of how children learn and grow. [Child's Name] has benefited tremendously from your wisdom and refined approach to education.<br><br>
+                                    What makes you truly special, though, is that despite your years in the classroom, you've maintained the passion and dedication of a new teacher. Your [humor/patience/enthusiasm/etc.] makes learning joyful for your students even now.<br><br>
+                                    While we're sad that future students won't have the opportunity to learn from you, we celebrate the well-deserved next chapter in your life. Your influence will continue through the countless students, including [Child's Name], whose lives you've shaped over your remarkable career.<br><br>
+                                    Thank you for ending your teaching journey with the same excellence with which you began it.<br><br>
+                                    With deep appreciation and best wishes,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Expressing gratitude to a retiring teacher, acknowledging their career and impact on many students.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- From Students Templates -->
+                <div id="students-templates" class="template-category hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Template 1 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Elementary Student Thanks</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for being the best teacher ever! I love coming to school because you make learning fun. My favorite thing we did this year was [specific activity or lesson], and I learned so much from it.<br><br>
+                                    You always help me when I don't understand something, and you never make me feel bad for asking questions. I like how you [specific thing the teacher does that the student appreciates].<br><br>
+                                    Before I was in your class, I didn't like [subject], but now it's one of my favorites because of how you teach it. Thank you for believing in me and helping me get better at [specific skill].<br><br>
+                                    You are kind, funny, and the smartest teacher I know. I will miss being in your class next year!<br><br>
+                                    Your student,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Elementary school students (grades 3-5) expressing appreciation to their teacher at the end of the school year.</p>
+                        </div>
+                        
+                        <!-- Template 2 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Middle School Appreciation</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I wanted to take time to thank you for making this school year awesome. Middle school can be tough sometimes, but your class was always something I looked forward to.<br><br>
+                                    You made [subject] interesting with activities like [specific example], and I actually understand it now! I appreciate how you explain things in different ways until we get it, and you never make anyone feel bad for not understanding right away.<br><br>
+                                    Thank you for also being someone I could talk to when I was having a bad day. The time you [specific example of teacher being supportive] really helped me, and I won't forget it.<br><br>
+                                    You're not just a great teacher of [subject], but you also teach us important things about life, like [lesson about character/values]. I hope I get to have you as a teacher again next year!<br><br>
+                                    Thank you for everything,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Middle school students expressing appreciation for both academic support and personal guidance from a teacher.</p>
+                        </div>
+                        
+                        <!-- Template 3 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">High School Reflection</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As I finish my time in your class, I wanted to express my sincere gratitude for the impact you've had on my education and outlook. Your approach to teaching [subject] has transformed it from just another class I needed to take into a genuine interest that I may continue to pursue.<br><br>
+                                    I particularly want to thank you for [specific example of something meaningful the teacher did], which showed me that you care about us as individuals, not just as students. The feedback you provided on [assignment/project] pushed me to think more deeply and produce work I'm truly proud of.<br><br>
+                                    Beyond the curriculum, you've taught me valuable lessons about [specific life skill or value], which I know will serve me well long after high school. Your passion for teaching is evident in every class, and it inspires me to find that same passion in my own pursuits.<br><br>
+                                    Thank you for challenging me, believing in me, and making this year one of significant growth.<br><br>
+                                    With appreciation,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: High school students reflecting on meaningful learning experiences and personal growth fostered by a teacher.</p>
+                        </div>
+                        
+                        <!-- Template 4 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Graduation Thank You</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As I prepare to graduate, I've been reflecting on the teachers who have made the most significant impact on my educational journey, and you immediately came to mind.<br><br>
+                                    Your [subject] class during my [freshman/sophomore/junior/senior] year was pivotal in developing my critical thinking and passion for learning. The way you [specific teaching approach] opened my eyes to new perspectives and possibilities.<br><br>
+                                    I still remember [specific lesson or moment] and how it changed my understanding of [concept/topic]. That moment of clarity has stayed with me and influenced my decision to pursue [future plans].<br><br>
+                                    Thank you for being more than just a teacher—for being a mentor who saw potential in me and encouraged me to reach for it. The confidence and skills I gained in your class have prepared me for the next chapter in ways that extend far beyond academics.<br><br>
+                                    As I move forward, I'll carry the lessons you taught me, both about [subject] and about myself.<br><br>
+                                    With heartfelt gratitude,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Graduating high school seniors thanking teachers who made significant impacts on their educational journey.</p>
+                        </div>
+                        
+                        <!-- Template 5 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Overcoming Academic Struggle</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I want to thank you for your patience and support when I was struggling with [specific topic/concept] earlier this year. There were times when I thought I would never understand it, but you never gave up on me.<br><br>
+                                    The extra help you provided during [lunch breaks/after school/study periods] made all the difference. I especially appreciate how you [specific approach that helped: found different ways to explain it/used real-life examples/broke it down into smaller steps].<br><br>
+                                    Because of your help, I not only passed that difficult unit, but I actually started to enjoy learning about it. The [specific assignment/test] that I was so worried about ended up being one I did well on, and that success gave me confidence in myself as a student.<br><br>
+                                    Thank you for believing I could do it even when I didn't believe in myself. You've taught me that with the right support and perseverance, I can overcome academic challenges.<br><br>
+                                    Gratefully,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Students thanking teachers who provided special support during academic difficulties or learning challenges.</p>
+                        </div>
+                        
+                        <!-- Template 6 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Subject Passion Ignited</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Before taking your class, I never thought I would be interested in [subject]. I only enrolled because it was required, but your teaching has completely changed my perspective.<br><br>
+                                    The way you connect [subject] to real-world issues like [specific example] showed me how relevant and important it actually is. The [project/assignment] where we [description of engaging activity] made learning come alive in a way I hadn't experienced before.<br><br>
+                                    Because of your class, I've started [reading more about the subject/joining the related club/considering it for college]. What began as just another course to check off has turned into a genuine passion, and I have you to thank for that transformation.<br><br>
+                                    Your enthusiasm for [subject] is contagious, and your ability to make complex concepts accessible has opened up a whole new world of interests for me. Thank you for being the kind of teacher who doesn't just teach information, but inspires curiosity.<br><br>
+                                    With new appreciation for [subject],<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Students thanking teachers who sparked their interest in a previously unappreciated subject area.</p>
+                        </div>
+                        
+                        <!-- Template 7 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Personal Support During Difficulty</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I wanted to express my deep gratitude for your understanding and support during the difficult time I experienced [earlier this year/this semester] when [general reference to personal challenge, if comfortable sharing].<br><br>
+                                    Your flexibility with [assignments/deadlines] and your check-ins to see how I was doing showed me that you care about your students as people, not just for their academic performance. When you [specific supportive action the teacher took], it made a world of difference during a challenging time.<br><br>
+                                    Despite everything going on, I was able to stay engaged with learning because of the supportive environment you created. The skills I learned in your class went beyond [subject matter] to include resilience and perspective.<br><br>
+                                    Thank you for being a teacher who understands that students sometimes face challenges outside the classroom, and for your compassion that helped me through a tough period.<br><br>
+                                    Sincerely grateful,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Students thanking teachers who provided understanding and accommodation during personal difficulties or challenges.</p>
+                        </div>
+                        
+                        <!-- Template 8 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Extracurricular Mentor</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    I want to thank you for your dedication as the [advisor/coach/director] of [club/team/activity]. The time and energy you invest beyond your teaching responsibilities has made this experience incredibly meaningful.<br><br>
+                                    Under your guidance, I've developed skills in [specific skills related to the activity] that I'll carry with me long after graduation. I particularly appreciate how you [specific positive quality: encourage everyone to participate/push us to excel/create a supportive team environment].<br><br>
+                                    The [specific event/competition/performance] was a highlight of my year, not just because of [any achievement], but because of the growth and confidence I gained through the process. Your belief in my potential has encouraged me to take on challenges I might otherwise have avoided.<br><br>
+                                    I know that leading [activity] requires significant time beyond your regular teaching duties, often [evenings/weekends/holidays]. Please know that your commitment makes a tremendous difference to students like me who find purpose and belonging through these opportunities.<br><br>
+                                    Thank you for making [activity] a meaningful part of my high school experience.<br><br>
+                                    With appreciation,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Students thanking teachers who serve as mentors for extracurricular activities, clubs, or teams.</p>
+                        </div>
+                        
+                        <!-- Template 9 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">Inspiring Future Path</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As I consider my future plans, I wanted to let you know how instrumental you've been in shaping my interest in [field/subject/career].<br><br>
+                                    Your class introduced me to concepts and ideas that resonated deeply with me, especially when we covered [specific topic]. The [assignment/project/discussion] about [specific content] opened my eyes to possibilities I hadn't considered before.<br><br>
+                                    I particularly value the way you've shared your own experiences in [field/industry] and connected our learning to real-world applications. The advice you provided when I asked about [specific question related to future plans] was incredibly helpful and has influenced my decision to pursue [specific path].<br><br>
+                                    As I move forward with [college applications/career exploration/further study], I carry with me the foundation and inspiration you've provided. Your belief in my abilities in this area has given me confidence to pursue this path.<br><br>
+                                    Thank you for being a teacher whose influence extends far beyond the classroom and into the future.<br><br>
+                                    With gratitude,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Students thanking teachers who have influenced their career interests, college plans, or future aspirations.</p>
+                        </div>
+                        
+                        <!-- Template 10 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-purple-700">College Student Thank You</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear Professor [Name],<br><br>
+                                    As the semester comes to a close, I wanted to express my sincere appreciation for your [course name] class, which has been one of the most valuable educational experiences of my college career.<br><br>
+                                    Your expertise in [subject area] is evident, but what truly sets you apart is your ability to make complex concepts accessible while still challenging us to think critically. The discussions on [specific topic] pushed me to reconsider assumptions I had long held and develop a more nuanced understanding.<br><br>
+                                    I particularly benefited from your feedback on [specific assignment], which not only improved my work for your class but has enhanced my approach to [writing/research/problem-solving] across other courses as well. Your office hours provided clarification when I needed it most, and I appreciate your willingness to engage with students' questions thoughtfully.<br><br>
+                                    The readings and resources you selected exposed me to perspectives I might not have encountered otherwise, particularly [specific reading/resource] which has become fundamental to my understanding of [concept].<br><br>
+                                    Thank you for creating a learning environment that values intellectual curiosity and rigorous analysis. The skills and knowledge from your course will serve me well beyond this semester.<br><br>
+                                    With appreciation,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: College students thanking professors for meaningful learning experiences and academic mentorship.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Short & Sweet Templates -->
+                <div id="short-templates" class="template-category hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Template 1 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Quick Parent Thanks</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Your patience, creativity, and dedication have made a world of difference for [Child's Name] this year. We're deeply grateful for the positive impact you've had on [his/her] education and confidence.<br><br>
+                                    Thank you for being an exceptional teacher!<br><br>
+                                    Appreciatively,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents who want to express sincere appreciation concisely at the end of a school year or term.</p>
+                        </div>
+                        
+                        <!-- Template 2 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Brief Student Gratitude</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for making learning fun and for believing in me when I didn't believe in myself. Your class has been the highlight of my day, and I've learned so much more than just [subject].<br><br>
+                                    You're an amazing teacher!<br><br>
+                                    Gratefully,<br>
+                                    [Student's Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Students of any age who want to express simple but sincere appreciation to a favorite teacher.</p>
+                        </div>
+                        
+                        <!-- Template 3 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Teacher Appreciation Week</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    During Teacher Appreciation Week, we wanted to let you know how much we value everything you do. Your dedication and care create a wonderful learning environment for [Child's Name].<br><br>
+                                    Teachers like you make all the difference. Thank you!<br><br>
+                                    Warmly,<br>
+                                    The [Last Name] Family
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: A quick note of thanks during Teacher Appreciation Week or similar recognition periods.</p>
+                        </div>
+                        
+                        <!-- Template 4 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Holiday Thanks</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As we approach the holiday season, I wanted to express my gratitude for the gift you give every day – the gift of learning, encouragement, and care. [Child's Name/I] look(s) forward to your class each day.<br><br>
+                                    Wishing you a joyful holiday and a well-deserved break!<br><br>
+                                    With appreciation,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: A brief holiday season thank you note to accompany a small gift or card.</p>
+                        </div>
+                        
+                        <!-- Template 5 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Specific Achievement Thanks</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for your help with [specific project/challenge/achievement]. Your guidance and support made it possible for [Child's Name/me] to [specific accomplishment]. Your ability to [specific teaching quality] made all the difference.<br><br>
+                                    We/I truly appreciate you!<br><br>
+                                    Gratefully,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Acknowledging a teacher's help with a specific achievement, project, or challenge.</p>
+                        </div>
+                        
+                        <!-- Template 6 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Conference Follow-Up</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for the thoughtful discussion during our parent-teacher conference. I appreciate your insights about [Child's Name]'s progress and your suggestions for supporting [his/her] learning at home. Your understanding of [his/her] strengths and challenges shows how much you care.<br><br>
+                                    We value our partnership in [Child's Name]'s education.<br><br>
+                                    Sincerely,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: A brief note following a parent-teacher conference to express appreciation for the teacher's time and insights.</p>
+                        </div>
+                        
+                        <!-- Template 7 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Birthday Thank You</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for making [Child's Name]'s birthday special at school. The time you took to [specific action: sing, celebrate, give a small gift, etc.] meant so much to [him/her]. These moments of personal connection show your extraordinary care for your students.<br><br>
+                                    We're grateful to have you as [Child's Name]'s teacher.<br><br>
+                                    Warmly,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Thanking a teacher for acknowledging a child's birthday or other special occasion in the classroom.</p>
+                        </div>
+                        
+                        <!-- Template 8 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Special Event Thanks</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for organizing the [specific event: field trip, science fair, class party, etc.]. The effort you put into making it educational and enjoyable was evident, and [Child's Name/I] had a wonderful experience. We especially appreciated [specific detail about the event].<br><br>
+                                    These special activities create lasting memories. Thank you for going the extra mile!<br><br>
+                                    Appreciatively,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Expressing thanks for a teacher's efforts in planning and executing special class events or activities.</p>
+                        </div>
+                        
+                        <!-- Template 9 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Subject Improvement</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for helping [Child's Name/me] improve in [specific subject]. Your clear explanations, patience, and encouraging approach have made a tremendous difference. [He/She/I] now approaches this subject with confidence instead of anxiety.<br><br>
+                                    Your teaching makes a lasting impact!<br><br>
+                                    Gratefully,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Acknowledging a teacher's role in helping a student overcome difficulties in a particular subject area.</p>
+                        </div>
+                        
+                        <!-- Template 10 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-green-700">Classroom Environment</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for creating such a positive, inclusive classroom environment. [Child's Name/I] feel(s) valued, respected, and excited to learn each day. Your attention to building a supportive community where everyone belongs makes a tremendous difference.<br><br>
+                                    We appreciate your thoughtful approach to teaching!<br><br>
+                                    Sincerely,<br>
+                                    [Your Name]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Expressing appreciation for a teacher's efforts to create a positive classroom culture and community.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- For Daycare Teachers Templates -->
+                <div id="daycare-templates" class="template-category hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Template 1 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Infant Care Appreciation</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for the wonderful care you provide for [Child's Name] each day. As new parents, leaving our baby in someone else's care was one of the hardest things we've done, but your gentle nature, expertise, and obvious love for the children have put our minds at ease.<br><br>
+                                    We appreciate how you [specific examples: send us photos throughout the day/keep detailed notes about feedings and naps/sing songs to soothe the babies/etc.]. These thoughtful touches show your dedication to both the children and their families.<br><br>
+                                    The developmental milestones we've seen [Child's Name] reach under your care, like [specific milestone], fill us with joy. We know these achievements are supported by the nurturing environment and stimulating activities you provide.<br><br>
+                                    Thank you for being an extension of our family and for loving our little one so well.<br><br>
+                                    With deep appreciation,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents of infants expressing gratitude to daycare providers who offer loving, attentive care.</p>
+                        </div>
+                        
+                        <!-- Template 2 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Toddler Development</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    We are amazed by the growth we've seen in [Child's Name] since joining your toddler class. Your patience with this challenging but wonderful age is nothing short of remarkable!<br><br>
+                                    The social skills [Child's Name] is developing—sharing, taking turns, using words to express feelings—are foundations that will serve [him/her] for life. We love hearing about the friendships forming and seeing [his/her] excitement about going to "school" each morning.<br><br>
+                                    The creative activities you plan, like [specific examples of projects or activities], engage [his/her] curiosity while building important skills. We often find ourselves amazed by new words, songs, or concepts that [Child's Name] brings home, clear evidence of your thoughtful curriculum.<br><br>
+                                    Most importantly, we appreciate the kindness and consistency you provide during this time of big emotions and developing independence. Your calm guidance is exactly what [Child's Name] needs.<br><br>
+                                    Thank you for making these formative years so positive and enriching.<br><br>
+                                    Gratefully,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents of toddlers expressing appreciation for a daycare teacher's guidance during this developmental stage.</p>
+                        </div>
+                        
+                        <!-- Template 3 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Preschool Preparation</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As [Child's Name] prepares to move on to kindergarten, we wanted to express our heartfelt gratitude for the foundation you've helped build during these important preschool years.<br><br>
+                                    Under your guidance, [Child's Name] has blossomed in so many ways. The academic readiness you've fostered—[specific skills like letter recognition, counting, early writing, etc.]—has prepared [him/her] well for the next step. Even more valuable are the social-emotional skills and love of learning you've cultivated.<br><br>
+                                    We particularly appreciate your emphasis on [specific aspect of the program that stood out], which has helped [Child's Name] develop [specific quality or skill]. The way you balance structured learning with play and discovery creates the perfect environment for young minds.<br><br>
+                                    Thank you for your partnership in these formative years, for your communication with us as parents, and for creating a preschool experience filled with joy and growth. [Child's Name] will carry the confidence and curiosity nurtured in your classroom into kindergarten and beyond.<br><br>
+                                    With deep appreciation for your dedication,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents thanking preschool teachers at the end of the year, especially as children prepare to transition to kindergarten.</p>
+                        </div>
+                        
+                        <!-- Template 4 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Special Needs Support</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Finding a childcare provider who embraces and supports [Child's Name]'s unique needs was our greatest concern, and in you, we found everything we could have hoped for and more.<br><br>
+                                    Your willingness to learn about [specific condition/need], collaborate with our intervention team, and implement strategies that help [Child's Name] thrive has been extraordinary. We've seen remarkable progress in [specific area of development] thanks to your consistent support and adaptations.<br><br>
+                                    What means the most to us is how you see [Child's Name]'s strengths and potential, not just [his/her] challenges. You celebrate every achievement, no matter how small it might seem to others, and you've created an environment where [he/she] feels fully included and valued.<br><br>
+                                    The way you've educated the other children about differences and fostered acceptance has created a truly inclusive community. [Child's Name] talks about [his/her] friends and activities with such joy, which is the greatest gift.<br><br>
+                                    Thank you for being not just a caregiver, but an advocate and partner in [Child's Name]'s development.<br><br>
+                                    With heartfelt gratitude,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents of children with special needs expressing appreciation for a daycare teacher's inclusive approach and individualized support.</p>
+                        </div>
+                        
+                        <!-- Template 5 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">First Transition to Daycare</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    When we first enrolled [Child's Name] in daycare [timeframe] ago, we were filled with anxiety about the transition. Today, we're writing to thank you for making what seemed like a daunting change into a positive experience for our entire family.<br><br>
+                                    Your patience during those first tearful drop-offs and your reassuring updates throughout the day were exactly what we needed. The gradual introduction process you recommended helped ease [Child's Name] into the new routine with minimal stress.<br><br>
+                                    We've been amazed at how quickly [Child's Name] bonded with you and how eagerly [he/she] now heads into the classroom each morning. The way [he/she] lights up when talking about "[Teacher's Name]" and the activities you do together speaks volumes about the connection you've established.<br><br>
+                                    Thank you for understanding that this transition was as much about supporting the parents as it was about caring for [Child's Name]. Your expertise and compassion have made all the difference as we navigated this important milestone.<br><br>
+                                    Gratefully,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Parents thanking daycare providers who helped ease a child's first transition into childcare.</p>
+                        </div>
+                        
+                        <!-- Template 6 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Provider Appreciation Day</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    On Provider Appreciation Day, we want to recognize the incredible work you do caring for [Child's Name] and all the children in your class. Your job demands endless energy, creativity, patience, and love – and you bring all these qualities to work each day with a smile.<br><br>
+                                    We see the small moments that add up to extraordinary care: the way you [get down on the children's level to talk to them/remember each child's preferences and comfort items/greet everyone by name each morning/etc.]. These thoughtful interactions create a nurturing environment where children feel safe and valued.<br><br>
+                                    While we appreciate you today especially, please know that our gratitude extends throughout the year. As working parents, the peace of mind that comes from knowing [Child's Name] is in capable, caring hands is priceless.<br><br>
+                                    Thank you for the important difference you make in our lives and in [Child's Name]'s development every day.<br><br>
+                                    With sincere appreciation,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Acknowledging daycare teachers on Provider Appreciation Day or similar recognition days.</p>
+                        </div>
+                        
+                        <!-- Template 7 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Holiday or Year-End Thanks</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As we reach the [holiday season/end of the year], we wanted to take a moment to express our deep appreciation for the wonderful care you provide to [Child's Name] day after day.<br><br>
+                                    This year has been filled with growth and happy memories, from [mention specific milestones, events, or projects the child enjoyed]. The photos and updates you share give us glimpses into [Child's Name]'s day, and we treasure seeing [him/her] thrive in your care.<br><br>
+                                    We know that caring for young children is both rewarding and challenging. The energy, creativity, and patience required is immense, yet you bring your best self to work each day. From managing busy schedules to handling the occasional meltdown with grace, your professionalism never wavers.<br><br>
+                                    Thank you for being a constant source of support, guidance, and affection in [Child's Name]'s life. Your influence extends far beyond the hours spent in your classroom.<br><br>
+                                    Wishing you a joyful [holiday/new year] and a well-deserved break,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: End-of-year or holiday appreciation notes for daycare providers, often accompanying a gift.</p>
+                        </div>
+                        
+                        <!-- Template 8 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Difficult Phase Support</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    Thank you for your extraordinary support and understanding during [Child's Name]'s recent [challenging phase/transition/difficulty]. Your expertise and compassion have been invaluable as we navigate this period together.<br><br>
+                                    We particularly appreciate your [specific supportive actions: regular updates, implementing consistent strategies, offering resources, etc.]. The suggestions you shared for handling similar behaviors at home have been tremendously helpful, creating the consistency that [Child's Name] needs right now.<br><br>
+                                    Most importantly, we're grateful that through this challenging time, you've maintained a positive relationship with [Child's Name] and helped preserve [his/her] sense of security and self-esteem. Your ability to see past difficult behaviors to the needs underneath reflects your deep understanding of child development.<br><br>
+                                    Thank you for being a partner in not just the easy, celebratory moments, but in the challenging ones as well. Your support means the world to our family.<br><br>
+                                    With sincere appreciation,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Thanking daycare teachers who have provided extra support during challenging developmental phases or transitions.</p>
+                        </div>
+                        
+                        <!-- Template 9 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Moving or Leaving Note</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Teacher's Name],<br><br>
+                                    As we prepare for [Child's Name]'s last day at [daycare name] due to our [move/job change/other transition], we wanted to express our deep gratitude for the wonderful care you've provided over the past [time period].<br><br>
+                                    You have been much more than a childcare provider – you've been a teacher, confidant, playmate, and extended family member to [Child's Name]. The bond you've formed is evident in how [he/she] talks about you and the excitement [he/she] shows each morning at drop-off.<br><br>
+                                    During [his/her] time in your care, we've watched [Child's Name] develop [specific skills, abilities, or traits], and we know your nurturing guidance played a central role in this growth. The foundation you've helped build will benefit [him/her] as we transition to our new [location/situation].<br><br>
+                                    While we're excited about our family's next chapter, leaving your classroom is bittersweet. Please know that your impact on [Child's Name]'s early years will never be forgotten, and you'll always hold a special place in our family's hearts.<br><br>
+                                    With deep appreciation and warm wishes,<br>
+                                    The [Last Name] Family
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Families who are leaving a daycare due to a move or other transition and want to express appreciation to a beloved provider.</p>
+                        </div>
+                        
+                        <!-- Template 10 -->
+                        <div class="template-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition duration-300 relative">
+                            <button class="copy-btn transition duration-300">
+                                <i class="far fa-copy mr-1"></i> Copy
+                            </button>
+                            <h3 class="text-xl font-semibold mb-3 text-teal-700">Classroom Assistant Thanks</h3>
+                            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                                <p class="text-gray-700 leading-relaxed">
+                                    Dear [Assistant's Name],<br><br>
+                                    While lead teachers often receive much of the recognition, we wanted to make sure you know how much we appreciate your vital role in [Child's Name]'s classroom.<br><br>
+                                    The warmth and attention you provide create a nurturing environment where children feel secure and valued. [Child's Name] often mentions your name and the special moments you share, like [specific interaction or activity the child has mentioned].<br><br>
+                                    We notice the countless ways you support the classroom: helping with transitions, attending to individual children's needs, assisting with activities, and maintaining the environment. Your calm presence and ready smile contribute immeasurably to the positive atmosphere.<br><br>
+                                    Thank you for being an essential part of the teaching team and for the care you show to [Child's Name] and all the children each day.<br><br>
+                                    With sincere appreciation,<br>
+                                    [Your Names]
+                                </p>
+                            </div>
+                            <p class="text-sm text-gray-500">Perfect for: Acknowledging assistant teachers or aides who play important supporting roles in daycare classrooms.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Creative Ideas Section -->
+    <section id="creative" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Creative Ways to Say Thank You</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Go beyond traditional thank you notes with these unique and memorable ways to express your appreciation to teachers.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Idea 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 card-hover">
+                    <div class="bg-pink-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <i class="fas fa-video text-pink-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Video Testimonials</h3>
+                    <p class="text-gray-600 text-center">Record a heartfelt video message expressing your gratitude. Include specific examples of the teacher's impact and perhaps feature multiple family members or classmates sharing brief messages.</p>
+                    <div class="mt-4">
+                        <a href="#" class="text-pink-600 hover:text-pink-800 text-sm flex items-center justify-center">
+                            <span>Learn how to create a video testimonial</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Idea 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 card-hover">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <i class="fas fa-book-open text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Classroom Memory Book</h3>
+                    <p class="text-gray-600 text-center">Coordinate with other parents or students to create a memory book with photos, artwork, and written messages from everyone. Include candid classroom moments and special events throughout the year.</p>
+                    <div class="mt-4">
+                        <a href="#" class="text-blue-600 hover:text-blue-800 text-sm flex items-center justify-center">
+                            <span>Get memory book templates</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Idea 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition duration-300 card-hover">
+                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <i class="fas fa-star text-purple-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center">Appreciation Jar</h3>
+                    <p class="text-gray-600 text-center">Fill a decorative jar with colorful notes sharing specific memories, lessons learned, or reasons why the teacher is special. The teacher can read one note each day as a continuous reminder of their impact.</p>
+                    <div class="mt-4">
+                        <a href="#" class="text-purple-600 hover:text-purple-800 text-sm flex items-center justify-center">
+                            <span>See appreciation jar ideas</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- More Ideas Collection -->
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4 border-b pb-2">More Creative Thank You Ideas</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><strong>Class Contribution:</strong> Donate a book, educational material, or classroom supply in the teacher's name.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><strong>Handmade Gifts:</strong> Create personalized artwork, crafts, or DIY items that reflect the teacher's interests.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><strong>Digital Slideshow:</strong> Compile photos and quotes in a digital presentation that celebrates the school year.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><strong>Gift Basket:</strong> Assemble a themed collection of small items based on the teacher's preferences.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><strong>Classroom Decoration:</strong> Create a banner, poster, or bulletin board display expressing collective gratitude.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                            <span><strong>Social Media Recognition:</strong> Share your appreciation publicly by highlighting your teacher's impact.</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Testimonial -->
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-8 rounded-lg text-white">
+                    <div class="mb-4">
+                        <i class="fas fa-quote-left text-white opacity-50 text-4xl"></i>
+                    </div>
+                    <p class="italic text-lg mb-6">
+                        "I coordinated with other parents to create a surprise 'Appreciation Week' for my daughter's teacher. Each day, we delivered something small: Monday was a handwritten note, Tuesday was her favorite coffee, and so on. By Friday, when we presented the class memory book, she was moved to tears. It was such a meaningful way to show our collective gratitude for her dedication."
+                    </p>
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-user text-indigo-600"></i>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Sarah Thompson</p>
+                            <p class="text-indigo-200">Parent of a 3rd grader</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Design Studio Section -->
+    <section id="design" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Design Your Thank You Card</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Create a personalized, visually appealing thank you card that perfectly expresses your gratitude.</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0 md:pr-8">
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-md">
+                        <h3 class="text-xl font-semibold mb-6 text-center">Card Designer</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 mb-2">Choose a Template</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="border-2 border-indigo-600 rounded-lg p-2 cursor-pointer">
+                                        <img src="https://cdn.jsdelivr.net/gh/Tes3awy/freepik-illustrations@main/svg/Thank-you-card-bro.svg" alt="Template 1" class="w-full">
+                                    </div>
+                                    <div class="border border-gray-200 rounded-lg p-2 cursor-pointer">
+                                        <img src="https://cdn.jsdelivr.net/gh/Tes3awy/freepik-illustrations@main/svg/Thank-you-note-rafiki.svg" alt="Template 2" class="w-full">
+                                    </div>
+                                    <div class="border border-gray-200 rounded-lg p-2 cursor-pointer">
+                                        <img src="https://cdn.jsdelivr.net/gh/Tes3awy/freepik-illustrations@main/svg/Thank-you-flower-cuate.svg" alt="Template 3" class="w-full">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2">Card Size</label>
+                                <select class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                    <option>5 x 7 inches (Standard)</option>
+                                    <option>4 x 6 inches (Postcard)</option>
+                                    <option>6 x 8 inches (Large)</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2">Colors</label>
+                                <div class="flex space-x-2">
+                                    <span class="block w-8 h-8 rounded-full bg-indigo-600 cursor-pointer"></span>
+                                    <span class="block w-8 h-8 rounded-full bg-purple-600 cursor-pointer"></span>
+                                    <span class="block w-8 h-8 rounded-full bg-pink-600 cursor-pointer"></span>
+                                    <span class="block w-8 h-8 rounded-full bg-blue-600 cursor-pointer"></span>
+                                    <span class="block w-8 h-8 rounded-full bg-green-600 cursor-pointer"></span>
+                                    <span class="block w-8 h-8 rounded-full bg-yellow-500 cursor-pointer"></span>
+                                    <span class="block w-8 h-8 rounded-full bg-red-600 cursor-pointer"></span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2">Add Your Message</label>
+                                <textarea class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" rows="4" placeholder="Enter your thank you message or select from our templates..."></textarea>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 mb-2">Signature</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Your name or family name">
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button class="bg-white border border-indigo-600 text-indigo-600 px-4 py-2 rounded-lg">
+                                    <i class="fas fa-eye mr-2"></i> Preview
+                                </button>
+                                <div class="space-x-2">
+                                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg btn-hover transition duration-300">
+                                        <i class="fas fa-download mr-2"></i> Download
+                                    </button>
+                                    <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg btn-hover transition duration-300">
+                                        <i class="fas fa-print mr-2"></i> Print
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2">
+                    <h3 class="text-xl font-semibold mb-6">Card Preview</h3>
+                    <div class="bg-white border border-gray-300 rounded-lg shadow-lg p-8 aspect-[7/5]">
+                        <div class="bg-indigo-50 rounded-lg h-full flex flex-col justify-between p-6 border-4 border-indigo-200">
+                            <div class="text-center mb-4">
+                                <div class="inline-block">
+                                    <img src="https://cdn.jsdelivr.net/gh/Tes3awy/freepik-illustrations@main/svg/Thank-you-card-bro.svg" alt="Thank you illustration" class="h-36 mx-auto mb-4">
+                                </div>
+                                <h2 class="text-2xl font-bold text-indigo-700 mb-2">Thank You!</h2>
+                            </div>
+                            
+                            <div class="flex-grow text-center">
+                                <p class="text-gray-800 italic mb-6">
+                                    Dear Mrs. Johnson,<br><br>
+                                    Thank you for being an amazing teacher. Your patience, creativity, and dedication have made a tremendous difference in Emma's education this year. We appreciate all you do!
+                                </p>
+                            </div>
+                            
+                            <div class="text-right text-gray-700">
+                                <p>With gratitude,<br>The Williams Family</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h4 class="font-medium mb-2">Design Tips:</h4>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Keep your message concise and focused on specific points of gratitude</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Choose colors and imagery that reflect the teacher's personality or classroom theme</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Include a personal touch like a photo or child's drawing for added meaning</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Resources Section -->
+    <section id="resources" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Helpful Resources</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Explore these additional resources to help you express your gratitude effectively.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Resource 1 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
+                    <div class="h-48 bg-indigo-100 flex items-center justify-center">
+                        <i class="fas fa-pen-fancy text-6xl text-indigo-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Writing Guide</h3>
+                        <p class="text-gray-600 mb-4">Learn how to structure your thank you note for maximum impact with our comprehensive writing guide.</p>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
+                            <span>Read the guide</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Resource 2 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
+                    <div class="h-48 bg-purple-100 flex items-center justify-center">
+                        <i class="fas fa-quote-right text-6xl text-purple-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Quote Collection</h3>
+                        <p class="text-gray-600 mb-4">Browse our collection of inspirational quotes about teachers and education to include in your message.</p>
+                        <a href="#" class="text-purple-600 hover:text-purple-800 font-medium flex items-center">
+                            <span>See quotes</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Resource 3 -->
+                <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition duration-300">
+                    <div class="h-48 bg-pink-100 flex items-center justify-center">
+                        <i class="fas fa-gift text-6xl text-pink-500"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Gift Ideas</h3>
+                        <p class="text-gray-600 mb-4">Discover thoughtful gift suggestions to accompany your thank you note for every budget.</p>
+                        <a href="#" class="text-pink-600 hover:text-pink-800 font-medium flex items-center">
+                            <span>Explore gift ideas</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- FAQ Section -->
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold mb-8 text-center">Frequently Asked Questions</h3>
+                
+                <div class="max-w-3xl mx-auto space-y-4">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-lg mb-2">When is the best time to give a thank you note to a teacher?</h4>
+                        <p class="text-gray-600">While the end of the school year is a traditional time for thank you notes, expressions of gratitude are welcome anytime. Consider Teacher Appreciation Week (early May), holidays, after a special project or event, or simply when you notice something particularly impressive about the teacher's work.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-lg mb-2">Should I include a gift with my thank you note?</h4>
+                        <p class="text-gray-600">A heartfelt note is meaningful on its own, but a small gift can be a nice addition if you wish. Consider the teacher's preferences and school policies. Often, the most appreciated gifts are personalized, practical items, gift cards, or classroom supplies. Remember that the sincere message is the most valuable part.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-lg mb-2">How can I make my thank you note stand out?</h4>
+                        <p class="text-gray-600">The most memorable thank you notes include specific examples of the teacher's impact. Instead of general statements like "You're a great teacher," mention particular lessons, moments, or qualities that made a difference. Including your child's perspective or a handwritten element also adds a personal touch that teachers treasure.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h4 class="font-semibold text-lg mb-2">Is it appropriate for my child to write their own thank you note?</h4>
+                        <p class="text-gray-600">Absolutely! Teachers cherish notes written by their students, regardless of age. Younger children can draw pictures or dictate their thoughts for you to write down. Older students should be encouraged to write their own notes. Parents can also include a separate note of their own appreciation alongside their child's message.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-20 animated-gradient text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Create Your Perfect Thank You Note?</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">Express your gratitude with a personalized message that captures your appreciation for the important teachers in your life.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <a href="#generator" class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-full font-medium text-center btn-hover transition duration-300">Create with AI</a>
+                <a href="#templates" class="bg-transparent border-2 border-white hover:bg-white hover:text-indigo-600 px-8 py-3 rounded-full font-medium text-center transition duration-300">Browse Templates</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">TeacherThankYou</h3>
+                    <p class="text-gray-400">The ultimate resource for creating meaningful expressions of gratitude for educators who make a difference.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#generator" class="text-gray-400 hover:text-white transition duration-200">AI Generator</a></li>
+                        <li><a href="#templates" class="text-gray-400 hover:text-white transition duration-200">Templates</a></li>
+                        <li><a href="#creative" class="text-gray-400 hover:text-white transition duration-200">Creative Ideas</a></li>
+                        <li><a href="#design" class="text-gray-400 hover:text-white transition duration-200">Design Studio</a></li>
+                        <li><a href="#resources" class="text-gray-400 hover:text-white transition duration-200">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Help & Support</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-200">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-200">Contact Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-200">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-200">Terms of Service</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect With Us</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-indigo-600 transition duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-indigo-600 transition duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-indigo-600 transition duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-gray-700 flex items-center justify-center hover:bg-indigo-600 transition duration-300">
+                            <i class="fab fa-pinterest"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-400">Subscribe to our newsletter for new templates and ideas</p>
+                    <div class="flex mt-2">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg w-full focus:outline-none text-gray-800">
+                        <button class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-r-lg transition duration-300">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2023 TeacherThankYou. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Function to show template category
+        function showTemplateCategory(category) {
+            // Hide all template categories
+            const categories = document.querySelectorAll('.template-category');
+            categories.forEach(cat => {
+                cat.classList.add('hidden');
+            });
+            
+            // Show selected category
+            document.getElementById(category + '-templates').classList.remove('hidden');
+            
+            // Update active tab styling
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.classList.remove('tab-active');
+            });
+            document.getElementById(category + '-tab').classList.add('tab-active');
+        }
+        
+        // Add copy functionality to template cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const templateCard = this.closest('.template-card');
+                    const templateText = templateCard.querySelector('.bg-gray-50 p').innerText;
+                    
+                    navigator.clipboard.writeText(templateText).then(() => {
+                        // Change button text temporarily
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 2000);
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
