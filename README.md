@@ -162,10 +162,10 @@ In separate terminals:
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 # Start the content worker
-celery -A app.workers.content worker -l info -c 4 -Q content_queue -n content_worker@%h
+celery -A app.workers.content worker -l info -c 4 -Q content_queue -n content_worker@%%h
 
 # Start the rag worker
-celery -A app.workers.rag worker -l info -c 4 -Q rag_queue -n rag_worker@%h
+celery -A app.workers.rag worker -l info -c 4 -Q rag_queue -n rag_worker@%%h
 ```
 
 > **Note:** You must run the main app and both Celery workers (content-worker and rag-parser) at the same time for full functionality.
