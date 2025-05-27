@@ -29,6 +29,11 @@ Traditional note-taking and learning tools often fall short in capturing and org
 
 ## Features
 
+
+https://github.com/user-attachments/assets/1ecdcc23-b848-4a11-83ff-f054f7df7048
+
+
+
 - **🎯 Unified Knowledge Base**  
   Save and organize all your content—web pages, text, images, audio, video, and files—into a single, easily searchable repository.
 
