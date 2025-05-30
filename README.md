@@ -1,5 +1,13 @@
 # Ainee
 
+
+We're launching on Product Hunt, please click upvote to support us, thanks!！
+
+<a href="https://www.producthunt.com/products/ainee?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-ainee&#0045;2" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=967379&theme=light&t=1748576029399" alt="Ainee - Your&#0032;AI&#0032;notetaking&#0032;&#0038;&#0032;learning&#0032;companion | Product Hunt" style="width: 400px; height: 86.4px;" width="400" height="86.4" /></a>
+
+
+<br>
+
 Ainee is a versatile AI assistant created to revolutionize the way you capture, organize, and interact with your study materials, whether they involve audio, text, files, YouTube videos, or other formats. It serves as a free alternative to products like NotebookLM, helping you accelerate your learning and improve your ability to share insights.
 
 <img src="https://raw.githubusercontent.com/luyu0279/Ainee/main/misc/features.png" >
